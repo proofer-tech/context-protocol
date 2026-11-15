@@ -1,5 +1,26 @@
-dist/
+# 빌드 산출물. 배포는 GitHub Release 로만 한다
+/dist/
+
+# 유지보수자의 프로토콜 워크스페이스가 이 저장소의 작업 트리다.
+# 아래는 그 워크스페이스에만 있는 기록과 설치본이라 공개하지 않는다.
+/CONTEXT.md
+/AGENTS.md
+/CLAUDE.md
+/_project.md
+/memory/
+/action-log/
+/fleet/
+/references/
+/cowork-global-instructions.md
+/_context-protocol/_concepts/
+/_context-protocol/_deprecated_v5/
+
+# OS, 동기화 클라이언트 잡파일
 .DS_Store
 ._*
+Icon?
+*.gdoc
+*.gsheet
+*.gslides
 *.pyc
 __pycache__/
