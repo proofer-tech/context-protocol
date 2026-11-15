@@ -1,3 +1,7 @@
+---
+type: readme
+---
+
 # context-protocol
 
 폴더 하나를 **에이전트의 장기기억이자 1차 정보원(SoT)** 으로 쓰는 워크스페이스 프로토콜.
@@ -8,7 +12,8 @@
 Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 연다.
 
 - 최신 버전: [Releases](https://github.com/proofer-tech/context-protocol/releases) 참고
-- 라이센스: [PolyForm Noncommercial 1.0.0](LICENSE). 소스는 공개하지만 **상업적 이용은 허용하지 않는다** (아래 [라이센스](#라이센스))
+- 라이센스: [PolyForm Noncommercial 1.0.0 또는 PolyForm Internal Use 1.0.0](LICENSE) 중 선택. 영리 기업도 **사내 업무에는 쓸 수 있고**, 고객 납품이나 서비스 제공은 별도 계약이다 (아래 [라이센스](#라이센스))
+- 회사나 기관에서 도입을 검토한다면: [docs/조직-도입-가이드.md](docs/조직-도입-가이드.md)
 
 ## 빠른 설치
 
@@ -109,11 +114,14 @@ _context-protocol/
   backends/             백엔드 능력 계약과 프로파일 (gdrive, local)
   harnesses/            하네스 능력 계약과 프로파일 7종
   installers/           CONTEXT_SETUP.md (신규), CONTEXT_MIGRATE.md (기존 버전 올리기)
-  tools/hwp2md.py       한글(hwp, hwpx) 문서 변환기
+  tools/                hwp2md.py (한글 문서 변환), integrity_lint.py (무결성 린트 실행판)
 presets/                  주제별 온톨로지 프리셋 5종
 package/README.md         zip 루트에 들어가는 README. 압축을 푼 에이전트가 가장 먼저 읽는다
 scripts/build.sh          설치 패키지 빌드와 검증
-docs/                     설치 가이드, 릴리스 절차
+docs/                     설치 가이드, 조직 도입 가이드, 릴리스 절차
+tests/                    린트 단위 테스트
+LICENSE, LICENSES/        이용 조건
+CHANGELOG.md              버전별 변경
 ```
 
 처음 읽는다면 이 순서가 빠르다.
@@ -137,21 +145,31 @@ scripts/build.sh 2      # dist/context-protocol-<버전>-b2.zip
 버전은 `CONTEXT_MIGRATE.md` 의 LATEST_VERSION 에서 읽는다. 스탬프 대조, 블록 대조, MANIFEST
 생성, 압축 해제 후 `diff -r` 검증까지 한 번에 한다. 릴리스 절차는 [docs/릴리스.md](docs/릴리스.md).
 
+## 무결성 린트
+
+설치한 워크스페이스의 구조가 규칙을 지키는지 에이전트 없이 확인한다. 위반이 있으면 종료 코드 1 이라
+CI 에 걸 수 있다. 자세한 쓰임은 [조직 도입 가이드](docs/조직-도입-가이드.md) 5절.
+
+```bash
+python3 _context-protocol/tools/integrity_lint.py <워크스페이스 루트>
+```
+
 ## 라이센스
 
-[PolyForm Noncommercial License 1.0.0](LICENSE). Copyright 2026 임한솔.
+Copyright 2026 임한솔. 아래 두 라이센스 중 하나를 골라 쓴다([LICENSE](LICENSE)).
 
-비상업 조건이 붙어 있으므로 OSI 기준의 "오픈소스" 가 아니라 **소스 공개(source-available)**
-라이센스다. 요약하면 이렇다. 법적 효력은 [LICENSE](LICENSE) 원문에만 있다.
+- [PolyForm Noncommercial License 1.0.0](LICENSES/PolyForm-Noncommercial-1.0.0.txt)
+- [PolyForm Internal Use License 1.0.0](LICENSES/PolyForm-Internal-Use-1.0.0.txt)
 
-| 할 수 있다 | 할 수 없다 |
+비상업 조건이 붙어 있어 OSI 기준의 "오픈소스" 가 아니라 **소스 공개(source-available)** 다.
+요약하면 이렇다. 법적 효력은 원문에만 있다.
+
+| 할 수 있다 | 할 수 없다 (별도 상업 라이센스 필요) |
 |---|---|
-| 개인 워크스페이스에 설치해 쓰기 | 이 프로토콜이나 파생물을 판매하기 |
-| 연구, 학습, 취미 프로젝트에 쓰기 | 유료 서비스나 컨설팅 상품에 넣어 제공하기 |
-| 학교, 공공기관, 비영리 단체에서 쓰기 | 영리 기업의 업무에 쓰기 |
-| 수정하고 비상업 조건으로 다시 배포하기 | Required Notice 줄을 지우고 배포하기 |
+| 개인 워크스페이스, 연구, 학습, 취미 프로젝트 | 고객사에 설치해 주거나 납품물에 포함하기 |
+| 학교, 공공기관, 비영리 단체에서 쓰기 | 호스팅 서비스나 유료 교육, 컨설팅 상품으로 제공하기 |
+| 영리 기업의 사내 업무에 쓰기 (사내 SoT, 평가, PoC, 사내 수정) | 이 프로토콜이나 파생물을 판매하기 |
+| 비상업 조건으로 수정해 다시 배포하기 | 영리 목적으로 회사 밖에 배포하기 |
 
-다시 배포할 때는 받은 사람도 같은 조건을 알 수 있도록 [LICENSE](LICENSE) 의 첫 줄
-`Required Notice: Copyright 2026 임한솔 (...)` 을 그대로 함께 전달해야 한다.
-
-상업적 이용이 필요하면 [이슈](https://github.com/proofer-tech/context-protocol/issues) 로 문의한다.
+다시 배포할 때는 [LICENSE](LICENSE) 첫 줄의 `Required Notice: Copyright 2026 임한솔 (...)` 을 그대로 함께
+전달한다. 상업 라이센스나 쓰임 판단이 필요하면 [이슈](https://github.com/proofer-tech/context-protocol/issues) 로 문의한다.

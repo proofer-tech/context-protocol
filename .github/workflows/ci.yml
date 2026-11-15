@@ -1,0 +1,42 @@
+name: ci
+
+# 모든 push 와 PR 에서 정본의 정합성을 기계로 확인한다.
+# 에이전트가 규칙을 지켰는지에 기대지 않고, 어긋나면 병합 전에 멈춘다.
+#   - 패키지 빌드 검증: 설치기 두 개와 가이드의 버전 스탬프, 설치기 블록과 정본의 일치,
+#     MANIFEST 생성, 압축 해제 후 diff
+#   - integrity_lint.py 단위 테스트 (PyYAML 있을 때와 없을 때 같은 결과)
+#   - 공개 문서에 키보드 밖 특수문자(em dash 등)가 섞이지 않았는지
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: PyYAML
+        run: pip install pyyaml
+
+      - name: 패키지 빌드 검증
+        run: scripts/build.sh
+
+      - name: 린트 단위 테스트
+        run: python3 -m unittest discover -s tests -v
+
+      - name: 공개 문서 표기
+        run: |
+          # README, docs, CHANGELOG 는 키보드 기본 특수문자만 쓴다
+          if grep -nP '[\x{2014}\x{2013}\x{2192}\x{2190}\x{2026}\x{00B7}\x{2500}-\x{257F}]' README.md CHANGELOG.md docs/*.md; then
+            echo "키보드 밖 특수문자가 있다" >&2; exit 1
+          fi

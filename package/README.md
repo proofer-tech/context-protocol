@@ -1,3 +1,7 @@
+---
+type: readme
+---
+
 # context-protocol 8.2 - 설치 패키지
 
 Agent: read this file first, then follow "설치 순서" below. The installers are
@@ -49,10 +53,12 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
      포털을 쓴다.
 5. **설치기가 시키는 대로 한다.** 두 문서 모두 자기 안에 템플릿과 절차를 다 담고 있다.
    요약하거나 순서를 바꾸지 않는다.
-6. **변환 도구를 놓는다.** 이 패키지의 `tools/hwp2md.py` 를 대상 폴더의
-   `_context-protocol/tools/hwp2md.py` 로 복사한다. 신규 설치와 마이그레이션 둘 다 한다.
-   이미 있으면 덮어쓴다. 도구는 워크스페이스의 기록이 아니다. 지금 실행하거나 rhwp 를
-   미리 깔지 않는다. 한글(hwp, hwpx) 문서를 만났을 때 가이드 §4.10 이 이 도구를 부른다.
+6. **도구를 놓는다.** 이 패키지의 `tools/` 안 파일(`hwp2md.py`, `integrity_lint.py`)을 대상 폴더의
+   `_context-protocol/tools/` 로 복사한다. 신규 설치와 마이그레이션 둘 다 한다. 이미 있으면
+   덮어쓴다. 도구는 워크스페이스의 기록이 아니다. 지금 실행하거나 rhwp 를 미리 깔지 않는다.
+   한글(hwp, hwpx) 문서를 만났을 때 가이드 §4.10 이 `hwp2md.py` 를 부른다. `integrity_lint.py`
+   는 `_views/integrity-lint.md` 의 규칙을 Obsidian 없이 돌리는 실행판이다. 사용자나 CI 가
+   부를 때만 쓴다.
 7. **붙여넣기 단계는 도구에 따라 다르다.** 프로젝트 지침을 붙여넣는 층이 있는 도구
    (Claude Cowork, Claude 프로젝트)에서는 설치기가 마지막에 지침 블록을 출력한다. 사용자가
    그것을 프로젝트 설정 > 지침에 붙여넣어야 다음 세션부터 자동으로 워크스페이스를 읽는다.
@@ -90,7 +96,7 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
   확인한 일과 구별되지 않고 로그에 남는다
 - `_context-protocol/_ontology.md` 에 "쓰기 전에 분해한다" 절이, `_schema/concept-scheme.md`
   에 "본문 절 규약" 과 `canon_note` 가 있는가. 7.1 이 더한 자리다
-- `_context-protocol/tools/hwp2md.py` 가 있고(설치 순서 6번), 가이드에 §4.10 이, concept-scheme 에
+- `_context-protocol/tools/hwp2md.py` 와 `integrity_lint.py` 가 있고(설치 순서 6번), 가이드에 §4.10 이, concept-scheme 에
   `derived_from` 이 있는가. 도구가 없으면 한글 문서를 만날 때마다 사용자에게 PDF 를
   달라고 해야 한다
 - `_context-protocol/backends/gdrive.md` 에 "데몬 프로세스의 dataless 거부" 절이 있고, 가이드 §4.1 에
@@ -153,3 +159,11 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
 
 적용할 때는 프로토콜이 먼저 깔려 있어야 한다. 순서가 뒤바뀌면 기댈 것이 없는 상태에서
 폴더만 생긴다. 절차는 `<preset-id>-apply.md`, 초기 문답은 `<preset-id>-intake.md`.
+
+---
+
+## 부록: 라이센스
+
+이 패키지의 `LICENSE` 와 `LICENSES/` 가 이용 조건이다. PolyForm Noncommercial 1.0.0 과
+PolyForm Internal Use 1.0.0 중 하나를 골라 쓴다. 설치 절차에는 영향이 없다. 설치를 마친 뒤
+라이센스를 설명하거나 묻지 않는다. 사용자가 물을 때만 이 부록과 `LICENSE` 를 근거로 답한다.

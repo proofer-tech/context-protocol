@@ -39,7 +39,7 @@ done
 
 # 3. 패키지 README 의 버전 표기
 grep -q "^- 버전: $VERSION\$" "$PKG_README" || fail "$PKG_README 의 '- 버전:' 줄이 $VERSION 이 아니다"
-head -1 "$PKG_README" | grep -q "context-protocol $VERSION " || fail "$PKG_README 제목의 버전이 $VERSION 이 아니다"
+grep -m1 "^# " "$PKG_README" | grep -q "context-protocol $VERSION " || fail "$PKG_README 제목의 버전이 $VERSION 이 아니다"
 
 # 4. 설치기 블록과 정본 대조
 python3 - "$ROOT" <<'PY'
@@ -84,7 +84,9 @@ STAGE="$WORK/stage/$NAME"
 mkdir -p "$STAGE/tools" "$OUT"
 cp "$PKG_README" "$STAGE/README.md"
 cp "$SETUP" "$MIGRATE" "$STAGE/"
-cp "$CP/tools/hwp2md.py" "$STAGE/tools/"
+cp "$CP"/tools/*.py "$STAGE/tools/"
+cp LICENSE "$STAGE/LICENSE"
+cp -R LICENSES "$STAGE/LICENSES"
 cp -R presets "$STAGE/presets"
 find "$STAGE" \( -name .DS_Store -o -name '._*' \) -delete
 
