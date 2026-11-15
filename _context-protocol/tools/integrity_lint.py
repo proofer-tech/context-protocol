@@ -9,7 +9,7 @@
     python3 _context-protocol/tools/integrity_lint.py [워크스페이스 루트] [--json] [--signals-fail]
 
 - 규칙 위반이 하나라도 있으면 종료 코드 1. 없으면 0.
-- 검토 신호(분해 검토, 근거 drift, 효력 만료)는 기본적으로 종료 코드에 넣지 않는다.
+- 검토 신호(분해 검토, 근거 drift, 신뢰 역전, 효력 만료)는 기본적으로 종료 코드에 넣지 않는다.
   `--signals-fail` 을 주면 신호도 실패로 친다(CI 에서 엄격하게 볼 때).
 - 표준 라이브러리만 쓴다. PyYAML 이 있으면 frontmatter 를 그것으로 읽는다.
 
@@ -269,7 +269,7 @@ def lint(root: Path, today: dt.date | None = None) -> dict:
         "rule6_project_subjects": [],
         "yaml_error": [],
     }
-    signals: dict[str, list] = {"decomposition": [], "grounded_drift": [], "validity_expired": []}
+    signals: dict[str, list] = {"decomposition": [], "grounded_drift": [], "trust_inversion": [], "validity_expired": []}
 
     for n in notes:
         if n.fm.get("__yaml_error__"):
@@ -378,6 +378,28 @@ def lint(root: Path, today: dt.date | None = None) -> dict:
                         "source_mtime": dt.datetime.fromtimestamp(m).date().isoformat(),
                     })
 
+    # 검토 신호: 신뢰 역전 (8.3, trust_tier 가 있는 문서만)
+    rank = {"verified": 3, "sourced": 2, "unverified": 1}
+    for n in notes:
+        if n.type != "document" or n.fm.get("trust_tier") is None:
+            continue
+        mine_v = str(n.fm.get("trust_tier")).strip()
+        if mine_v not in rank:
+            signals["trust_inversion"].append({"note": n.rel, "trust_tier": mine_v, "problem": "허용값(verified, sourced, unverified)이 아니다"})
+            continue
+        low, low_src = None, None
+        for l in as_list(n.fm.get("grounded_on")):
+            t_ = link_target(l)
+            hit = res.resolve(t_) if t_ else None
+            src = by_rel.get(hit) if hit else None
+            if src is None:
+                continue
+            r = rank.get(str(src.fm.get("trust_tier", "")).strip())
+            if r and (low is None or r < low):
+                low, low_src = r, hit
+        if low is not None and rank[mine_v] > low:
+            signals["trust_inversion"].append({"note": n.rel, "trust_tier": mine_v, "lower_source": low_src})
+
     # 검토 신호: 효력 만료 (프리셋이 쓰는 종료 필드와 범용 valid_until)
     end_keys = ("valid_until", "effectiveTo", "coversTo", "endDate")
     for n in notes:
@@ -404,6 +426,7 @@ LABELS = {
     "yaml_error": "frontmatter 를 읽지 못한 노트",
     "decomposition": "검토 신호) 분해 검토",
     "grounded_drift": "검토 신호) 근거 drift",
+    "trust_inversion": "검토 신호) 신뢰 역전",
     "validity_expired": "검토 신호) 효력 만료",
 }
 

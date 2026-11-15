@@ -33,6 +33,7 @@ top_concept: "[[context-infrastructure]]"
 | grounded_on | Link 리스트 | document 에만. 이 정리 노트가 기대어 쓰인 원본. 비-md 원본은 확장자까지 쓴 위키링크. 원본이 노트보다 나중에 바뀌면 integrity-lint 가 근거 drift 검토 신호를 띄운다 |
 | grounded_checked | date (YYYY-MM-DD) | grounded_on 이 있는 document 에만. 노트는 고치지 않고 근거 원본과 대조만 한 날. drift 신호는 updated 와 이 값 중 늦은 날을 기준으로 본다 |
 | supersedes | Link 리스트 | document 에만. 이 판이 대체한 이전 판. 대체된 판은 고치지 않는다. 지금 유효한 판은 이 관계로 정하고 수정 시각이나 파일명으로 정하지 않는다. 절차는 `_context-protocol/_ontology.md` "판이 바뀌는 문서" |
+| trust_tier | enum `verified` / `sourced` / `unverified` | document 에만, 선택(8.3). 이 문서를 얼마나 믿어도 되는가. `verified` 원본이나 책임자가 확인함, `sourced` 출처는 있으나 확인 전, `unverified` 출처가 불분명하거나 추정. 높은 순서는 verified, sourced, unverified. `sourced` 이하 문서로 답할 때는 그렇다고 밝힌다(GUIDE §3). 키가 없는 문서는 판정하지 않는다. 정리 노트의 등급은 `grounded_on` 원본 중 이 키가 있는 것의 가장 낮은 등급을 넘지 못한다. 넘으면 integrity-lint 가 신뢰 역전 검토 신호를 띄운다 |
 | derived_from | text | 기계 변환본 document 에만. 같은 폴더에 있는 원본 파일의 이름. 이 키가 있으면 도구가 만든 사본이라 손으로 고치지 않고, 원본이 바뀌면 다시 만든다. 분해 검토 신호에서 빠진다. 지금 쓰는 곳은 HWP 변환기(GUIDE §4.10) |
 
 v3의 `source` 키는 폐기됐다. 원본이 곧 문서라 참조 경로가 없다.
@@ -114,6 +115,9 @@ v3의 `source` 키는 폐기됐다. 원본이 곧 문서라 참조 경로가 없
   `grounded_checked` 중 늦은 날보다 뒤다. 동기화로도 수정 시각이 바뀌므로 오탐이 난다.
   판정은 원본을 열어 노트와 대조해서 한다. 절차는 `_context-protocol/_ontology.md` 의
   "정리 노트의 근거".
+- 신뢰 역전: `trust_tier` 가 있는 document 의 등급이, `grounded_on` 원본 중 `trust_tier` 가 있는
+  것의 가장 낮은 등급보다 높다. 정리하는 과정이 신뢰를 올려 주지 않는다는 원칙의 점검이다. 노트의
+  등급을 낮추거나, 원본을 확인해 원본 쪽 등급을 올린다. 키가 없는 문서는 양쪽 다 대상이 아니다.
 
 ## 관계 방향 정책
 

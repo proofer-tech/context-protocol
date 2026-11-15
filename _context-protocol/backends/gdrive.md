@@ -21,6 +21,7 @@ title: Backend profile - Google Drive
 | `dual_root` | 공유 드라이브 = L1a public / 내 드라이브 = L1b private | |
 | `connector` | google-drive | 네이티브 문서와 동기화 폴더 밖 항목 |
 | `sync_lag` | yes | 다른 PC 의 최신본이 아직 로컬에 없을 수 있음 |
+| `vcs` | none | git 으로 운용하려면 동기화 폴더 밖에 clone 하고 `git` 백엔드를 고른다 |
 
 ## WS 경로 분해 (mount_root: yes)
 
@@ -225,7 +226,8 @@ Layer A 유래 증상(delete 불가, git lock 제거 불가)은 이 표가 아�
 하네스가 `proxy_mount: no` 라서 삭제와 git 이 기술적으로 되더라도, 이 백엔드의 워크스페이스
 안에서 `git init` 을 하거나 저장소를 운용하지 않는다. 동기화 클라이언트가 `.git` 내부 파일을
 여러 PC 사이에서 따로 올리고 내리면서 저장소가 깨진다. 코드 저장소는 동기화 폴더 밖 로컬에
-두고 결과물만 워크스페이스로 복사한다. 이 규칙은 하네스가 아니라 백엔드(`sync_scope: multi-pc`)가
+두고 결과물만 워크스페이스로 복사한다. 워크스페이스 자체를 git 으로 운용하고 싶으면 동기화 폴더 밖에
+clone 하고 `git` 백엔드(8.3)를 고른다. 이 규칙은 하네스가 아니라 백엔드(`sync_scope: multi-pc`)가
 정한다. 2026-10-25 실측에서 Claude Code 는 이 점을 짚었고 Grok Build 는 `proxy_mount: no` 만
 보고 git 을 허용한다고 답했다. 그래서 하네스 프로파일의 주의가 아니라 이 프로파일의 규칙으로 둔다.
 백엔드를 바꿔도 사라지지 않는다.

@@ -61,8 +61,13 @@ profile you resolve in Step 0.
      not enforce the boundary. Sensitive content goes to WS_PRIV only.
   3. Confirm the exact target folder path(s) before writing.
   4. BACKEND: which backend this workspace uses. Ask it as a question with the
-     profile ids as options (`local`, `gdrive`, plus a reserved id when the path
-     matches one), the path inference first and marked as suggested. Announcing
+     profile ids as options (`local`, `gdrive`, `git`, plus a reserved id when the
+     path matches one), the path inference first and marked as suggested. Offer
+     `git` only as an option, never as the suggestion: it is never inferred, not
+     even from an existing `.git` (backends/git.md "판별"), and it requires that
+     WS is the root of a git clone OUTSIDE any cloud-synced folder; if the user
+     picks it for a synced path, say once that the repository will break there
+     and do not record `git` until the clone is moved. Announcing
      the inference and moving on does not count as asking. Record the answer as
      BACKEND with BACKEND_SOURCE = `user`. If the answer contradicts the path
      shape (e.g. `local` for a folder inside a OneDrive sync path), say once that
@@ -70,10 +75,19 @@ profile you resolve in Step 0.
      if they confirm. No later step re-infers BACKEND.
      Unattended run with no one to ask: use the inference with BACKEND_SOURCE =
      `inferred`, and say so in the completion report.
+  5. GIT_MERGE, only when BACKEND is `git` (and only if `WS/.git` exists; if it
+     does not, ask the user to `git init` or clone first, and do not record
+     `git` until then): the default merge mode, `direct`
+     (the agent commits and pushes to the default branch) or `review` (the agent
+     pushes a branch and opens a PR, a person merges). Suggest `direct` for a
+     workspace one person uses and `review` for an organization's official
+     canon. Then ask whether any folders should use the other mode (for
+     example `review` by default with `memory/` and `action-log/` as `direct`),
+     and record them as GIT_MERGE_PATHS. Record both as the user's choice.
 - Define WS = the confirmed working folder (or the WS_PUB/WS_PRIV pair).
 - Derive WS_REL by the §4.9 rule (do not hardcode it), branching on the
   backend's `mount_root` capability:
-  - `mount_root: no` (BACKEND `local`): there is no anchor to strip. WS is the
+  - `mount_root: no` (BACKEND `local` or `git`): there is no anchor to strip. WS is the
     connected absolute path. Record `ws_rel_path` as a home-relative path; if the
     folder is outside the home directory there is no such path, so DROP the line
     entirely rather than writing an absolute one.
@@ -96,6 +110,11 @@ profile you resolve in Step 0.
 
 ### Step 1 - Create files
 
+(BACKEND `git` only) Before writing anything, run the session start in
+backends/git.md "세션 절차" 1 (default branch, then pull), so the install lands
+on the latest default branch. Add `.obsidian/workspace*.json`, `.DS_Store` and
+`cache/` to `WS/.gitignore` (create it, or append missing lines).
+
 Create these files under WS. If a target exists and is non-empty, show
 its content and ask before overwriting.
 
@@ -116,6 +135,11 @@ this wrong silently produces a file tens of KB too long.
    They are the mechanism by which a rule announces which backend it belongs to,
    and a session that later moves the workspace to another backend needs them
    intact. Do not prune the template to the current backend.
+   When BACKEND is `git`, add `git_merge: <GIT_MERGE>` after `ws_backend_source`,
+   and `git_merge_paths:` with one `  <folder>/: <mode>` line per GIT_MERGE_PATHS
+   entry when there are any, and add the line `(vcs: git) Before reading
+   anything else, run the session start in _context-protocol/backends/git.md.`
+   at the end of item 1. Other backends get none of these.
 3. The two portals, both always, whatever harness runs this setup:
    `WS/AGENTS.md` from <portal_agents_md> and `WS/CLAUDE.md` from
    <portal_claude_md>, verbatim. They hold no rules and need no substitution.
@@ -128,9 +152,9 @@ this wrong silently produces a file tens of KB too long.
    forks the canon.
 4. `WS/memory/MEMORY.md` : the skeleton between <memory_index> tags,
    with <project> replaced.
-5. `WS/_context-protocol/backends/` : the three files between <backend_profiles> tags -
+5. `WS/_context-protocol/backends/` : the four files between <backend_profiles> tags -
    `storage-backend.md` (the folder concept: capability contract and detection),
-   `gdrive.md`, `local.md`. Write all profiles, not only the one in use: a
+   `gdrive.md`, `local.md`, `git.md`. Write all profiles, not only the one in use: a
    workspace that later moves between backends must carry the target profile
    already. `storage-backend.md` is a folder concept note, so the profiles in
    that folder are classified by location and need no `subject`.
@@ -260,6 +284,17 @@ subagents, so it adds no end-of-run latency.
    "## Legacy entries" and offer to migrate their bodies to WS/memory/.
    Appending a single router line is NOT enough; without the warning header,
    future sessions re-grow auto-memory into long-term storage.
+
+4. (BACKEND `git` only) Commit the installation as backends/git.md "설치와 첫
+   커밋" says: one commit of exactly the files this setup created (`git add`
+   with their paths), then push (`direct`) or a branch and PR (`review`). An
+   empty remote with no default branch takes the commit directly. With
+   `review`, tell the user in the final report that the install is complete
+   only once the PR is merged and that no new session should start before
+   that. A protected default branch turns `direct` into `review`; never bypass
+   it. On a harness with `proxy_mount: yes`, or with no shell, run no git
+   command: leave the files uncommitted and tell the user to commit them from
+   the host.
 
 ### Step 4 - Mandatory final output
 
@@ -557,8 +592,9 @@ FUSE 의 지연 하이드레이션)만 백엔드에 달려 있다. 6.0 은 Layer
 
 ## 프로파일이 선언하는 능력
 
-프로파일 파일은 `_context-protocol/backends/<backend_id>.md` 하나다. 아래 여덟 개 키의 값이 코어의
-어느 규칙을 켜고 끄는지가 계약의 전부다.
+프로파일 파일은 `_context-protocol/backends/<backend_id>.md` 하나다. 아래 아홉 개 키의 값이 코어의
+어느 규칙을 켜고 끄는지가 계약의 전부다. 8.3 에서 아홉째 키 `vcs` 가 들어왔다. 8.2 까지의 프로파일과
+폴백은 `vcs: none` 이라 동작이 그대로다.
 
 | 능력 키 | 값 | 좌우하는 코어 규칙 |
 |---|---|---|
@@ -570,6 +606,7 @@ FUSE 의 지연 하이드레이션)만 백엔드에 달려 있다. 6.0 은 Layer
 | `dual_root` | 두 루트의 매핑 서술 / none | GUIDE §2 의 L1a public 과 L1b private |
 | `connector` | 커넥터 id / none | GUIDE §4.6, §5 의 비-DC 예외 |
 | `sync_lag` | yes / no | GUIDE §6 동시성 충돌 처리 |
+| `vcs` | none / git | GUIDE §6 의 쓰기 단계를 감싸는 세션 절차(받기, 커밋, 반영 모드)가 있는가 |
 
 Layer A 는 이 표에 없다. 백엔드 능력이 아니라 하네스 능력(`proxy_mount`,
 [[agent-harness]])이기 때문이다. `proxy_mount: yes` 인 하네스(Cowork)에서는 연결된
@@ -584,6 +621,7 @@ git 을 그냥 돌려도 되겠지" 로 새는 실수가 나온다. 백엔드가
 |---|---|---|
 | `gdrive` | [[gdrive]] | 지원. 5.x 까지의 기본값이자 유일한 실측 대상 |
 | `local` | [[local]] | 지원. 단일 PC 전제 |
+| `git` | [[git]] | 선택(8.3). 동기화 폴더 밖의 git clone. 경로로 추론하지 않고 사용자가 고를 때만 쓴다 |
 | `onedrive` | 없음 | 예약. 폴백 규칙 적용 |
 | `dropbox` | 없음 | 예약. 폴백 규칙 적용 |
 
@@ -635,6 +673,11 @@ PC 에 OneDrive 가 깔려 있다는 사실은 WS 의 위치와 무관하다. �
 | 경로 상단에 `Dropbox` 세그먼트 | `dropbox` |
 | 위 어디에도 안 걸림 | `local` |
 
+`git` 은 이 표에 없다. 경로 모양으로도, `.git` 폴더가 있다는 사실로도 추론하지 않는다. 코드 저장소에
+프로토콜을 설치하는 경우가 흔하고, 에이전트가 커밋해도 되는지는 사용자만 정할 수 있기 때문이다.
+`git` 은 언제나 사용자 선언(`ws_backend_source: user`)으로만 기록된다. 판별 절차와 반영 모드는
+[[git]] 에 있다.
+
 셀렉터는 경로 아무 데나 있으면 되는 것이 아니라 마운트 루트 바로 아래여야 한다.
 `~/backup/My Drive/ws` 처럼 사람이 그 이름으로 만든 평범한 폴더를 gdrive 로 오판하지
 않기 위해서다.
@@ -657,6 +700,7 @@ symlink_registered: no  (안전한 쪽. 심링크 금지 유지)
 dual_root: none
 connector: none
 sync_lag: yes
+vcs: none
 ```
 
 보수적이라는 말은 "제약을 더 거는 쪽" 이라는 뜻이다. 미검증 백엔드에서 규칙을
@@ -664,7 +708,7 @@ sync_lag: yes
 
 ## 새 백엔드를 추가할 때
 
-1. `_context-protocol/backends/<backend_id>.md` 를 만든다. 위 여덟 개 능력 키를 전부 채우고,
+1. `_context-protocol/backends/<backend_id>.md` 를 만든다. 위 아홉 개 능력 키를 전부 채우고,
    `yes`/`no` 로 갈리는 항목은 **무엇을 실측했는지**를 함께 적는다. 실측하지 않은
    값은 값이 아니라 추측이라고 표시한다.
 2. GUIDE 는 건드리지 않는다. 코어가 프로파일을 참조하도록 이미 짜여 있으므로,
@@ -707,6 +751,7 @@ title: Backend profile - Google Drive
 | `dual_root` | 공유 드라이브 = L1a public / 내 드라이브 = L1b private | |
 | `connector` | google-drive | 네이티브 문서와 동기화 폴더 밖 항목 |
 | `sync_lag` | yes | 다른 PC 의 최신본이 아직 로컬에 없을 수 있음 |
+| `vcs` | none | git 으로 운용하려면 동기화 폴더 밖에 clone 하고 `git` 백엔드를 고른다 |
 
 ## WS 경로 분해 (mount_root: yes)
 
@@ -911,7 +956,8 @@ Layer A 유래 증상(delete 불가, git lock 제거 불가)은 이 표가 아�
 하네스가 `proxy_mount: no` 라서 삭제와 git 이 기술적으로 되더라도, 이 백엔드의 워크스페이스
 안에서 `git init` 을 하거나 저장소를 운용하지 않는다. 동기화 클라이언트가 `.git` 내부 파일을
 여러 PC 사이에서 따로 올리고 내리면서 저장소가 깨진다. 코드 저장소는 동기화 폴더 밖 로컬에
-두고 결과물만 워크스페이스로 복사한다. 이 규칙은 하네스가 아니라 백엔드(`sync_scope: multi-pc`)가
+두고 결과물만 워크스페이스로 복사한다. 워크스페이스 자체를 git 으로 운용하고 싶으면 동기화 폴더 밖에
+clone 하고 `git` 백엔드(8.3)를 고른다. 이 규칙은 하네스가 아니라 백엔드(`sync_scope: multi-pc`)가
 정한다. 2026-10-25 실측에서 Claude Code 는 이 점을 짚었고 Grok Build 는 `proxy_mount: no` 만
 보고 git 을 허용한다고 답했다. 그래서 하네스 프로파일의 주의가 아니라 이 프로파일의 규칙으로 둔다.
 백엔드를 바꿔도 사라지지 않는다.
@@ -940,6 +986,7 @@ title: Backend profile - local directory
 | `dual_root` | 별도 디렉토리 두 개(선택) | |
 | `connector` | none | |
 | `sync_lag` | no | |
+| `vcs` | none | 프로토콜이 git 절차를 정하지 않는다. 폴더가 git 저장소이고 워크스페이스 규칙(`CONTEXT.md` 의 조직 규칙 등)이 git 운용을 정해 두었으면 그 규칙을 그대로 따른다. 프로토콜이 정한 절차를 원하면 `git` 백엔드를 고른다 |
 
 ## 단일 PC 전제
 
@@ -1017,6 +1064,212 @@ public / private 분리가 필요하면 디렉토리를 둘 만든다. 공유 �
 GUIDE §4.3 §4.4 §4.5 §4.7 로 간다. 클라우드 관련 증상(빈 grep 결과, BadZipFile,
 URL 스텁)이 이 백엔드에서 나왔다면 백엔드 판별이 틀렸다는 뜻이다. 연결 경로를
 다시 확인한다.
+
+=== FILE: _context-protocol/backends/git.md ===
+---
+type: document
+backend_id: git
+title: Backend profile - git clone
+---
+
+# 백엔드 프로파일: git 저장소
+
+git 저장소를 로컬에 clone 한 폴더를 WS 로 쓴다. PC 사이는 동기화 클라이언트가 아니라 pull 과
+push 로 잇고, 정본 반영은 기본 브랜치에 바로 올리거나(수시반영) 브랜치와 PR 을 거쳐 사람이
+병합한다(승인반영). 8.3 에서 들어온 선택 백엔드다. 고르지 않은 워크스페이스는 아무것도 바뀌지 않는다.
+
+## 능력
+
+| 능력 키 | 값 | 근거 |
+|---|---|---|
+| `sync_scope` | multi-pc | push 와 pull 로 잇는다. 자동 동기화는 없다 |
+| `mount_root` | no | WS 는 clone 루트의 경로 그대로다 |
+| `lazy_hydration` | no | 모든 파일이 실체로 있다. 클라우드 동기화 폴더 안에 두지 않기 때문이다(아래) |
+| `native_doc_stubs` | none | |
+| `symlink_registered` | yes | git 은 링크를 링크로 저장한다. 그래도 금지(GUIDE §10) |
+| `dual_root` | 저장소 두 개(선택) | 공개와 비공개를 저장소로 가른다. 권한은 원격 호스팅의 저장소 권한이 강제한다 |
+| `connector` | none | 원격 호스팅의 CLI 나 MCP 는 PR 을 열 때만 선택적으로 쓴다 |
+| `sync_lag` | yes | 아직 받지 않은 원격 커밋과 아직 올리지 않은 로컬 커밋이 있을 수 있다 |
+| `vcs` | git | GUIDE §6 의 쓰기 단계를 아래 "세션 절차" 가 감싼다 |
+
+실측: 이 프로파일은 2026-11-15 에 정의됐다. 위 값은 git 의 성질에서 나온 것이고, 세션 절차는 아직
+여러 하네스에서 실측되지 않았다.
+
+## 언제 이 백엔드인가
+
+- WS 가 git 저장소의 작업 트리 루트다(`WS/.git` 이 있다).
+- 그 폴더가 클라우드 동기화 폴더(Drive, OneDrive, Dropbox) 밖에 있다. 동기화 클라이언트가 `.git`
+  내부 파일을 PC 마다 따로 올리고 내리면 저장소가 깨진다. 이 점은 `gdrive.md` 의 "git 저장소를
+  두지 않는다" 와 같은 근거다.
+- 원격(`origin`)이 있으면 여러 PC 와 여러 사람이 쓸 수 있다. 원격이 없으면 한 PC 의 이력 관리로만
+  쓰고, 아래 절차의 push 와 PR 단계를 건너뛴다.
+
+## 판별: 사용자만 고른다
+
+경로 모양으로 이 백엔드를 추론하지 않는다. `WS/.git` 이 있다는 사실로도 정하지 않는다. 코드
+저장소에 프로토콜을 설치하는 경우가 흔하고, 그때 사용자가 에이전트의 커밋을 원하는지는 경로가
+말해 주지 않는다. 그래서 `ws_backend: git` 은 언제나 `ws_backend_source: user` 다.
+
+사용자가 `git` 을 골랐는데 경로가 클라우드 동기화 폴더 모양이면(`storage-backend.md` 추론표),
+그 자리에 저장소를 두면 깨진다고 한 번 말하고 동기화 폴더 밖으로 clone 을 옮기라고 안내한다.
+옮기기 전에는 이 백엔드로 기록하지 않는다.
+
+## 반영 모드
+
+`CONTEXT.md` frontmatter 에 둔다. 설치할 때 사용자에게 묻고, 사용자가 고른 값은 이후 세션이
+덮어쓰지 않는다.
+
+```yaml
+ws_backend: git
+ws_backend_source: user
+git_merge: review          # 기본 모드. direct (수시반영) | review (승인반영)
+git_merge_paths:           # 선택. 폴더별 예외. 워크스페이스 루트 기준 경로
+  memory/: direct
+  action-log/: direct
+```
+
+- `direct`(수시반영): 에이전트가 기본 브랜치에 커밋하고 push 한다.
+- `review`(승인반영): 에이전트는 브랜치에 커밋하고 push 한 뒤 PR 까지만 만든다. 병합과 승인은
+  사람이 한다. 에이전트는 어떤 경우에도 PR 을 병합하거나 승인하지 않는다.
+- 한 파일의 모드는 `git_merge_paths` 에서 그 파일을 담는 가장 긴 경로가 정하고, 맞는 경로가 없으면
+  `git_merge` 가 정한다.
+- `git_merge` 가 없으면 `review` 로 본다. 제약을 더 거는 쪽이다. 그 사실을 사용자에게 한 번 알린다.
+- 설치할 때의 추천값: 혼자 쓰는 워크스페이스는 `direct`, 조직의 공식 정본은 `review`. 둘을 섞으려면
+  기본값을 `review` 로 두고 `memory/`, `action-log/` 처럼 잦고 가벼운 기록만 `direct` 예외로 둔다.
+- 사용자가 이 백엔드를 고른 것이 곧 이 워크스페이스에서 요청마다 커밋하고 모드대로 반영해도 된다는
+  동의다. 하네스가 "요청이 있을 때만 커밋" 을 기본으로 삼더라도, 이 워크스페이스 안의 파일에 한해서는
+  이 동의가 그 요청을 대신한다. 이 워크스페이스 밖의 저장소에는 적용되지 않는다.
+
+## 하네스 전제
+
+git 명령은 하네스가 그 폴더에서 git 을 돌릴 수 있을 때만 쓴다.
+
+- `proxy_mount: yes` (Cowork 연결 폴더): git 이 자기 잠금 파일을 지우지 못해 `.git/*.lock` 이 남고
+  이후 모든 git 명령이 깨진다(GUIDE §4.5). git 명령을 하나도 돌리지 않는다. 파일은 평소대로 쓰고,
+  세션 끝에 커밋되지 않은 변경 목록을 보고하며 "호스트에서 커밋해 달라" 고 남긴다. 승인반영 경로의
+  파일을 바꿨으면 그 사실도 같이 적는다. 호스트에서 이어받는 세션이 브랜치로 옮긴다.
+- 셸이 없는 하네스: 같은 방식으로 파일만 쓰고 보고한다.
+- 그 밖(Claude Code, Codex, Cursor, Antigravity, Grok Build 를 호스트에서 돌릴 때): 아래 절차를 따른다.
+
+## 세션 절차
+
+### 1. 시작: 받고 나서 읽는다
+
+`CONTEXT.md` frontmatter 에서 `ws_backend: git` 을 확인한 직후, `memory/MEMORY.md` 를 비롯한 다른
+파일을 읽기 전에 한다. 받기 전에 읽은 내용은 다른 PC 의 최신본이 아닐 수 있기 때문이다. 이 자리는
+`git` 워크스페이스의 `CONTEXT.md` 1번 항목에 능력 조건부 한 줄로 적혀 있다(설치기가 넣는다).
+
+1. 기본 브랜치를 정한다. 원격이 있으면 `git symbolic-ref --short refs/remotes/origin/HEAD` 의 값
+   (`origin/` 을 뗀 이름), 없으면 지금 체크아웃된 브랜치 중 `main` 또는 `master`.
+2. `git status` 로 작업 트리와 지금 브랜치를 본다.
+3. 바뀐 파일이 있으면 그 목록을 보고에 남긴다. 사람의 편집일 수 있으므로 에이전트가 그 변경을 커밋하거나
+   버리지 않는다. 이번 요청이 그 파일을 건드려야 하면 진행하기 전에 사용자에게 묻는다. 건드리지 않으면
+   그대로 두고 진행한다(무인 실행도 같다). 커밋은 언제나 이번 요청이 쓴 경로만 지정해서
+   `git add <경로>` 로 올린다. `git add -A` 와 `git commit -a` 는 쓰지 않는다.
+4. 지금 브랜치가 기본 브랜치가 아니면(앞 세션이 승인반영 브랜치에 남겨 뒀으면) `git switch <기본 브랜치>`.
+   바뀐 파일 때문에 전환이 안 되면 3번처럼 사용자에게 묻는다.
+5. 원격이 있으면 `git pull --ff-only`. 로컬에 올리지 않은 커밋이 있어 fast-forward 가 안 되면
+   `git pull --rebase`. 충돌이 나면 아래 "충돌" 로 간다. 원격이 없으면 이 단계를 건너뛴다.
+6. 원격에 닿지 못하면(오프라인, 인증 실패) 로컬 상태로 읽고, 최신이 아닐 수 있다는 점을 답에 밝힌다.
+
+자주 바뀌지만 기록이 아닌 파일(편집기 상태 `.obsidian/workspace*.json`, `.DS_Store`, `cache/`)은
+`.gitignore` 에 넣어 둔다. 설치기가 `git` 을 고른 워크스페이스에 이 줄들을 더한다.
+
+### 2. 쓴다
+
+GUIDE §6 그대로 쓴다(먼저 읽기, `updated` 올리기, 날짜가 어긋나면 다시 읽고 병합). action-log 엔트리와
+memory 기록도 같은 커밋에 넣는다.
+
+### 3. 요청 하나를 커밋 하나로 묶는다
+
+사용자 요청 하나가 끝나면 그 요청이 바꾼 파일을 모아 커밋한다. 메시지 첫 줄은 무엇을 했는지 한 줄,
+action-log 엔트리의 "무엇" 과 같은 말로 쓴다. 한 요청이 `direct` 경로와 `review` 경로를 함께 바꿨으면
+커밋을 둘로 나눈다. 순서는 기본 브랜치에서 `direct` 경로만 커밋하고 반영한 다음, 그 상태에서 브랜치를
+만들어 `review` 경로를 커밋한다. 작업 트리의 `review` 경로 변경은 브랜치를 만들 때 그대로 따라간다.
+
+### 4. 모드대로 반영한다
+
+**direct**
+
+1. 기본 브랜치에 커밋하고 `git push`.
+2. 원격이 앞서 있어 거부되면(non-fast-forward) `git pull --rebase` 후 한 번만 다시 push 한다.
+   충돌이면 "충돌" 로 간다.
+3. 원격이 기본 브랜치를 보호해서 거부되면 우회하지 않는다. 그 커밋을 아래 `review` 규칙의 이름으로
+   브랜치에 옮기고(`git branch <새 브랜치>` 다음 `git reset --keep origin/<기본 브랜치>`), `review` 의
+   2번부터(push, PR) 이어 간다. 그리고 그 경로를 `review` 로 바꿀지(`git_merge` 나 `git_merge_paths`)
+   사용자에게 한 번 묻는다. 사용자가 그대로 두면 이후 세션은 같은 폴백을 묻지 않고 하고 보고만 한다.
+   반대로 `review` 경로를 에이전트 판단으로 `direct` 로 올리는 일은 없다.
+
+**review**
+
+1. 최신 기본 브랜치에서 브랜치를 만든다. 이름은 `context/<YYYY-MM-DD>-<짧은 주제>`.
+2. 커밋하고 `git push -u origin <브랜치>`.
+3. 하네스에 원격 호스팅 도구(GitHub CLI, GitLab CLI, 그 MCP)가 있으면 PR 을 연다. 제목은 커밋 첫 줄,
+   본문에는 바꾼 파일과 이유, 확정과 제안의 구분을 적는다. 도구가 없으면 브랜치 이름과 비교 URL 을
+   사용자에게 알린다.
+4. 같은 주제의 후속 요청이 병합 전에 오면 같은 브랜치에 커밋을 더한다. 다른 주제는 새 브랜치다.
+5. 원격이 없으면 브랜치에 커밋까지만 하고, 병합은 사용자에게 맡긴다.
+6. 반영이 끝나면 `git switch <기본 브랜치>` 로 돌아온다. 다음 요청과 다음 세션은 기본 브랜치에서 시작한다.
+
+### 5. 끝: 남은 것을 보고한다
+
+올리지 못한 커밋, 열어 둔 PR, 커밋하지 못한 변경이 있으면 마지막 보고에 적는다. action-log 엔트리의
+"갱신 원본" 에는 파일과 함께, `review` 면 브랜치 이름을 적는다(PR 번호는 PR 을 연 뒤에 보고로 알린다).
+커밋 SHA 는 엔트리에 적지 않는다. 엔트리가 그 커밋 안에 있어서 미리 알 수 없고, 이력은 `git log` 가
+갖는다.
+
+## 설치와 첫 커밋
+
+- 설치는 WS 가 이미 git 저장소(`WS/.git`)일 때만 이 백엔드로 한다. 아니면 사용자에게 `git init` 이나
+  clone 을 먼저 하게 하고, 그 전에는 `git` 으로 기록하지 않는다.
+- 설치기는 파일을 쓰기 전에 위 "시작" 절차(기본 브랜치, 받기)를 한다.
+- 원격의 기본 브랜치가 아직 없으면(빈 저장소) 설치 커밋은 모드와 무관하게 기본 브랜치에 바로 올린다.
+  PR 을 열 대상 브랜치가 없기 때문이다.
+- 기본 브랜치가 있고 모드가 `review` 면 설치도 브랜치와 PR 로 낸다. 이때 설치는 **병합되어야 끝난다**.
+  병합 전에 기본 브랜치에서 시작한 세션에는 `CONTEXT.md` 가 없다. 설치기는 완료 보고에 "PR 이 병합되면
+  설치가 끝난다, 그 전에는 새 세션을 열지 않는다" 를 적는다.
+
+## 병합되지 않은 내용의 지위
+
+브랜치와 열린 PR 의 내용은 **제안**이다. 세션은 기본 브랜치를 기준으로 답한다. 열린 PR 의 내용을
+근거로 쓸 때는 검토 중이라고 밝힌다. 확정/제안 절(concept scheme "본문 절 규약")과 같은 구분을
+저장소 단위로 한 것이다.
+
+## 충돌
+
+에이전트가 스스로 풀어도 되는 것은 아래뿐이다.
+
+- 양쪽이 서로 다른 엔트리를 덧붙인 경우(action-log 날짜 파일, memory 본문의 목록). 양쪽 엔트리를 다
+  남기고 시간순으로 둔다.
+- frontmatter `updated` 만 다른 경우. 늦은 날짜를 남긴다.
+
+그 밖, 특히 같은 문단을 양쪽이 고친 경우는 `git rebase --abort` 또는 `git merge --abort` 로 되돌리고
+두 판을 사용자에게 보여 준다. 남의 변경을 버리는 쪽으로 푸는 일은 하지 않는다.
+
+## 하지 않는 것
+
+- `push --force`, 이미 올린 커밋의 이력 재작성, 보호 규칙이나 훅 우회(`--no-verify`)
+- PR 병합과 승인. 다른 사람의 브랜치에 커밋하기
+- 비밀(키, 토큰, 자격증명)을 커밋하기. 발견하면 커밋하지 않고 사용자에게 알린다
+- 클라우드 동기화 폴더 안에 clone 을 두거나 그 안에서 git 을 돌리기
+- 사용자가 고르지 않았는데 `.git` 이 있다는 이유로 이 백엔드처럼 행동하기
+
+## 쓰기 소유권과 권한
+
+누가 어느 폴더를 고칠 수 있는지(CODEOWNERS, 브랜치 보호, 저장소 권한)는 원격 호스팅의 설정이고
+프로토콜은 그것을 강제하지 않는다. 프로토콜은 그 설정이 거부한 것을 우회하지 않고 `review` 로
+내려가는 데까지를 맡는다. 공개와 비공개를 나누려면 저장소를 둘로 두고 권한을 저장소에 건다.
+
+## 증상 표 (이 백엔드 고유분)
+
+| 증상 | 원인 | 대응 |
+|---|---|---|
+| `.git/index.lock: File exists` | 잠금 파일을 못 지우는 하네스(proxy_mount: yes)에서 git 을 돌렸다 | 그 하네스에서는 git 을 돌리지 않는다. 호스트에서 잠금 파일을 지운 뒤 이어간다 |
+| push 가 `protected branch` 로 거부 | 원격의 브랜치 보호 | `direct` 커밋을 브랜치로 옮겨 `review` 로 처리, 모드 변경을 묻는다 |
+| pull 이 fast-forward 불가 | 로컬에 올리지 않은 커밋 | `pull --rebase`. 충돌이면 "충돌" 규칙 |
+| 다른 PC 에 방금 쓴 내용이 없다 | push 전이거나 상대가 pull 전 | 시작 절차의 pull, 끝 보고의 미반영 목록 |
+| 세션마다 바뀐 파일이 있다고 보고된다 | 편집기 상태 파일 같은 비기록 파일 | `.gitignore` 에 넣는다 |
+| `.git` 내부가 깨졌다는 오류 | 저장소를 클라우드 동기화 폴더 안에 뒀다 | 동기화 폴더 밖에 새로 clone 하고 작업 내용을 옮긴다 |
 </backend_profiles>
 
 <harness_profiles>
@@ -1907,6 +2160,7 @@ top_concept: "[[context-infrastructure]]"
 | grounded_on | Link 리스트 | document 에만. 이 정리 노트가 기대어 쓰인 원본. 비-md 원본은 확장자까지 쓴 위키링크. 원본이 노트보다 나중에 바뀌면 integrity-lint 가 근거 drift 검토 신호를 띄운다 |
 | grounded_checked | date (YYYY-MM-DD) | grounded_on 이 있는 document 에만. 노트는 고치지 않고 근거 원본과 대조만 한 날. drift 신호는 updated 와 이 값 중 늦은 날을 기준으로 본다 |
 | supersedes | Link 리스트 | document 에만. 이 판이 대체한 이전 판. 대체된 판은 고치지 않는다. 지금 유효한 판은 이 관계로 정하고 수정 시각이나 파일명으로 정하지 않는다. 절차는 `_context-protocol/_ontology.md` "판이 바뀌는 문서" |
+| trust_tier | enum `verified` / `sourced` / `unverified` | document 에만, 선택(8.3). 이 문서를 얼마나 믿어도 되는가. `verified` 원본이나 책임자가 확인함, `sourced` 출처는 있으나 확인 전, `unverified` 출처가 불분명하거나 추정. 높은 순서는 verified, sourced, unverified. `sourced` 이하 문서로 답할 때는 그렇다고 밝힌다(GUIDE §3). 키가 없는 문서는 판정하지 않는다. 정리 노트의 등급은 `grounded_on` 원본 중 이 키가 있는 것의 가장 낮은 등급을 넘지 못한다. 넘으면 integrity-lint 가 신뢰 역전 검토 신호를 띄운다 |
 | derived_from | text | 기계 변환본 document 에만. 같은 폴더에 있는 원본 파일의 이름. 이 키가 있으면 도구가 만든 사본이라 손으로 고치지 않고, 원본이 바뀌면 다시 만든다. 분해 검토 신호에서 빠진다. 지금 쓰는 곳은 HWP 변환기(GUIDE §4.10) |
 
 v3의 `source` 키는 폐기됐다. 원본이 곧 문서라 참조 경로가 없다.
@@ -1988,6 +2242,9 @@ v3의 `source` 키는 폐기됐다. 원본이 곧 문서라 참조 경로가 없
   `grounded_checked` 중 늦은 날보다 뒤다. 동기화로도 수정 시각이 바뀌므로 오탐이 난다.
   판정은 원본을 열어 노트와 대조해서 한다. 절차는 `_context-protocol/_ontology.md` 의
   "정리 노트의 근거".
+- 신뢰 역전: `trust_tier` 가 있는 document 의 등급이, `grounded_on` 원본 중 `trust_tier` 가 있는
+  것의 가장 낮은 등급보다 높다. 정리하는 과정이 신뢰를 올려 주지 않는다는 원칙의 점검이다. 노트의
+  등급을 낮추거나, 원본을 확인해 원본 쪽 등급을 올린다. 키가 없는 문서는 양쪽 다 대상이 아니다.
 
 ## 관계 방향 정책
 
@@ -2367,6 +2624,31 @@ if (rows.length) dv.table(["분해 검토 문서", "폴더", "줄 수", "H2 (출
 else dv.paragraph("분해 검토 대상 없음.")
 ```
 
+## 검토 신호) 신뢰 역전 (오류 아님)
+
+통과 여부에 넣지 않는다. `trust_tier` 가 있는 노트의 등급이 `grounded_on` 원본 중 등급이 있는
+것의 가장 낮은 등급보다 높으면 띄운다(concept scheme "검토 신호"). 키가 없는 문서는 보지 않는다.
+
+```dataviewjs
+const rank = { verified: 3, sourced: 2, unverified: 1 }
+const pages = dv.pages('-"_deprecated_v3" AND -"_deprecated_v5"').where(p => p.type === "document" && p.trust_tier && p.grounded_on)
+const rows = []
+for (const p of pages) {
+  const mine = rank[String(p.trust_tier)]
+  if (!mine) { rows.push([p.file.link, String(p.trust_tier), "(허용값 verified, sourced, unverified 가 아니다)"]); continue }
+  const list = Array.isArray(p.grounded_on) ? p.grounded_on : [p.grounded_on]
+  let low = null, lowPath = null
+  for (const l of list) {
+    const src = l && l.path ? dv.page(l.path) : null
+    const r = src && src.trust_tier ? rank[String(src.trust_tier)] : null
+    if (r && (low === null || r < low)) { low = r; lowPath = src.file.path }
+  }
+  if (low !== null && mine > low) rows.push([p.file.link, String(p.trust_tier), lowPath])
+}
+if (rows.length) dv.table(["노트", "노트 등급", "더 낮은 근거 원본"], rows)
+else dv.paragraph("신뢰 역전 없음.")
+```
+
 ## 검토 신호) 근거 drift (오류 아님)
 
 통과 여부에 넣지 않는다. `grounded_on` 원본의 수정 시각이 노트의 `updated` 와
@@ -2444,7 +2726,11 @@ updated: YYYY-MM-DD
 > Prereq: an agent harness that can read and write the workspace folder. The
 > tool that does host-side file work is a harness capability (§0-B); on Claude
 > Cowork it is the Desktop Commander (DC) MCP plugin.
-> Guide version: 8.2 (8.2 adds a check level, 직접 확인 or 보고됨, to every
+> Guide version: 8.3 (8.3 adds the opt-in `git` backend, a local clone with
+> pull, commit, push and a direct-or-review merge mode, through a ninth backend
+> capability `vcs`, §0-A and §6; and an optional `trust_tier` on documents, §3.
+> Workspaces that use neither behave exactly as in 8.2.
+> 8.2 adds a check level, 직접 확인 or 보고됨, to every
 > action-log entry, §12.3. 8.1 makes `memory/MEMORY.md` a memory-layer router
 > and drops every hand-kept file list, §6. 8.0 makes the core harness-neutral: CONTEXT.md is the
 > rule canon, AGENTS.md and CLAUDE.md are portals into it, and tool names, agent
@@ -2490,13 +2776,13 @@ are separate concerns. Keep them separate.
 ## 0-A. Backend profile
 
 WS is not a fixed kind of folder. It is whichever backend this workspace chose:
-a cloud mount (Google Drive today, OneDrive / Dropbox reserved) or a plain local
-directory. The core in this guide is identical on every backend; only the
+a cloud mount (Google Drive today, OneDrive / Dropbox reserved), a plain local
+directory, or a local git clone (opt-in, chosen only by the user). The core in this guide is identical on every backend; only the
 profile differs.
 
-A profile declares eight capabilities: `sync_scope`, `mount_root`,
+A profile declares nine capabilities: `sync_scope`, `mount_root`,
 `lazy_hydration`, `native_doc_stubs`, `symlink_registered`, `dual_root`,
-`connector`, `sync_lag`. Each one switches a specific core rule on or off. The
+`connector`, `sync_lag`, `vcs`. Each one switches a specific core rule on or off. The
 capability contract, the detection procedure, the path-shape inference table,
 and the fallback for unprofiled backends all live in
 `_context-protocol/backends/storage-backend.md`.
@@ -2628,6 +2914,12 @@ Order: L0 -> L1a -> L1b -> L2 -> L3. Advance only on miss.
    When integrity-lint shows it under the grounding-drift signal, open the
    changed original before relying on the note, then fix the note or record the
    check in `grounded_checked` (§10).
+7. Trust tier (optional): a document may carry `trust_tier: verified |
+   sourced | unverified`. When an answer rests on a `sourced` or `unverified`
+   document, say so and name its source; never restate it as settled fact. A
+   document without the key is read as before. A note's tier cannot be higher
+   than the lowest tier among its `grounded_on` originals that carry one;
+   integrity-lint raises a review signal when it is (concept scheme).
 
 ### 3-A. Hard rules: "L0 miss != not in memory"
 
@@ -2950,7 +3242,14 @@ Concurrency:
 - Always read before writing. No blind full overwrite.
 - Always bump `updated`. If read-date != write-date, re-read and merge.
 - (sync_lag: yes) another host's latest may not be local yet. On conflict,
-  don't overwrite; report to the user.
+  don't overwrite; report to the user (with vcs: git, resolve only within the
+  profile's limits and report the rest).
+- (vcs: git) the backend profile's session procedure wraps the steps above:
+  pull before reading, commit each request, then push or open a review branch
+  by the workspace's merge mode, and resolve conflicts only within the
+  profile's limits. Content on an unmerged branch is a proposal, not canon.
+  On a harness that cannot run git here (proxy_mount: yes), write files as
+  usual, run no git command, and report the uncommitted changes.
 
 Project descriptor upkeep: when a session changes the workspace's concept
 structure (adds/removes a concept in `_context-protocol/_concepts/` or a folder
@@ -2974,7 +3273,8 @@ and guides never expire; edit only on explicit change.
 ## 8. Applying to a new project
 
 1. Pick the backend (§0-A) and create the workspace folder(s): a cloud synced
-   folder for multi-PC, or a plain local directory for one machine. Optionally
+   folder for multi-PC, a plain local directory for one machine, or a local
+   git clone (outside any synced folder) when history and review matter. Optionally
    public + private. Connect it as the session's working folder.
 2. Standard structure:
 

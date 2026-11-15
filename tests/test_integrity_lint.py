@@ -146,6 +146,17 @@ class LintTest(unittest.TestCase):
         e, _ = counts(self.run_both(f))
         self.assertEqual(sum(e.values()), 0, e)
 
+    def test_trust_inversion_signal(self):
+        f = dict(OK_FILES)
+        f["notes/raw.md"] = "---\ntype: document\ntrust_tier: unverified\n---\n"
+        f["notes/curated.md"] = "---\ntype: document\ntrust_tier: verified\ngrounded_on: [\"[[raw]]\", \"[[source.pdf]]\"]\n---\n"
+        f["notes/fine.md"] = "---\ntype: document\ntrust_tier: unverified\ngrounded_on: [\"[[raw]]\"]\n---\n"
+        f["notes/nokey.md"] = "---\ntype: document\ngrounded_on: [\"[[raw]]\"]\n---\n"
+        f["notes/bad.md"] = "---\ntype: document\ntrust_tier: maybe\n---\n"
+        e, s = counts(self.run_both(f))
+        self.assertEqual(sum(e.values()), 0, e)
+        self.assertEqual(s["trust_inversion"], 2)  # curated 역전 + bad 허용값 아님
+
 
 if __name__ == "__main__":
     unittest.main()

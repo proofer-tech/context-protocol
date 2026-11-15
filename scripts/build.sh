@@ -71,6 +71,25 @@ for inst in ("CONTEXT_SETUP.md", "CONTEXT_MIGRATE.md"):
         c = (cp / rel).read_text(encoding="utf-8")
         if not (strip_fm(c).strip() in b or c.strip() in b):
             print(f"  {inst} <{tag}> 가 {rel} 와 다르다"); bad += 1
+multi = {"backend_profiles": "backends/", "harness_profiles": "harnesses/"}
+for inst in ("CONTEXT_SETUP.md", "CONTEXT_MIGRATE.md"):
+    s = (cp / "installers" / inst).read_text(encoding="utf-8")
+    for tag, folder in multi.items():
+        m = re.search(r"^<%s>\n(.*?)^</%s>" % (tag, tag), s, re.S | re.M)
+        if not m:
+            print(f"  {inst} <{tag}> 블록 없음"); bad += 1; continue
+        parts = re.split(r"^=== FILE: (.+?) ===\n", m.group(1), flags=re.M)
+        named = set()
+        for i in range(1, len(parts), 2):
+            rel = parts[i].strip()
+            named.add(rel)
+            f = root / rel
+            if not f.exists() or parts[i + 1].rstrip("\n") != f.read_text(encoding="utf-8").rstrip("\n"):
+                print(f"  {inst} <{tag}> 의 {rel} 가 정본과 다르다"); bad += 1
+        for f in sorted((cp / folder).glob("*.md")):
+            rel = f.relative_to(root).as_posix()
+            if rel not in named and f.name != "harness-portal-design.md":
+                print(f"  {inst} <{tag}> 에 {rel} 가 없다"); bad += 1
 if bad:
     sys.exit("블록 대조 실패")
 print("블록 대조 일치")

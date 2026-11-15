@@ -2,7 +2,7 @@
 type: readme
 ---
 
-# context-protocol 8.2 - 설치 패키지
+# context-protocol 8.3 - 설치 패키지
 
 Agent: read this file first, then follow "설치 순서" below. The installers are
 self-contained; do not improvise a workflow of your own.
@@ -16,7 +16,7 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
 루트의 `CONTEXT.md` 한 곳에 살고, `AGENTS.md` 와 `CLAUDE.md` 는 각 도구가 스스로
 읽는 입구로서 `CONTEXT.md` 를 가리키기만 한다.
 
-- 버전: 8.2
+- 버전: 8.3
 - 필요한 것: 작업 폴더 한 곳. 여러 PC 에서 같이 쓰려면 클라우드 동기화 폴더,
   이 PC 에서만 쓸 것이면 로컬 디렉토리 (또는 공개/비공개 두 곳)
 - 설치를 돌리는 도구: 폴더에 파일을 쓸 수 있는 에이전트면 된다. 파일을 첨부만 하는
@@ -37,7 +37,9 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
    두고 질문한다. 추론을 말하고 넘어가면 물은 것이 되지 않는다. 답은
    `ws_backend_source: user` 로 기록되고 이후 세션이 덮어쓰지 않는다. PC 에 어떤
    동기화 앱이 깔려 있는지는 조사하지도 근거로 쓰지도 않는다. 자세한 표는 설치기
-   Step 0 에 있다.
+   Step 0 에 있다. `git` 은 선택지로만 내고 추천하지 않는다. 폴더에 `.git` 이 있어도
+   마찬가지다. 사용자가 `git` 을 고르면 반영 모드(수시반영 `direct`, 승인반영 `review`)와
+   폴더별 예외를 이어서 묻는다.
 4. **기존 설치 여부를 판별한다.** 대상 폴더에 루트 `CONTEXT.md`(8.0 이후),
    `_context-protocol/CONTEXT_GUIDE.md`(7.x), 루트 `CONTEXT_GUIDE.md`(6.x),
    `GDRIVE_CONTEXT_GUIDE.md`(6.0 이전 이름), 또는 프로토콜이 쓴 `CLAUDE.md`(frontmatter 에
@@ -45,7 +47,7 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
    - 없다 -> `CONTEXT_SETUP.md` 를 읽고 그 안의 Setup 단계를 그대로 실행한다.
    - 있다 -> `CONTEXT_MIGRATE.md` 를 읽고 버전을 판별해 델타만 적용한다.
      **덮어쓰지 않는다.** 기존 워크스페이스에 SETUP 을 돌리면 그 폴더가 쌓아 둔 규칙과
-     기록이 사라진다. 7.x 설치본은 이 경로로 8.2 가 된다. 규칙이 `CLAUDE.md` 에서
+     기록이 사라진다. 7.x 설치본은 이 경로로 8.3 이 된다. 규칙이 `CLAUDE.md` 에서
      `CONTEXT.md` 로 옮겨지고 `CLAUDE.md` 는 포털로 바뀐다.
    - 코드 저장소처럼 그 도구용 `AGENTS.md` 나 `CLAUDE.md` 만 있고 위 파일이 하나도
      없으면 신규 설치다. 개발 규칙이 적힌 `CLAUDE.md` 라도 프로토콜 frontmatter 가 없으면
@@ -87,11 +89,14 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
   같은가. 6.4 가 고친 자리다
 - `_context-protocol/harnesses/` 에 `agent-harness.md` 와 프로파일 일곱 개가 있고, 가이드에
   §0-B 가, concept-scheme 에 `harness_id` 가 있는가. 8.0 이 더한 자리다
-- 가이드 스탬프가 8.2 인가
+- 가이드 스탬프가 8.3 인가
 - `memory/MEMORY.md` 가 `memory/` 안의 본문만 가리키는가. 개념, 프로젝트, 프로토콜 문서 줄이
   남아 있으면 8.1 전환이 덜 끝난 것이다. 8.1 이 고친 자리다
 - `action-log/action-log.md` 에 "## 파일 형식" 절이 있는가. 6.3 이 고친 자리다.
   이 절이 없으면 다음 세션이 데이 파일 형식을 지어내게 된다
+- `_context-protocol/backends/git.md` 가 있고 `storage-backend.md` 능력 표에 `vcs` 가, concept-scheme 에
+  `trust_tier` 가, `_views/integrity-lint.md` 에 "신뢰 역전" 블록이 있는가. 8.3 이 더한 자리다. `git` 을
+  고른 워크스페이스라면 `CONTEXT.md` frontmatter 에 `git_merge` 가 있는가. 고르지 않았다면 그 키가 없어야 한다
 - 그 "## 파일 형식" 절에 `확인:` 줄이 있는가. 8.2 가 더한 자리다. 없으면 보고만 받은 일이
   확인한 일과 구별되지 않고 로그에 남는다
 - `_context-protocol/_ontology.md` 에 "쓰기 전에 분해한다" 절이, `_schema/concept-scheme.md`

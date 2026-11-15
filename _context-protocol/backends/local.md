@@ -21,6 +21,7 @@ title: Backend profile - local directory
 | `dual_root` | 별도 디렉토리 두 개(선택) | |
 | `connector` | none | |
 | `sync_lag` | no | |
+| `vcs` | none | 프로토콜이 git 절차를 정하지 않는다. 폴더가 git 저장소이고 워크스페이스 규칙(`CONTEXT.md` 의 조직 규칙 등)이 git 운용을 정해 두었으면 그 규칙을 그대로 따른다. 프로토콜이 정한 절차를 원하면 `git` 백엔드를 고른다 |
 
 ## 단일 PC 전제
 

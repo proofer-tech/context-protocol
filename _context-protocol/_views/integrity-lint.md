@@ -118,6 +118,31 @@ if (rows.length) dv.table(["분해 검토 문서", "폴더", "줄 수", "H2 (출
 else dv.paragraph("분해 검토 대상 없음.")
 ```
 
+## 검토 신호) 신뢰 역전 (오류 아님)
+
+통과 여부에 넣지 않는다. `trust_tier` 가 있는 노트의 등급이 `grounded_on` 원본 중 등급이 있는
+것의 가장 낮은 등급보다 높으면 띄운다(concept scheme "검토 신호"). 키가 없는 문서는 보지 않는다.
+
+```dataviewjs
+const rank = { verified: 3, sourced: 2, unverified: 1 }
+const pages = dv.pages('-"_deprecated_v3" AND -"_deprecated_v5"').where(p => p.type === "document" && p.trust_tier && p.grounded_on)
+const rows = []
+for (const p of pages) {
+  const mine = rank[String(p.trust_tier)]
+  if (!mine) { rows.push([p.file.link, String(p.trust_tier), "(허용값 verified, sourced, unverified 가 아니다)"]); continue }
+  const list = Array.isArray(p.grounded_on) ? p.grounded_on : [p.grounded_on]
+  let low = null, lowPath = null
+  for (const l of list) {
+    const src = l && l.path ? dv.page(l.path) : null
+    const r = src && src.trust_tier ? rank[String(src.trust_tier)] : null
+    if (r && (low === null || r < low)) { low = r; lowPath = src.file.path }
+  }
+  if (low !== null && mine > low) rows.push([p.file.link, String(p.trust_tier), lowPath])
+}
+if (rows.length) dv.table(["노트", "노트 등급", "더 낮은 근거 원본"], rows)
+else dv.paragraph("신뢰 역전 없음.")
+```
+
 ## 검토 신호) 근거 drift (오류 아님)
 
 통과 여부에 넣지 않는다. `grounded_on` 원본의 수정 시각이 노트의 `updated` 와

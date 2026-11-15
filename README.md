@@ -78,6 +78,7 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
 |---|---|
 | `gdrive` (구글 드라이브 동기화 폴더) | 실측 검증. 여러 PC 에서 같은 워크스페이스 |
 | `local` (일반 로컬 디렉토리) | 지원. PC 한 대 전제 |
+| `git` (동기화 폴더 밖의 git clone) | 선택(8.3). pull, 요청 단위 커밋, 수시반영 또는 승인반영(PR). 설치할 때 사용자가 고를 때만 |
 | `onedrive`, `dropbox` | 예약. 프로파일이 없어 폴백 규칙으로 동작 |
 
 ## 프리셋

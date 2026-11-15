@@ -22,8 +22,9 @@ FUSE 의 지연 하이드레이션)만 백엔드에 달려 있다. 6.0 은 Layer
 
 ## 프로파일이 선언하는 능력
 
-프로파일 파일은 `_context-protocol/backends/<backend_id>.md` 하나다. 아래 여덟 개 키의 값이 코어의
-어느 규칙을 켜고 끄는지가 계약의 전부다.
+프로파일 파일은 `_context-protocol/backends/<backend_id>.md` 하나다. 아래 아홉 개 키의 값이 코어의
+어느 규칙을 켜고 끄는지가 계약의 전부다. 8.3 에서 아홉째 키 `vcs` 가 들어왔다. 8.2 까지의 프로파일과
+폴백은 `vcs: none` 이라 동작이 그대로다.
 
 | 능력 키 | 값 | 좌우하는 코어 규칙 |
 |---|---|---|
@@ -35,6 +36,7 @@ FUSE 의 지연 하이드레이션)만 백엔드에 달려 있다. 6.0 은 Layer
 | `dual_root` | 두 루트의 매핑 서술 / none | GUIDE §2 의 L1a public 과 L1b private |
 | `connector` | 커넥터 id / none | GUIDE §4.6, §5 의 비-DC 예외 |
 | `sync_lag` | yes / no | GUIDE §6 동시성 충돌 처리 |
+| `vcs` | none / git | GUIDE §6 의 쓰기 단계를 감싸는 세션 절차(받기, 커밋, 반영 모드)가 있는가 |
 
 Layer A 는 이 표에 없다. 백엔드 능력이 아니라 하네스 능력(`proxy_mount`,
 [[agent-harness]])이기 때문이다. `proxy_mount: yes` 인 하네스(Cowork)에서는 연결된
@@ -49,6 +51,7 @@ git 을 그냥 돌려도 되겠지" 로 새는 실수가 나온다. 백엔드가
 |---|---|---|
 | `gdrive` | [[gdrive]] | 지원. 5.x 까지의 기본값이자 유일한 실측 대상 |
 | `local` | [[local]] | 지원. 단일 PC 전제 |
+| `git` | [[git]] | 선택(8.3). 동기화 폴더 밖의 git clone. 경로로 추론하지 않고 사용자가 고를 때만 쓴다 |
 | `onedrive` | 없음 | 예약. 폴백 규칙 적용 |
 | `dropbox` | 없음 | 예약. 폴백 규칙 적용 |
 
@@ -100,6 +103,11 @@ PC 에 OneDrive 가 깔려 있다는 사실은 WS 의 위치와 무관하다. �
 | 경로 상단에 `Dropbox` 세그먼트 | `dropbox` |
 | 위 어디에도 안 걸림 | `local` |
 
+`git` 은 이 표에 없다. 경로 모양으로도, `.git` 폴더가 있다는 사실로도 추론하지 않는다. 코드 저장소에
+프로토콜을 설치하는 경우가 흔하고, 에이전트가 커밋해도 되는지는 사용자만 정할 수 있기 때문이다.
+`git` 은 언제나 사용자 선언(`ws_backend_source: user`)으로만 기록된다. 판별 절차와 반영 모드는
+[[git]] 에 있다.
+
 셀렉터는 경로 아무 데나 있으면 되는 것이 아니라 마운트 루트 바로 아래여야 한다.
 `~/backup/My Drive/ws` 처럼 사람이 그 이름으로 만든 평범한 폴더를 gdrive 로 오판하지
 않기 위해서다.
@@ -122,6 +130,7 @@ symlink_registered: no  (안전한 쪽. 심링크 금지 유지)
 dual_root: none
 connector: none
 sync_lag: yes
+vcs: none
 ```
 
 보수적이라는 말은 "제약을 더 거는 쪽" 이라는 뜻이다. 미검증 백엔드에서 규칙을
@@ -129,7 +138,7 @@ sync_lag: yes
 
 ## 새 백엔드를 추가할 때
 
-1. `_context-protocol/backends/<backend_id>.md` 를 만든다. 위 여덟 개 능력 키를 전부 채우고,
+1. `_context-protocol/backends/<backend_id>.md` 를 만든다. 위 아홉 개 능력 키를 전부 채우고,
    `yes`/`no` 로 갈리는 항목은 **무엇을 실측했는지**를 함께 적는다. 실측하지 않은
    값은 값이 아니라 추측이라고 표시한다.
 2. GUIDE 는 건드리지 않는다. 코어가 프로파일을 참조하도록 이미 짜여 있으므로,

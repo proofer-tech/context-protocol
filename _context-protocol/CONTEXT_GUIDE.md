@@ -11,7 +11,11 @@ subject:
 > Prereq: an agent harness that can read and write the workspace folder. The
 > tool that does host-side file work is a harness capability (§0-B); on Claude
 > Cowork it is the Desktop Commander (DC) MCP plugin.
-> Guide version: 8.2 (8.2 adds a check level, 직접 확인 or 보고됨, to every
+> Guide version: 8.3 (8.3 adds the opt-in `git` backend, a local clone with
+> pull, commit, push and a direct-or-review merge mode, through a ninth backend
+> capability `vcs`, §0-A and §6; and an optional `trust_tier` on documents, §3.
+> Workspaces that use neither behave exactly as in 8.2.
+> 8.2 adds a check level, 직접 확인 or 보고됨, to every
 > action-log entry, §12.3. 8.1 makes `memory/MEMORY.md` a memory-layer router
 > and drops every hand-kept file list, §6. 8.0 makes the core harness-neutral: CONTEXT.md is the
 > rule canon, AGENTS.md and CLAUDE.md are portals into it, and tool names, agent
@@ -57,13 +61,13 @@ are separate concerns. Keep them separate.
 ## 0-A. Backend profile
 
 WS is not a fixed kind of folder. It is whichever backend this workspace chose:
-a cloud mount (Google Drive today, OneDrive / Dropbox reserved) or a plain local
-directory. The core in this guide is identical on every backend; only the
+a cloud mount (Google Drive today, OneDrive / Dropbox reserved), a plain local
+directory, or a local git clone (opt-in, chosen only by the user). The core in this guide is identical on every backend; only the
 profile differs.
 
-A profile declares eight capabilities: `sync_scope`, `mount_root`,
+A profile declares nine capabilities: `sync_scope`, `mount_root`,
 `lazy_hydration`, `native_doc_stubs`, `symlink_registered`, `dual_root`,
-`connector`, `sync_lag`. Each one switches a specific core rule on or off. The
+`connector`, `sync_lag`, `vcs`. Each one switches a specific core rule on or off. The
 capability contract, the detection procedure, the path-shape inference table,
 and the fallback for unprofiled backends all live in
 `_context-protocol/backends/storage-backend.md`.
@@ -195,6 +199,12 @@ Order: L0 -> L1a -> L1b -> L2 -> L3. Advance only on miss.
    When integrity-lint shows it under the grounding-drift signal, open the
    changed original before relying on the note, then fix the note or record the
    check in `grounded_checked` (§10).
+7. Trust tier (optional): a document may carry `trust_tier: verified |
+   sourced | unverified`. When an answer rests on a `sourced` or `unverified`
+   document, say so and name its source; never restate it as settled fact. A
+   document without the key is read as before. A note's tier cannot be higher
+   than the lowest tier among its `grounded_on` originals that carry one;
+   integrity-lint raises a review signal when it is (concept scheme).
 
 ### 3-A. Hard rules: "L0 miss != not in memory"
 
@@ -517,7 +527,14 @@ Concurrency:
 - Always read before writing. No blind full overwrite.
 - Always bump `updated`. If read-date != write-date, re-read and merge.
 - (sync_lag: yes) another host's latest may not be local yet. On conflict,
-  don't overwrite; report to the user.
+  don't overwrite; report to the user (with vcs: git, resolve only within the
+  profile's limits and report the rest).
+- (vcs: git) the backend profile's session procedure wraps the steps above:
+  pull before reading, commit each request, then push or open a review branch
+  by the workspace's merge mode, and resolve conflicts only within the
+  profile's limits. Content on an unmerged branch is a proposal, not canon.
+  On a harness that cannot run git here (proxy_mount: yes), write files as
+  usual, run no git command, and report the uncommitted changes.
 
 Project descriptor upkeep: when a session changes the workspace's concept
 structure (adds/removes a concept in `_context-protocol/_concepts/` or a folder
@@ -541,7 +558,8 @@ and guides never expire; edit only on explicit change.
 ## 8. Applying to a new project
 
 1. Pick the backend (§0-A) and create the workspace folder(s): a cloud synced
-   folder for multi-PC, or a plain local directory for one machine. Optionally
+   folder for multi-PC, a plain local directory for one machine, or a local
+   git clone (outside any synced folder) when history and review matter. Optionally
    public + private. Connect it as the session's working folder.
 2. Standard structure:
 
