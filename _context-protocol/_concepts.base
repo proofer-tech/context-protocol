@@ -1,0 +1,13 @@
+filters:
+  and:
+    - type == "concept"
+    - '!file.inFolder("_deprecated_v3")'
+    - '!file.inFolder("_deprecated_v5")'
+views:
+  - type: table
+    name: 개념 목록
+    order:
+      - file.name
+      - pref_label_ko
+      - broader
+      - definition

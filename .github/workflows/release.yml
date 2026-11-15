@@ -1,0 +1,65 @@
+name: release
+
+# 태그 v<버전> 또는 v<버전>-b<N> 을 push 하면 패키지를 빌드해 같은 이름의 Release 에 붙인다.
+# 이미 같은 이름의 zip 이 Release 에 붙어 있으면 덮어쓰지 않는다.
+# 한 번 배포한 zip 의 해시가 바뀌면 설치 이력을 되짚을 수 없기 때문이다.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "빌드할 태그 (예: v8.2, v8.2-b2)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 태그 결정
+        id: tag
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          if [[ ! "$TAG" =~ ^v([0-9]+\.[0-9]+)(-b([0-9]+))?$ ]]; then
+            echo "태그 형식이 v<버전> 또는 v<버전>-b<N> 이 아니다: $TAG" >&2; exit 1
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+          echo "build=${BASH_REMATCH[3]}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.tag.outputs.tag }}
+
+      - name: 빌드
+        id: build
+        run: |
+          scripts/build.sh "${{ steps.tag.outputs.build }}" | tee build.log
+          ZIP="$(ls dist/*.zip)"
+          echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
+          # 태그의 버전과 LATEST_VERSION 이 같아야 한다
+          case "$(basename "$ZIP")" in
+            "context-protocol-${{ steps.tag.outputs.version }}"*) ;;
+            *) echo "태그 버전과 LATEST_VERSION 이 다르다: $ZIP" >&2; exit 1 ;;
+          esac
+
+      - name: Release 에 붙이기
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          ZIP="${{ steps.build.outputs.zip }}"
+          NAME="$(basename "$ZIP")"
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --title "context-protocol ${TAG#v}" --notes "설치: zip 을 내려받아 에이전트 대화에 첨부하고 \"이 파일을 압축해제해서 설치해줘\" 라고 한다. 자세한 것은 README 와 docs/설치-가이드.md."
+          fi
+          if gh release view "$TAG" --json assets -q '.assets[].name' | grep -qx "$NAME"; then
+            echo "$NAME 이 이미 붙어 있어 건너뛴다"
+          else
+            gh release upload "$TAG" "$ZIP"
+          fi
