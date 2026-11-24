@@ -3,7 +3,8 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 rm -rf dist && mkdir -p dist/fonts
-cp src/index.html src/style.css src/llms.txt src/icon.svg dist/
+cp src/index.html src/llms.txt src/icon.svg src/proofer-wordmark-dark-bg.png src/proofer-mark.png dist/
+cat src/ds/tokens.css src/ds/bundle-core.css src/style.css > dist/style.css
 
 # motion.js
 npx esbuild src/motion.ts --bundle --minify --format=iife --target=es2019 --outfile=dist/motion.js --log-level=warning
@@ -17,10 +18,10 @@ chars = set(text) | set("0123456789.,-_/:;!?()[]<>#@&+=%'\"*`~^|\\ ")
 chars |= set(chr(c) for c in range(0x20, 0x7f))
 pathlib.Path("/tmp/cp-chars.txt").write_text("".join(sorted(chars)))
 PY
-pyftsubset node_modules/wanted-sans/fonts/webfonts/variable/complete/woff2/WantedSansVariable.woff2 \
-  --text-file=/tmp/cp-chars.txt --flavor=woff2 --layout-features='*' --output-file=dist/fonts/wanted.woff2
-pyftsubset node_modules/d2coding/src/d2coding.ttf \
-  --text-file=/tmp/cp-chars.txt --flavor=woff2 --layout-features='*' --output-file=dist/fonts/d2coding.woff2
+for w in Rg Bd; do
+  pyftsubset src/fonts-src/LINESeedKR-$w.woff2 --text-file=/tmp/cp-chars.txt --flavor=woff2 \
+    --layout-features='*' --output-file=dist/fonts/lineseed-$(echo $w | tr A-Z a-z).woff2
+done
 
 # icons + og.png
 cp src/og.html dist/og.html

@@ -1,260 +1,750 @@
-/* context-protocol site
-   visual ref: tracebit.com (A1 실측: 바탕 #f3efec, 잉크 #231f20, 보조 #4f4c4d, 강조 #ea6f53,
-   제목 56~72 600 ls -0.03 lh 1.02, 모노 본문 16~18 lh 1.4, 컨테이너 1260, 섹션 padY 124, radius 8~12)
-   ux ref: decimal.app (헤어라인 셀 격자, 허브 연결 도식) */
-
-@font-face{font-family:"Wanted Sans";src:url(fonts/wanted.woff2) format("woff2");font-weight:400 800;font-display:swap}
-@font-face{font-family:"D2Coding";src:url(fonts/d2coding.woff2) format("woff2");font-weight:400;font-display:swap}
-
-:root{
-  --bg:#f3efec; --ink:#231f20; --soft:#4f4c4d; --mute:#6f6a6b;
-  --line:rgba(35,31,32,.16); --line-2:rgba(35,31,32,.32);
-  --dark:#231f20; --on-dark:#f3efec; --on-dark-soft:#b9b2ae; --dark-line:rgba(243,239,236,.16);
-  --accent:#ea6f53;
-  --sage:#c9d0c5; --rose:#e9d2d1; --sand:#e8d8c3;
-  --sans:"Wanted Sans",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
-  --mono:"D2Coding",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --wrap:1260px; --pad:clamp(20px,4.6vw,64px);
-  --sec:clamp(80px,10vw,124px);
+/* Proofer Design System tokens (project/tokens.css), font-face는 사이트 서브셋으로 대체 */
+/* Proofer Design System — generated from tokens.json */
+:root, [data-theme="default"] {
+  --color-blue-600: #344fe0; /* Brand Blue(--blue). 버튼 면, 아이브로, 숫자 강조, 링크. 흰 면 위 글자 6.3:1. Print: C88 M70 Y0 K0. */
+  --color-blue-deep: #0020b6; /* --blue-deep. 주 버튼 호버 면, 다크 CTA 그라디언트 끝, 흰 바탕 위 CTA 글자색. */
+  --color-blue-soft: #eef2ff; /* --blue-soft. 파란 칩(.ec-label) 면과 옅은 파란 그라디언트 시작. */
+  --color-blue-edge: #cdd6ff; /* 카드 호버 테두리. 기본 테두리 color-line에서 한 단계 진하게. */
+  --color-green-500: #45af66; /* Brand Green(--green). 그라디언트 끝, 태그 면(green-soft)의 원색. 면과 마크에만 쓴다. Print: C74 M0 Y78 K0. */
+  --color-green-soft: #e7f6ec; /* --green-soft. 진행 중 태그(.tagr, .pill.live) 면. 글자는 color-green-ink. */
+  --color-green-ink: #2c7a47; /* 초록 칩 안 글자. green-soft 위 4.6:1. */
+  --color-ink: #0b1020; /* 기본 글자색(--ink). 흰 면 위 18.9:1. Print text: K96 먹 1도. */
+  --color-gray-600: #5b6172; /* 보조 글자(--gray). 설명문, 푸터, 카드 본문. 흰 면 위 6.6:1. */
+  --color-gray-400: #9aa1b4; /* 구분 기호와 비활성 표시. 흰 면 위 2.6:1이라 글자색으로 쓰지 않는다. */
+  --color-line: #e9ebf2; /* 카드와 칩의 기본 테두리(--line). 1.6px 실선. */
+  --color-page: #f8f8f8; /* 브라우저 배경. 섹션과 카드가 흰 면이라 가장자리에만 보인다. */
+  --color-paper: #ffffff; /* 기본 면(--bg). 섹션, 카드, 버튼 글자. */
+  --color-amber-ink: #9a6400; /* 준비 중 칩(.pill.soon) 글자. #fff3e0 면 위 5.1:1. */
+  --color-amber-soft: #fff3e0; /* 준비 중 칩 면. */
+  --fg-1: var(--color-ink); /* 본문과 제목 글자. 흰 면 위 18.9:1. 다크: #eef1f8, bg-surface 위 15:1 이상. */
+  --fg-2: var(--color-gray-600); /* 설명문과 보조 글자. 흰 면 위 6.6:1. 다크: #a6acbd, bg-surface 위 8.1:1, bg-popover 위 7.6:1. */
+  --fg-3: var(--color-gray-600); /* 캡션과 푸터도 같은 회색을 쓴다. 이보다 옅은 회색은 글자에 쓰지 않는다. 다크: fg-2와 같은 #a6acbd. */
+  --fg-on-brand: var(--color-paper); /* color-blue-600 면과 다크 섹션 위 글자(6.3:1 이상). */
+  --fg-link: var(--color-blue-600); /* 링크와 아이브로. 흰 면 위 6.3:1. 다크: color-blue-pale(#9db4ff), bg-surface 위 9.2:1. 파랑 600은 다크 면 위 2.9:1이라 글자에 쓰지 않는다. */
+  --bg-page: var(--color-page); /* 브라우저 배경. 다크: #070a14. */
+  --bg-surface: var(--color-paper); /* 섹션과 카드 면. 다크: #0e1324. */
+  --bg-inverted: var(--color-ink); /* 다크 섹션 면. 글자는 fg-on-brand. */
+  --border-strong: var(--color-blue-edge); /* 카드 호버 테두리. 다크: #3a4a8a. */
+  --border-soft: var(--color-line); /* 카드, 칩, 구분선의 기본 테두리. 다크: #232b45. */
+  --color-blue-700: #0052cc; /* 이전 CI의 흰 바탕 로고용 파랑(#0052cc). 사이트에는 없다. 옛 로고 파일 재현에만. */
+  --color-charcoal-900: #343434; /* 이전 CI의 글자색(#343434). 현행 글자색은 color-ink다. 옛 산출물 재현에만. */
+  --color-charcoal-800: #353535; /* 이전 CI의 OG 다크 배경. */
+  --color-charcoal-700: #4a4f51; /* 이전 CI의 보조 글자와 점선 테두리 색. */
+  --color-graphite: #333638; /* 이전 CI의 카드 테두리 색. 현행 테두리는 color-line. */
+  --color-canvas: #f9fafa; /* 이전 CI의 페이지 배경(#f9fafa). 현행 배경은 color-page와 color-paper. */
+  --color-haze: #f5f5f5; /* 이전 CI 스케일의 옅은 회색. 쓰임새 기록 없음. */
+  --color-mist: #f8f8f8; /* 이전 CI 스케일의 옅은 회색. 값이 color-page와 같다. */
+  --color-gray-100: #f2f2f3; /* 이전 CI의 옅은 회색 채움. */
+  --color-blue-frame-bg: #edf2f8; /* 이전 CI 아키텍처 타일 면. */
+  --color-blue-frame-ink: #074994; /* 이전 CI 아키텍처 타일 라벨과 점선. */
+  --color-gray-frame-bg: #f2f2f3; /* 이전 CI 회색 타일 면. */
+  --color-gray-frame-ink: #4a4f51; /* 이전 CI 회색 타일 라벨. */
+  --color-success: #4caf50; /* 이전 CI 상태색. 사이트에서는 초록 칩(green-soft + green-ink)으로 대신한다. */
+  --color-warn-amber: #f9a11d; /* 이전 CI 경고색. 사이트에서는 amber-soft + amber-ink 칩을 쓴다. */
+  --color-warn-yellow: #ffdf90; /* 이전 CI 경고 면. */
+  --color-grape: #9747ff; /* 이전 CI 파일의 보라. 쓰지 않는다. */
+  --color-surface-soft: #f6f7fa; /* proofer.tech 소프트 밴드 면(#problem, #why). bg-muted의 라이트 값. 2026-10-14 사이트 값으로 등록. */
+  --color-nav-ink: #2b3146; /* 사이트 상단 메뉴 링크와 소셜 아이콘 글자. 흰 면 위 12.9:1. 2026-10-14 사이트 값으로 등록. */
+  --color-dot-idle: #d2d7e6; /* 도트 내비와 캐러셀 점의 꺼진 상태, 드로어 손잡이. 장식이라 글자에 쓰지 않는다. 사이트 값. */
+  --color-blue-orb: #6f8cff; /* 사이트 히어로 블러 오브 파랑. 다크 테마의 포커스 링(ring)으로 쓴다. 다크 면 위 6.0:1. */
+  --color-blue-pale: #9db4ff; /* 사이트 오브의 옅은 파랑. 다크 테마의 링크 글자(fg-link)와 차트 4번. 다크 면 위 9.2:1. */
+  --color-on-blue-body: #dfe6ff; /* 파랑 그라디언트 밴드 위 본문 글자. 사이트 값. */
+  --color-on-blue-eyebrow: #cdd8ff; /* 파랑 밴드와 다크 섹션 위 아이브로. README가 말하는 #cdd8ff 값. */
+  --color-on-blue-list: #e8eeff; /* 파랑 밴드 위 목록 글자. 사이트 값. */
+  --color-on-blue-check: #9be3b4; /* 파랑 밴드 위 체크 표시. 사이트 값. */
+  --color-red-500: #ef4444; /* proofer.tech 제품 UI 레이어의 destructive(hsl 0 84.2% 60.2%). 흰 면 위 3.8:1이라 글자와 흰 글자 바탕에는 쓰지 않는다. 테두리와 아이콘 전용. */
+  --color-red-600: #d92d20; /* 위험 동작 버튼 면(destructive). 흰 글자 4.8:1. 2026-10-14 추가. */
+  --color-red-ink: #b42318; /* 오류 글자. 흰 면 위 6.6:1, color-red-soft 위 5.8:1. 2026-10-14 추가. */
+  --color-red-soft: #fdeceb; /* 오류 알림과 오류 칩 면. 글자는 color-red-ink. 2026-10-14 추가. */
+  --color-gray-500: #7c8396; /* 체크박스, 라디오, 스위치 꺼짐처럼 작은 컨트롤의 테두리와 면. 흰 면 위 3.8:1(WCAG 1.4.11 충족). 글자에는 쓰지 않는다. 2026-10-14 추가. */
+  --bg-muted: var(--color-surface-soft); /* 눌러지지 않는 옅은 면. 표 행 호버, 메뉴 항목 하이라이트, 빈 상태 면, kbd. shadcn muted. 글자는 fg-1 또는 fg-2(fg-2 기준 라이트 5.8:1, 다크 7.1:1). */
+  --bg-accent: var(--color-blue-soft); /* 선택되고 활성인 항목의 면. 사이드바 현재 위치, 페이지 현재 번호, 정보 알림, 보조 버튼. shadcn accent. 글자는 fg-accent. */
+  --fg-accent: var(--color-blue-deep); /* bg-accent 위 글자. 라이트 #0020b6 10.0:1, 다크 #dfe6ff 10.9:1. */
+  --bg-popover: var(--color-paper); /* 떠 있는 면. 메뉴, 팝오버, 다이얼로그, 토스트, 커맨드. 다크에서는 bg-surface보다 한 단계 밝다. */
+  --bg-tooltip: var(--color-ink); /* 툴팁 면. 테마와 반대 명도로 뒤집는다. 글자는 fg-tooltip. */
+  --fg-tooltip: var(--color-paper); /* 툴팁 글자. 18:1 이상. */
+  --bg-overlay: rgba(11, 16, 32, 0.45); /* 다이얼로그, 시트, 드로어 뒤를 덮는 막. 라이트 값은 사내 시안(갈래)에서 쓰던 잉크 45%. */
+  --border-input: var(--color-line); /* 텍스트 입력, 텍스트영역, 셀렉트 트리거의 테두리. 라이트는 사이트와 사내 시안이 쓰는 color-line을 그대로 둔다(흰 면 위 1.2:1로 WCAG 1.4.11 미달, 기존 스타일 우선). 플레이스홀더와 라벨이 컨트롤을 알린다. 다크 #6b7390은 3.9:1. */
+  --border-control: var(--color-gray-500); /* 체크박스, 라디오, 스위치 꺼짐 상태처럼 테두리가 곧 모양인 작은 컨트롤. 라이트 3.8:1, 다크 3.9:1. */
+  --ring: var(--color-blue-600); /* 포커스 링. 2px 실선, 2px 띄움(제품 UI 레이어 기존 값). 라이트 흰 면 6.3:1, bg-muted 5.9:1. 다크 6.0:1. */
+  --destructive: var(--color-red-600); /* 위험 동작 버튼 면과 오류 테두리. 흰 글자 4.8:1. */
+  --fg-destructive: var(--color-red-ink); /* 오류 글자와 아이콘. 라이트 6.6:1, 다크 8.4:1. 색만으로 알리지 않고 문구나 아이콘을 함께 둔다. */
+  --bg-destructive-soft: var(--color-red-soft); /* 오류 알림과 오류 칩 면. 글자는 fg-destructive. */
+  --fg-success: var(--color-green-ink); /* 완료와 성공 글자와 아이콘. 라이트 color-green-soft 위 4.7:1, 다크 10:1. 초록과 빨강이 명도로도 갈라지도록 문구를 함께 둔다. */
+  --bg-success-soft: var(--color-green-soft); /* 성공 알림 면. 글자는 fg-success. */
+  --fg-nav: var(--color-nav-ink); /* 상단 내비게이션 링크 글자. */
+  --chart-1: var(--color-blue-600); /* 차트 1번 계열. 주 지표. */
+  --chart-2: var(--color-green-500); /* 차트 2번 계열. 비교 지표. 파랑과 명도 차이로도 구분된다. */
+  --chart-3: var(--color-blue-deep); /* 차트 3번 계열. */
+  --chart-4: var(--color-blue-pale); /* 차트 4번 계열. */
+  --chart-5: var(--color-gray-400); /* 차트 5번 계열. 기타, 기준선. */
+  --shadow-card: 0 10px 30px -22px rgba(20, 30, 80, 0.5); /* 기본 카드 그림자. proofer.tech의 .prob-card 값이다. 블러가 크고 스프레드가 음수라 바닥에 가깝게 가라앉는다. 다크 테마는 검정 그림자. */
+  --shadow-raised: 0 18px 50px -22px rgba(20, 30, 80, 0.34); /* 한 단계 떠 있는 카드와 흐름 박스. proofer.tech의 .layer l1, .engage-flow 값. 다크 테마는 검정 그림자. */
+  --shadow-popover: 0 18px 50px -22px rgba(20, 30, 80, 0.34); /* 드롭다운, 팝오버처럼 떠 있는 레이어. shadow-raised와 같은 값. 다크 테마는 검정 그림자. */
+  --shadow-brand: 0 10px 22px -10px rgba(52, 79, 224, 0.85); /* 주 버튼(.btn-primary) 그림자. 브랜드 파랑을 그대로 흘린다. proofer.tech 값. */
+  --shadow-cta: 0 16px 44px -10px rgba(0, 8, 70, 0.55); /* 큰 CTA 버튼 그림자. 한 화면에 하나. proofer.tech 값. */
+  --shadow-dock: 0 -10px 30px -12px rgba(20, 30, 80, 0.5); /* 화면 아래 고정 바가 본문 위로 드리우는 그림자. 위쪽으로 향한다. proofer.tech 값. */
+  --shadow-stamp: 6px 6px 0 0 rgba(51, 54, 56, 0.85); /* 이전 CI의 하드 오프셋 그림자(블러 없음). 현행 규칙이 아니다. 기존 산출물 재현에만 쓴다. */
+  --shadow-stamp-lg: 10px 10px 0 0 rgba(51, 54, 56, 0.85); /* 이전 CI의 큰 하드 오프셋 그림자. 현행 규칙이 아니다. 새 화면에는 shadow-card나 shadow-raised를 쓴다. */
+  --shadow-stamp-soft: 10px 10px 0 -3px rgb(235, 235, 235); /* 이전 CI에서 스탬프 카드 뒤에 겹치던 회색 받침. 현행 규칙이 아니다. */
+  --shadow-layer: 0 -12px 30px -22px rgba(20, 30, 80, 0.55), 0 12px 26px -18px rgba(20, 30, 80, 0.32); /* 겹쳐 쌓은 레이어 카드(.layer). 위아래로 동시에 드리운다. */
+  --shadow-dock-lg: 0 20px 50px -16px rgba(20, 30, 80, 0.6); /* 떠 있는 하단 CTA 캡슐(.dock-cta) 데스크톱 값. */
 }
+[data-theme="dark"] {
+  --fg-1: #eef1f8;
+  --fg-2: #a6acbd;
+  --fg-3: #a6acbd;
+  --fg-on-brand: var(--color-paper);
+  --fg-link: #9db4ff;
+  --bg-page: #070a14;
+  --bg-surface: #0e1324;
+  --bg-inverted: var(--color-ink);
+  --border-strong: #3a4a8a;
+  --border-soft: #232b45;
+  --bg-muted: #182037;
+  --bg-accent: #1d2a5e;
+  --fg-accent: #dfe6ff;
+  --bg-popover: #141a2e;
+  --bg-tooltip: #eef1f8;
+  --fg-tooltip: var(--color-ink);
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --border-input: #6b7390;
+  --border-control: #6b7390;
+  --ring: var(--color-blue-orb);
+  --destructive: var(--color-red-600);
+  --fg-destructive: #ff8f84;
+  --bg-destructive-soft: #2a1518;
+  --fg-success: #7cd39a;
+  --bg-success-soft: #12291b;
+  --fg-nav: #dfe3ee;
+  --chart-1: var(--color-blue-orb);
+  --chart-2: var(--color-green-500);
+  --chart-3: var(--color-blue-pale);
+  --chart-4: #3a4a8a;
+  --chart-5: #6b7390;
+  --shadow-card: 0 10px 30px -22px rgba(0, 0, 0, 0.9);
+  --shadow-raised: 0 18px 50px -22px rgba(0, 0, 0, 0.8);
+  --shadow-popover: 0 18px 50px -22px rgba(0, 0, 0, 0.8);
+}
+:root {
+  --space-0: 0; /* 4px 스케일의 0단계. */
+  --space-1: 4px; /* 4px. */
+  --space-2: 8px; /* 8px. */
+  --space-3: 12px; /* 12px. */
+  --space-4: 16px; /* 16px. 제품 UI 기본 리듬(카드 패딩). */
+  --space-5: 20px; /* 20px. */
+  --space-6: 24px; /* 24px. 제품 UI 기본 리듬(블록 간격). */
+  --space-8: 32px; /* 32px. 데스크톱 안쪽 거터. */
+  --space-10: 40px; /* 40px. */
+  --space-12: 48px; /* 48px. */
+  --space-16: 64px; /* 64px. 데스크톱 바깥 거터, 로고 락업 최소 여백. */
+  --space-20: 80px; /* 80px. 1920 덱 블록 간격. */
+  --space-24: 96px; /* 96px. */
+  --bw-hair: 1px; /* 1px. 얇은 구분선. */
+  --bw-card: 3px; /* 이전 CI의 3px 카드 테두리. 현행은 bw-line(1.6px). */
+  --bw-strong: 5px; /* 이전 CI의 굵은 점선. */
+  --bw-loud: 8px; /* 이전 CI의 가장 굵은 점선. */
+  --wrap-max: 1160px; /* 본문 폭 상한(.wrap). */
+  --gutter: 24px; /* 본문 좌우 여백. */
+  --section-pad-top: 88px; /* 섹션 위 여백. */
+  --section-pad-bottom: 56px; /* 섹션 아래 여백. */
+  --bw-line: 1.6px; /* 카드와 칩 테두리 두께(--line 기준). */
+  --control-h: 46.5px; /* 컨트롤 기본 높이. .btn 기본 높이(위아래 패딩 12 + 15px 글자 행간 22.5)와 같게 맞춘 값. 텍스트 입력, 셀렉트 트리거, 입력 그룹. */
+  --control-h-sm: 36px; /* 작은 컨트롤 높이(.btn-sm, 토글, 메뉴바 트리거). 사내 시안의 필터 버튼 값. */
+  --control-h-lg: 52px; /* 큰 컨트롤 높이(.btn-lg). 사이트 히어로 버튼 패딩 14 26에서 나온 값. */
+  --target-min: 44px; /* 터치 대상 최소 크기. 아이콘 버튼과 작은 컨트롤은 이 크기의 누를 자리를 확보한다. */
+  --grid-gap-sm: 14px; /* 촘촘한 그리드와 카드 목록 간격. README 그리드 간격 14. */
+  --grid-gap: 24px; /* 기본 그리드 간격. README 그리드 간격 24. */
+  --sidebar-w: 232px; /* 사이드바 폭. 사내 시안(갈래) 값. */
+  --sheet-w: 520px; /* 시트(옆에서 나오는 패널) 최대 폭. 사내 시안 값. */
+  --dialog-w: 520px; /* 다이얼로그 최대 폭. */
+  --popover-w: 300px; /* 팝오버와 호버 카드 기본 폭. */
+  --prose-max: 680px; /* 긴 글 본문 폭. 한 행에 한글 40자 안팎. */
+  --radius-xs: 4px; /* 이전 CI 스케일 값. 사이트에는 없다. */
+  --radius-sm: 14px; /* 작은 카드(.signal). */
+  --radius-md: 16px; /* 기본 카드 라운드(--r). .prob-card, .case-exit. */
+  --radius-lg: 18px; /* 말풍선과 engage 카드. */
+  --radius-xl: 20px; /* 레이어 카드(.layer). */
+  --radius-2xl: 26px; /* 가장 큰 컨테이너. */
+  --radius-pill: 999px; /* 버튼, 칩, 태그. 사이트 버튼은 전부 필이다. */
+  --radius-item: 8px; /* 메뉴, 리스트박스, 커맨드 안 항목. 컨테이너 radius-sm(14)에서 패딩 6을 뺀 동심 값. 사내 시안 메뉴 항목 값. */
+  --radius-nav: 10px; /* 사이드바 항목, 32px 로고 타일, 미디어 타일. 사내 시안 값. */
+  --radius-field: 12px; /* 여러 줄 입력, OTP 칸, 안쪽 정보 상자. 사내 시안 값. */
+  --radius-frame: 22px; /* 팀 카드와 프로필 프레임(사이트 값). 안쪽 이미지는 radius-lg(18). */
+  --fs-display-xxl: clamp(64px, 8vw, 128px); /* 이전 CI의 반응형 초대형 크기. */
+  --fs-display-xl: clamp(48px, 5vw, 96px); /* 이전 CI의 반응형 대형 크기. */
+  --bd-dashed-strong: 3px dashed #4A4F51; /* 이전 CI 아키텍처 프레임 점선. */
+  --bd-dashed-blue: 3px dashed #074994; /* 이전 CI 파란 프레임 점선. */
+  --bd-card: 1.6px solid #e9ebf2; /* 카드와 칩의 기본 테두리 단축값. 사이트 .prob-card, .layer, .signal이 쓰는 값이다. */
+  --gradient-brand: linear-gradient(180deg, #45AF66 0%, #344FE0 100%); /* 이전 CI의 세로 그라디언트(초록에서 파랑). 사이트에는 없다. */
+  --gradient-brand-h: linear-gradient(90deg, #344fe0 0%, #45af66 100%); /* 가로 브랜드 그라디언트. 얇은 강조 바. */
+  --bar-blue-fr: 68; /* 이전 CI 브랜드 바 파랑 비율. */
+  --bar-green-fr: 32; /* 이전 CI 브랜드 바 초록 비율. */
+  --gradient-hl: linear-gradient(115deg, #344fe0 0%, #45af66 100%); /* 제목 강조 글자와 성과 숫자에 글자 클립으로 쓴다(.hl, .cm-num). */
+  --gradient-dot: linear-gradient(135deg, #344fe0 0%, #45af66 100%); /* 카드 제목 앞 8px 원형 점. */
+  --gradient-exit: linear-gradient(135deg, #0020b6 0%, #344fe0 100%); /* EXIT 배너와 하단 CTA 캡슐 면. */
+  --gradient-soft: linear-gradient(120deg, #eef2ff 0%, #ffffff 100%); /* 강조 카드의 옅은 파란 면. */
+  --gradient-layer-1: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%); /* 레이어 카드 1층 면. */
+  --gradient-layer-2: linear-gradient(180deg, #ffffff 0%, #f6f8ff 100%); /* 레이어 카드 2층 면. */
+  --gradient-layer-3: linear-gradient(180deg, #ffffff 0%, #eff3ff 100%); /* 레이어 카드 3층 면. */
+  --fs-hero: clamp(36px, 5.8vw, 64px); /* 히어로 제목 크기. */
+  --fs-section: clamp(25px, 3.4vw, 38px); /* 섹션 제목 크기. */
+  --fs-metric: clamp(38px, 5.5vw, 58px); /* 성과 숫자 크기. */
+  --fs-lead: clamp(15.5px, 1.7vw, 18px); /* 히어로 서브카피와 리드 문단 크기. 사이트 값. */
+  --gradient-green-frame: linear-gradient(135deg, #45af66 0%, #2c7a47 100%); /* 팀 카드 이사 프로필 프레임. 사이트 값. */
+  --gradient-blue-band: linear-gradient(120deg, #0020b6 0%, #344fe0 50%, #0020b6 100%); /* 마지막 CTA 밴드 면. 사이트 값. */
+  --tracking-tight: -0.02em; /* 제목 자간. 본문에는 자간을 주지 않는다. */
+  --tracking-display: -0.02em; /* 큰 숫자와 디스플레이 자간. */
+  --tracking-normal: 0; /* 본문 기본 자간(0). */
+  --tracking-eyebrow: 0.1em; /* 섹션 아이브로 자간. */
+  --leading-display: 1.06; /* 히어로 제목 행간. */
+  --leading-tight: 1.14; /* 섹션 제목 행간. */
+  --leading-loose: 1.62; /* 카드 본문 행간. */
+  --leading-body: 1.5; /* 본문 기본 행간. */
+  --z-raised: 10; /* 포커스된 그룹 항목, 겹친 아바타처럼 형제 위로 한 칸 올리는 값. */
+  --z-sticky: 40; /* 표 머리글, 고정 툴바. */
+  --z-header: 80; /* 사이트 고정 헤더(site-header). 사이트 값. */
+  --z-overlay: 90; /* 다이얼로그, 시트, 드로어와 그 막. 헤더 위에 온다. */
+  --z-popover: 100; /* 메뉴, 팝오버, 셀렉트 목록. 다이얼로그 안에서 열려도 위에 온다. */
+  --z-toast: 110; /* 토스트 영역. */
+  --z-tooltip: 120; /* 툴팁. 가장 위. */
+  --duration-fast: 180ms; /* 버튼, 토글, 입력 테두리 전환. 사이트 버튼 값. */
+  --duration-card: 250ms; /* 카드 호버(뜨기, 그림자, 테두리). 사이트 값. */
+  --duration-layer: 350ms; /* 레이어 펼침, 다이얼로그와 메뉴 등장. */
+  --duration-open: 400ms; /* 아코디언 설명 영역 열림. 사이트 값. */
+  --duration-reveal: 600ms; /* 섹션 등장(아래에서 위로). 사이트 값. */
+  --duration-sweep: 1100ms; /* 솔루션 밴드 원형 스윕. 사이트 값. */
+  --ease-brand: cubic-bezier(.2, .7, .2, 1); /* 프루퍼 기본 이징. 레이어 펼침, 리빌, 오버레이 등장. */
+  --ease-sweep: cubic-bezier(.7, 0, .3, 1); /* 스윕 전환 전용. */
+  --bp-dotnav: 980px; /* 이 폭 이하에서 도트 내비를 숨긴다. */
+  --bp-stack: 880px; /* 이 폭 이하에서 모든 그리드를 1열로 접는다. .grid-2, .grid-3 기준. */
+  --bp-menu: 780px; /* 이 폭 이하에서 상단 메뉴를 숨긴다. */
+  --bp-dock: 680px; /* 이 폭 이하에서 도킹 CTA가 바텀바로 바뀐다. 시트는 화면 폭 전체가 된다. */
+  --bp-team: 560px; /* 이 폭 이하에서 팀 카드를 세로로 쌓는다. */
+  --opacity-disabled: 0.5; /* 비활성 컨트롤. 누를 수 없음을 커서와 aria-disabled로도 알린다. */
+  --opacity-echo: 0.09; /* 마지막 밴드 배경 에코 문구. 사이트 값. */
+  --font-kr: LINESeedKR, 'LINE Seed Sans KR', -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-display: 'Baumans', 'Coda', system-ui, sans-serif;
+  --font-ui: 'Inter', 'LINE Seed Sans KR', system-ui, sans-serif;
+  --font-diagram: 'Nunito', 'Inter', system-ui, sans-serif;
+  --font-mono-display: 'Coda', 'JetBrains Mono', ui-monospace, monospace;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --text-hero: 700 64px/1.06 var(--font-kr); /* 히어로 제목. 실제 값은 clamp(36px, 5.8vw, 64px)이고 fs-hero 토큰에 그대로 있다. */
+  --text-h2-final: 700 52px/1.1 var(--font-kr); /* 마지막 CTA 섹션 제목. clamp(30px, 5vw, 52px). */
+  --text-h2-solution: 700 44px/1.16 var(--font-kr); /* 다크 섹션 제목. clamp(26px, 4vw, 44px). */
+  --text-h2: 700 38px/1.14 var(--font-kr); /* 기본 섹션 제목(.sect-head h2). clamp(25px, 3.4vw, 38px). */
+  --text-h3: 700 23px/1.3 var(--font-kr); /* 레이어와 팀 카드 제목. clamp(18px, 2.4vw, 23px). */
+  --text-h3-card: 700 20px/1.3 var(--font-kr); /* 카드 제목(.prob-card h3). clamp(17px, 2.2vw, 20px). */
+  --text-body: 400 15px/1.5 var(--font-kr); /* 본문 기본. 자간은 기본값이고 제목에만 -0.02em을 준다. */
+  --text-body-sm: 400 14.5px/1.62 var(--font-kr); /* 카드 본문과 설명(.prob-card p, .desc). 색은 fg-2. */
+  --text-caption: 400 13.5px/1.5 var(--font-kr); /* 푸터와 메타 정보. */
+  --text-eyebrow: 700 13px/1.5 var(--font-kr); /* 섹션 아이브로. 색은 fg-link, 다크 섹션에서는 #cdd8ff. */
+  --text-chip: 700 12px/1.5 var(--font-kr); /* 칩과 태그(.pill, .tagr, .ec-label). */
+  --text-metric: 700 58px/1.1 var(--font-kr); /* 성과 숫자(.cm-num). clamp(38px, 5.5vw, 58px)에 gradient-hl을 글자에 클립한다. */
+  --text-lead: 400 18px/1.5 var(--font-kr); /* 히어로 서브카피와 문서 첫 문단. 실제 값은 fs-lead(clamp 15.5에서 18). 색은 fg-2. */
+  --text-nav-link: 700 15.5px/1.5 var(--font-kr); /* 상단 내비 링크(.navmenu-link). 색은 fg-nav. 사이트 값. */
+  --text-page-title: 700 24px/1.25 var(--font-kr); /* 제품 화면의 페이지 제목. 사내 시안(갈래) 값. */
+  --text-dialog-title: 700 20px/1.3 var(--font-kr); /* 다이얼로그, 시트, 드로어 제목. */
+  --text-ui-title: 700 17px/1.35 var(--font-kr); /* 제품 화면 카드와 패널 제목, 빈 상태 제목. */
+  --text-ui-body: 400 14px/1.5 var(--font-kr); /* 밀도 높은 제품 화면(표, 메뉴, 사이드바) 기본 글자. 마케팅 본문은 body(15). */
+  --text-ui-label: 700 14px/1.4 var(--font-kr); /* 폼 라벨(.field 안 label). 서체에 500과 600이 없어 shadcn의 medium은 700으로 옮긴다. */
+  --text-ui-help: 400 13.5px/1.5 var(--font-kr); /* 폼 설명과 오류, 툴팁, 표 캡션. 설명은 fg-2, 오류는 fg-destructive. */
+  --text-ui-overline: 700 12px/1.5 var(--font-kr); /* 메뉴 그룹 이름, 사이드바 그룹 이름, 표 머리글. 색은 fg-2. 한글 소제목이라 자간을 주지 않는다(0.1em 자간은 영문 대문자 아이브로에만). */
+  --text-mono-sm: 400 13px/1.6 var(--font-mono); /* 코드, 주소, 명령어. 본문 안 인라인 코드는 0.88em. */
+}
+.hero {
+  font-family: var(--font-kr);
+  font-size: 64px;
+  line-height: 1.06;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.h2-final {
+  font-family: var(--font-kr);
+  font-size: 52px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.h2-solution {
+  font-family: var(--font-kr);
+  font-size: 44px;
+  line-height: 1.16;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.h2 {
+  font-family: var(--font-kr);
+  font-size: 38px;
+  line-height: 1.14;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.h3 {
+  font-family: var(--font-kr);
+  font-size: 23px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.h3-card {
+  font-family: var(--font-kr);
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.body {
+  font-family: var(--font-kr);
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.body-sm {
+  font-family: var(--font-kr);
+  font-size: 14.5px;
+  line-height: 1.62;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.caption {
+  font-family: var(--font-kr);
+  font-size: 13.5px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.eyebrow {
+  font-family: var(--font-kr);
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.chip {
+  font-family: var(--font-kr);
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.metric {
+  font-family: var(--font-kr);
+  font-size: 58px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.lead {
+  font-family: var(--font-kr);
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.nav-link {
+  font-family: var(--font-kr);
+  font-size: 15.5px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.page-title {
+  font-family: var(--font-kr);
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.dialog-title {
+  font-family: var(--font-kr);
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.ui-title {
+  font-family: var(--font-kr);
+  font-size: 17px;
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.ui-body {
+  font-family: var(--font-kr);
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.ui-label {
+  font-family: var(--font-kr);
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.ui-help {
+  font-family: var(--font-kr);
+  font-size: 13.5px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.ui-overline {
+  font-family: var(--font-kr);
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.mono-sm {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+
+
+/* Proofer Design System bundle.css 현행 부분(2024 CI 잔재 이전까지) */
+/* Proofer Design System — stylesheet
+   현행 규칙은 proofer.tech에서 재추출한 값이다(2026-09-18).
+   토큰 선언은 tokens.json에 있고 tokens.css로 생성된다. */
+
+
+
+/* @font-face LINE Seed Sans KR 300/400/700: tokens.json이 선언한다 (fonts/LINESeedKR-*.woff2) */
+
+/* ─── 기본값 ─── */
+html, body {
+  background: var(--bg-page);
+  color: var(--fg-1);
+  font-family: var(--font-kr);
+  font-size: 15px;
+  line-height: var(--leading-body);
+  letter-spacing: normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .h1, .h2, .h3 {
+  font-family: var(--font-kr);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+}
+h1, .h1 { font-size: var(--fs-hero); line-height: var(--leading-display); }
+h2, .h2 { font-size: var(--fs-section); line-height: var(--leading-tight); }
+h3, .h3 { font-size: clamp(18px, 2.4vw, 23px); line-height: 1.3; }
+p, .p   { margin: 0; font-size: 15px; line-height: var(--leading-body); }
+.muted  { color: var(--fg-2); }
+
+/* ─── 레이아웃 ─── */
+.wrap { width: 100%; max-width: var(--wrap-max); margin: 0 auto; padding: 0 var(--gutter); }
+.section { padding: var(--section-pad-top) 0 var(--section-pad-bottom); }
+
+/* ─── 아이브로 ─── */
+.eyebrow {
+  color: var(--fg-link);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+}
+
+/* ─── 버튼 ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform .18s, box-shadow .18s, background .18s;
+}
+.btn-primary { background: var(--color-blue-600); color: var(--fg-on-brand); box-shadow: var(--shadow-brand); }
+.btn-primary:hover { background: var(--color-blue-deep); }
+.btn-ghost { background: transparent; color: var(--fg-1); }
+.btn-ghost:hover { background: var(--color-blue-soft); }
+.btn-cta { background: var(--color-paper); color: var(--color-blue-deep); padding: 18px 36px; font-size: 18px; box-shadow: var(--shadow-cta); }
+.btn:active { transform: translateY(1px); }
+
+/* ─── 카드 ─── */
+.card {
+  background: var(--bg-surface);
+  border: var(--bd-card);
+  border-radius: var(--radius-md);
+  padding: 24px 24px 26px;
+  box-shadow: var(--shadow-card);
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-raised); border-color: var(--border-strong); }
+.card h3 { display: flex; align-items: center; gap: 9px; font-size: clamp(17px, 2.2vw, 20px); }
+.card h3::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--gradient-dot); }
+.card p { margin: 10px 0 0; color: var(--fg-2); font-size: 14.5px; line-height: var(--leading-loose); word-break: keep-all; }
+
+/* 겹쳐 쌓는 레이어 카드 */
+.layer {
+  background: var(--gradient-layer-1);
+  border: var(--bd-card);
+  border-radius: var(--radius-xl);
+  padding: 20px 28px;
+  margin-top: 14px;
+  box-shadow: var(--shadow-layer);
+}
+.layer.l2 { background: var(--gradient-layer-2); width: 92%; }
+.layer.l3 { background: var(--gradient-layer-3); width: 84%; }
+.layer:hover { box-shadow: var(--shadow-raised); border-color: var(--border-strong); transform: translateY(-6px) scale(1.012); }
+.layer .num { flex: none; width: 30px; color: var(--fg-link); font-size: 14px; font-weight: 700; }
+
+/* ─── 칩 ─── */
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; }
+.chip-brand { background: var(--color-blue-soft); color: var(--color-blue-600); }
+.chip-live  { background: var(--color-green-soft); color: var(--color-green-ink); }
+.chip-soon  { background: var(--color-amber-soft); color: var(--color-amber-ink); }
+
+/* ─── 강조 글자 ─── */
+.hl, .metric {
+  background: var(--gradient-hl);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
+.metric { font-size: var(--fs-metric); line-height: 1.1; letter-spacing: var(--tracking-display); }
+
+/* ─── EXIT 배너 ─── */
+.banner-exit { background: var(--gradient-exit); color: var(--fg-on-brand); border-radius: var(--radius-md); padding: 20px 26px; text-align: center; font-weight: 700; }
+
+/* context-protocol 소개 페이지
+   시각 체계: Proofer Design System (tokens.css, bundle.css 현행 클래스)
+   구조 레퍼런스: tracebit.com(섹션 머리, 허브 도식, 단계), decimal.app(셀 격자, 연결 도식) */
+
+@font-face{font-family:"LINE Seed Sans KR";src:url(fonts/lineseed-rg.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"LINE Seed Sans KR";src:url(fonts/lineseed-bd.woff2) format("woff2");font-weight:700;font-display:swap}
+
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-padding-top:72px}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word;overflow-x:clip}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:76px}
+body{margin:0;word-break:keep-all;overflow-wrap:break-word;overflow-x:clip}
 a{color:inherit}
 img,svg{display:block;max-width:100%}
-h1,h2,h3,p,dl,dd,ol,ul,figure{margin:0}
-ol,ul{padding:0;list-style:none}
-.mono{font-family:var(--mono);letter-spacing:0}
-.wrap{max-width:calc(var(--wrap) + var(--pad)*2);margin:0 auto;padding:0 var(--pad)}
-.skip{position:absolute;left:-9999px;top:8px;background:var(--ink);color:var(--bg);padding:8px 12px;z-index:50}
+ol,ul{margin:0;padding:0;list-style:none}
+dl,dd,figure{margin:0}
+.mono,code{font-family:var(--font-mono);font-size:.92em}
+.skip{position:absolute;left:-9999px;top:8px;background:var(--fg-1);color:#fff;padding:8px 12px;z-index:90;border-radius:var(--radius-item)}
 .skip:focus{left:8px}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+:focus-visible{outline:2px solid var(--ring,#344fe0);outline-offset:2px}
+h2,.h2,h1,.hero-title,.closing-title{text-wrap:balance}
+p{text-wrap:pretty}
+.eyebrow{margin:0 0 14px}
 
-/* type */
-.display{font-size:clamp(40px,7.2vw,88px);font-weight:700;letter-spacing:-.035em;line-height:1.04}
-.h2{font-size:clamp(32px,4.6vw,56px);font-weight:700;letter-spacing:-.03em;line-height:1.1}
-.eyebrow{font-size:14px;color:var(--soft);margin-bottom:22px}
-.body-mono{font-size:clamp(15px,1.25vw,17px);line-height:1.75;color:var(--ink)}
-.body-mono+.body-mono{margin-top:16px}
-.dim{color:var(--soft)}
-.body-mono a{text-underline-offset:3px}
-
-/* buttons: d4 fill + invert */
-.btn{position:relative;display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px;border-radius:8px;font-size:15px;font-weight:600;text-decoration:none;white-space:nowrap;overflow:hidden;isolation:isolate;border:1px solid var(--ink);transition:color .25s ease}
-.btn::before{content:"";position:absolute;inset:0;z-index:-1;transform:scaleY(0);transform-origin:bottom;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
-.btn-ink{background:var(--ink);color:var(--bg)}
-.btn-ink::before{background:var(--accent)}
-.btn-ink:hover{color:var(--ink)}
-.btn-line{background:transparent;color:var(--ink)}
-.btn-line::before{background:var(--ink)}
-.btn-line:hover{color:var(--bg)}
-.btn:hover::before{transform:scaleY(1)}
-.btn:active{transform:translateY(1px)}
-.btn-sm{height:36px;padding:0 14px;font-size:14px}
-.cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}
+/* buttons: DS .btn + 크기 */
+.btn{text-decoration:none;white-space:nowrap;height:46.5px;padding:0 22px}
+.btn-sm{height:36px;padding:0 16px;font-size:14px}
+.btn-line{box-shadow:inset 0 0 0 1.6px var(--border-soft)}
+.btn-line:hover{box-shadow:inset 0 0 0 1.6px var(--border-strong)}
+.btn-cta{height:auto}
+.btn-onblue{color:#fff;box-shadow:inset 0 0 0 1.6px rgba(255,255,255,.45);background:transparent}
+.btn-onblue:hover{background:rgba(255,255,255,.12)}
+.btn:hover{transform:translateY(-1px)}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
 
 /* nav */
-.nav{position:sticky;top:0;z-index:20;background:rgba(243,239,236,.9);backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid transparent;transition:border-color .2s}
-.nav.scrolled{border-bottom-color:var(--line)}
-.nav-in{display:flex;align-items:center;gap:28px;height:64px}
-.logo{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:-.01em;text-decoration:none}
-.links{display:flex;gap:22px}
-.links a{font-size:14.5px;color:var(--soft);text-decoration:none;position:relative}
-.links a::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .25s}
-.links a:hover,.links a.on{color:var(--ink)}
+.nav{position:sticky;top:0;z-index:80;background:rgba(255,255,255,.86);backdrop-filter:saturate(170%) blur(12px);border-bottom:1.6px solid transparent;transition:border-color .2s}
+.nav.scrolled{border-bottom-color:var(--border-soft)}
+.nav-in{display:flex;align-items:center;gap:30px;height:68px}
+.logo{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:var(--tracking-tight);text-decoration:none;white-space:nowrap}
+.links{display:flex;gap:28px}
+.links a{font-size:15px;font-weight:700;color:var(--fg-nav);text-decoration:none;position:relative}
+.links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;background:var(--color-blue-600);transform:scaleX(0);transform-origin:left;transition:transform .25s var(--ease-brand,ease)}
 .links a:hover::after,.links a.on::after{transform:scaleX(1)}
-.counter{margin-left:auto;font-size:13px;color:var(--soft)}
-.counter b{color:var(--ink);font-weight:400;display:inline-block;min-width:2ch}
+.counter{margin-left:auto;font-size:13px;color:var(--fg-2)}
+.counter b{color:var(--fg-1);font-weight:700;display:inline-block;min-width:2ch}
 @media (max-width:980px){.links{display:none}}
+@media (max-width:560px){.counter{display:none}.nav .btn-sm{margin-left:auto}}
 
 /* sections */
-.sec{padding:var(--sec) 0}
-.sec.tight{padding-top:0}
-.sec[data-sec]>.wrap{position:relative}
-.rule{position:absolute;left:var(--pad);right:var(--pad);top:calc(var(--sec)*-1 + 0px);height:1px;background:var(--line);transform-origin:left}
-.dark{background:var(--dark);color:var(--on-dark)}
-.dark .body-mono{color:var(--on-dark)}
-.dark .dim,.dark .eyebrow{color:var(--on-dark-soft)}
+.sec{padding:var(--section-pad-top) 0 calc(var(--section-pad-top) - 8px);background:var(--bg-surface)}
+.sec-soft{background:var(--bg-muted)}
+.sec-dark{background:var(--bg-inverted);color:var(--fg-on-brand)}
+.sec-dark .eyebrow{color:var(--color-on-blue-eyebrow,#cdd8ff)}
+.sec-dark .h2{color:#fff}
+.sec-dark p{color:#c9cfdf}
+.sec-dark p.soft{color:#a6acbd}
+.lede{color:var(--fg-2);font-size:16px;line-height:1.7}
+.sec-dark .lede{color:#c9cfdf}
 
 /* hero */
-.hero{padding-top:clamp(56px,8vw,112px);padding-bottom:0}
-.hero-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(32px,5vw,80px);align-items:end}
-.hero-side{padding-bottom:10px}
-@media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
-.facts{display:grid;grid-template-columns:repeat(4,1fr);margin-top:clamp(56px,7vw,96px);border-top:1px solid var(--line-2)}
-.facts>div{padding:22px 20px 28px 0;border-right:1px solid var(--line)}
-.facts>div+div{padding-left:20px}
-.facts>div:last-child{border-right:0}
-.facts dt{font-size:13px;color:var(--soft)}
-.facts dd{font-size:clamp(34px,4.2vw,52px);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-top:10px;font-variant-numeric:tabular-nums}
-@media (max-width:640px){.facts{grid-template-columns:1fr 1fr}.facts>div:nth-child(2){border-right:0}.facts>div:nth-child(3){padding-left:0;border-top:1px solid var(--line)}.facts>div:nth-child(4){border-top:1px solid var(--line)}}
+.hero-sec{background:var(--bg-surface) var(--gradient-soft);padding:clamp(64px,8vw,112px) 0 var(--section-pad-top);position:relative;overflow:hidden}
+.hero-sec::after{content:"";position:absolute;right:-12%;top:-30%;width:60vw;height:60vw;max-width:820px;max-height:820px;border-radius:50%;background:radial-gradient(closest-side,rgba(111,140,255,.18),rgba(69,175,102,.06) 60%,transparent);pointer-events:none}
+.hero-sec .wrap{position:relative;z-index:1}
+.hero-title{font-size:var(--fs-hero);line-height:var(--leading-display);letter-spacing:var(--tracking-tight);font-weight:700;margin:0}
+.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,5vw,72px);align-items:end;margin-top:8px}
+.hero-side p{font-size:16px;line-height:1.7;color:var(--fg-2)}
+.hero-side p+p{margin-top:12px}
+@media (max-width:880px){.hero-grid{grid-template-columns:1fr}}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:clamp(48px,6vw,80px)}
+.facts>div{background:var(--bg-surface);border:var(--bd-card);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:22px 24px 20px}
+.facts dt{font-size:13px;font-weight:700;color:var(--fg-2)}
+.facts dd{margin-top:6px;font-variant-numeric:tabular-nums}
+@media (max-width:680px){.facts{grid-template-columns:1fr 1fr}}
 
 /* heads (signature) */
-#heads{margin-top:var(--sec)}
-.heads-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,5vw,72px);align-items:center}
-.heads-copy .h2{margin-bottom:28px;color:#fff}
+.heads-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,5vw,64px);align-items:center}
+.heads-copy .h2{margin-bottom:22px}
+.heads-copy p{font-size:16px;line-height:1.7}
+.heads-copy p+p{margin-top:12px}
 @media (max-width:980px){.heads-grid{grid-template-columns:1fr}}
-.attached{display:inline-flex;align-items:center;gap:10px;margin-top:32px;padding:10px 14px;border:1px solid var(--dark-line);border-radius:8px;font-size:14px;color:var(--on-dark-soft)}
-.attached b{color:#fff;font-weight:400}
-.attached .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
-.hub{position:relative;background:var(--bg);color:var(--ink);border-radius:12px;padding:clamp(16px,3vw,36px) clamp(10px,2vw,24px);aspect-ratio:640/560}
-.hub svg{position:absolute;inset:clamp(16px,3vw,36px) clamp(10px,2vw,24px);width:calc(100% - 2*clamp(10px,2vw,24px));height:calc(100% - 2*clamp(16px,3vw,36px))}
-.hub .spokes path{stroke:var(--line-2)}
-.hub .spokes path.on{stroke:var(--ink)}
-.hub .pulses path{stroke:var(--accent);stroke-dasharray:0 1;opacity:0}
-.hub .core{fill:#fff;stroke:var(--ink);stroke-width:1.4}
-.chips{position:absolute;inset:clamp(16px,3vw,36px) clamp(10px,2vw,24px)}
-.chip{position:absolute;left:var(--x);top:var(--y);transform:translate(0,-50%);display:flex;flex-direction:column;gap:2px;padding:9px 13px;background:#fff;border:1px solid var(--line-2);border-radius:999px;line-height:1.2;white-space:nowrap;transition:border-color .3s,background .3s,color .3s}
-.chip.r{transform:translate(-100%,-50%);align-items:flex-end}
-.chip b{font-size:clamp(12px,1.15vw,15px);font-weight:600}
-.chip span{font-size:11px;color:var(--mute)}
-.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.chip.on span{color:var(--on-dark-soft)}
-.core-label{position:absolute;left:50%;top:63%;transform:translateX(-50%);text-align:center;font-size:12px;line-height:1.5;color:var(--soft)}
-.core-label span{color:var(--ink)}
-@media (max-width:520px){.chip{padding:6px 9px}.chip span{display:none}.core-label{font-size:10.5px}}
+.attached{display:inline-flex;align-items:center;gap:10px;margin-top:26px;padding:9px 16px;border-radius:var(--radius-pill);background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1.6px rgba(255,255,255,.14);font-size:14px}
+.attached b{color:#fff}
+.attached .dot{width:8px;height:8px;border-radius:50%;background:var(--color-green-500)}
+.hub{position:relative;background:var(--bg-surface);color:var(--fg-1);border-radius:var(--radius-xl);box-shadow:var(--shadow-raised);aspect-ratio:640/560;--pad-y:clamp(16px,3vw,36px);--pad-x:clamp(10px,2vw,24px)}
+.hub svg,.head-chips{position:absolute;top:var(--pad-y);bottom:var(--pad-y);left:var(--pad-x);right:var(--pad-x);width:calc(100% - 2*var(--pad-x));height:calc(100% - 2*var(--pad-y))}
+.hub .spokes path{stroke:var(--color-blue-edge)}
+.hub .spokes path.on{stroke:var(--color-blue-600)}
+.hub .pulses path{stroke:var(--color-green-500);opacity:0}
+.hub .ring{stroke:var(--color-blue-pale)}
+.hub .core{fill:var(--color-blue-soft);stroke:var(--color-blue-edge);stroke-width:1.6}
+.head-chip{position:absolute;left:var(--x);top:var(--y);transform:translate(0,-50%);display:flex;flex-direction:column;gap:3px;padding:9px 15px;background:var(--bg-surface);border:var(--bd-card);border-radius:var(--radius-pill);box-shadow:var(--shadow-card);line-height:1.2;white-space:nowrap;transition:background .18s,border-color .18s,color .18s,box-shadow .18s}
+.head-chip.r{transform:translate(-100%,-50%);align-items:flex-end}
+.head-chip b{font-size:clamp(12px,1.15vw,15px)}
+.head-chip span{font-size:11.5px;font-weight:700;color:var(--color-green-ink)}
+.head-chip.on{background:var(--color-blue-600);border-color:var(--color-blue-600);color:#fff;box-shadow:var(--shadow-brand)}
+.head-chip.on span{color:#dfe6ff}
+.core-label{position:absolute;left:50%;top:63%;transform:translateX(-50%);text-align:center;font-size:12px;line-height:1.5;color:var(--fg-2)}
+.core-label span{color:var(--fg-link);font-weight:700}
+@media (max-width:520px){.head-chip{padding:6px 10px}.head-chip span{display:none}.core-label{font-size:10.5px}}
 
-/* section head: heading left, mono right (tracebit features) */
-.head2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,80px);align-items:start;margin-bottom:clamp(40px,5vw,72px)}
-@media (max-width:900px){.head2{grid-template-columns:1fr}}
-.center-head{text-align:center;max-width:820px;margin:0 auto clamp(48px,6vw,80px)}
-.center-head .body-mono{margin-top:20px}
+/* section head */
+.head2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,5vw,72px);align-items:end;margin-bottom:clamp(32px,4vw,52px)}
+.head2>*{min-width:0}
+@media (max-width:880px){.head2{grid-template-columns:1fr;align-items:start}}
+.center-head{text-align:center;max-width:760px;margin:0 auto clamp(36px,5vw,56px)}
+.center-head .lede{margin-top:16px}
 
 /* compare */
-.compare{border-top:1px solid var(--ink)}
-.crow{display:grid;grid-template-columns:160px 1fr 1fr;border-bottom:1px solid var(--line)}
-.crow>span{padding:20px 20px 20px 0;font-size:17px}
-.crow>span+span{padding-left:20px;border-left:1px solid var(--line)}
-.crow>span:first-child{font-size:14px;color:var(--soft);padding-top:23px}
-.crow>span:last-child{font-weight:600}
-.chead>span{font-size:13px!important;color:var(--soft);font-weight:400!important;padding-top:14px!important;padding-bottom:14px!important}
-.chead>span:last-child{color:var(--ink)}
+.card-flat{background:var(--bg-surface);border:var(--bd-card);border-radius:var(--radius-md);box-shadow:var(--shadow-card)}
+.compare{overflow:hidden}
+.crow{display:grid;grid-template-columns:150px 1fr 1fr;border-top:1.6px solid var(--border-soft)}
+.crow:first-child{border-top:0}
+.crow>span{padding:18px 22px;font-size:15px;line-height:1.55}
+.crow>span:first-child{font-size:13px;font-weight:700;color:var(--fg-2);padding-top:20px}
+.crow>span:last-child{background:var(--color-blue-soft);font-weight:700;color:var(--fg-1)}
+.chead>span{font-size:13px!important;font-weight:700;color:var(--fg-2);padding-top:14px!important;padding-bottom:14px!important}
+.chead>span:last-child{color:var(--color-blue-600)}
 @media (max-width:700px){
   .crow{grid-template-columns:1fr 1fr}
-  .crow>span:first-child{grid-column:1/-1;padding:16px 0 0}
-  .crow>span:nth-child(2){padding-left:0;border-left:0}
+  .crow>span:first-child{grid-column:1/-1;padding:14px 18px 0}
+  .crow>span{padding:10px 18px 16px}
   .chead>span:first-child{display:none}
 }
 
 /* finds */
-.finds{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line-2)}
-.finds li{padding:24px 24px 8px 0;border-right:1px solid var(--line)}
-.finds li+li{padding-left:24px}
-.finds li:last-child{border-right:0}
-.finds .who{display:block;font-size:14px;color:var(--accent);filter:brightness(.78);margin-bottom:14px}
-.finds p{font-size:16px;line-height:1.6;color:var(--ink)}
-@media (max-width:1000px){.finds{grid-template-columns:1fr 1fr}.finds li:nth-child(2){border-right:0}.finds li:nth-child(3){padding-left:0}.finds li:nth-child(n+3){border-top:1px solid var(--line);padding-top:24px;margin-top:16px}}
-@media (max-width:600px){.finds{grid-template-columns:1fr}.finds li{border-right:0;padding-left:0!important;border-top:1px solid var(--line)}.finds li:first-child{border-top:0}}
+.finds{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:1000px){.finds{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.finds{grid-template-columns:1fr}}
 
-/* cards */
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-@media (max-width:900px){.cards{grid-template-columns:1fr}}
-.card{border-radius:12px;padding:30px 30px 34px;display:flex;flex-direction:column;min-height:420px}
-.card h3{font-size:clamp(26px,2.6vw,34px);font-weight:700;letter-spacing:-.025em}
-.card .glyph{margin:auto 0;padding:26px 0;color:var(--ink);width:100%}
-.card p{font-size:15px;line-height:1.7}
-.sage{background:var(--sage)}.rose{background:var(--rose)}.sand{background:var(--sand)}
-@media (max-width:900px){.card{min-height:0}}
+/* record cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media (max-width:880px){.cards{grid-template-columns:1fr}}
+.rec .glyph{width:100%;height:auto;margin:6px 0 22px;padding:18px 0;border-radius:var(--radius-sm);background:var(--color-blue-soft)}
+.rec h3{font-family:var(--font-mono);letter-spacing:0}
 
-/* steps */
-.steps{display:grid;grid-template-columns:repeat(3,1fr)}
-.steps li{padding:0 28px 8px;border-left:1px solid var(--line-2)}
-.steps h3{font-size:clamp(24px,2.4vw,32px);font-weight:700;letter-spacing:-.025em;line-height:1.15;margin:30px 0 12px}
-.steps p{font-size:15px;line-height:1.7;color:var(--soft)}
-.pill{display:inline-block;background:var(--accent);color:var(--ink);font-size:13px;font-weight:600;padding:4px 12px;border-radius:999px}
-@media (max-width:800px){.steps{grid-template-columns:1fr;gap:36px}}
+/* steps (tracebit 4단 세로선 구조를 DS 값으로) */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.steps li{padding:4px 0 4px 24px;border-left:1.6px solid var(--border-strong)}
+.steps h3{font-size:clamp(18px,2vw,22px);margin:16px 0 8px}
+.steps p{font-size:14.5px;line-height:var(--leading-loose);color:var(--fg-2)}
+.steps a{color:var(--fg-link)}
+@media (max-width:880px){.steps{grid-template-columns:1fr}}
 
-.cmd{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:48px;background:var(--dark);color:var(--on-dark);border-radius:8px;padding:14px 14px 14px 20px;font-family:var(--mono);font-size:15px}
-.cmd code{font-family:inherit;overflow-x:auto;white-space:nowrap}
-.cmd code::before{content:"> ";color:var(--accent)}
-.cmd.on-dark{background:rgba(243,239,236,.08);margin-top:28px}
-.copy{flex:none;background:transparent;border:1px solid var(--dark-line);color:var(--on-dark-soft);border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer;transition:background .2s,color .2s}
-.copy:hover{background:var(--on-dark);color:var(--ink)}
+.cmd{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;margin-top:40px;background:var(--bg-inverted);color:#eef1f8;border-radius:var(--radius-pill);padding:8px 8px 8px 24px;font-size:15px}
+.cmd code{overflow-x:auto;white-space:nowrap;font-size:14.5px}
+.cmd code::before{content:"> ";color:var(--color-green-500)}
+.cmd.on-dark{background:rgba(255,255,255,.08);margin-top:22px}
+.copy{flex:none;border:0;border-radius:var(--radius-pill);background:rgba(255,255,255,.1);color:#fff;font:inherit;font-size:13px;font-weight:700;height:36px;padding:0 16px;cursor:pointer;transition:background .18s}
+.copy:hover{background:var(--color-blue-600)}
 
-.tree-wrap{margin-top:16px;border:1px solid var(--line-2);border-radius:8px;overflow:hidden}
-.tree-cap{font-size:13px;color:var(--soft);padding:12px 20px;border-bottom:1px solid var(--line)}
-.tree{margin:0;padding:20px;font-size:14.5px;line-height:1.85;overflow-x:auto;background:rgba(255,255,255,.45)}
-.tree i{font-style:normal;color:var(--mute)}
+.tree-wrap{margin-top:14px;overflow:hidden}
+.tree-cap{font-size:13px;font-weight:700;color:var(--fg-2);padding:14px 22px;border-bottom:1.6px solid var(--border-soft)}
+.tree{margin:0;padding:18px 22px;font-size:13.5px;line-height:1.85;overflow-x:auto}
+.tree b{color:var(--fg-link)}
+.tree i{font-style:normal;color:var(--fg-2)}
 
-/* cells (decimal) */
-.cells{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line-2);border-left:1px solid var(--line)}
-.cell{padding:26px 24px 30px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .25s}
-.cell:hover{background:rgba(255,255,255,.5)}
-.cell .tag{display:inline-block;font-size:13px;border:1px solid var(--line-2);border-radius:6px;padding:3px 8px}
-.cell h3{font-size:20px;font-weight:600;letter-spacing:-.015em;margin:22px 0 8px;line-height:1.3}
-.cell p{font-size:14.5px;line-height:1.7;color:var(--soft)}
+/* storage cells */
+.cells{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.cells .card h3{margin-top:16px}
+.cells .card h3::before{display:none}
 @media (max-width:1000px){.cells{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.cells{grid-template-columns:1fr}}
 
-/* preset rows: d4 */
-.rows{border-top:1px solid var(--dark-line)}
-.rows li{position:relative;display:grid;grid-template-columns:240px 1fr;gap:24px;padding:22px 16px;border-bottom:1px solid var(--dark-line);isolation:isolate}
-.rows li::before{content:"";position:absolute;inset:0;background:var(--on-dark);z-index:-1;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
-.rows li:hover{color:var(--ink)}
-.rows li:hover::before{transform:scaleX(1)}
-.rows li span{font-size:16px;color:var(--accent)}
-.rows li:hover span{color:#b0412a}
-.rows li p{font-size:clamp(17px,1.6vw,21px);font-weight:500;letter-spacing:-.01em}
+/* preset rows */
+.rows{border-top:1.6px solid rgba(255,255,255,.12)}
+.rows li{position:relative;display:grid;grid-template-columns:220px 1fr;gap:24px;padding:20px 18px;border-bottom:1.6px solid rgba(255,255,255,.12);border-radius:var(--radius-item);transition:background .25s}
+.rows li:hover{background:rgba(255,255,255,.05)}
+.rows li span{font-size:15px;color:var(--color-blue-pale)}
+.rows li p{font-size:clamp(16px,1.5vw,19px);color:#fff}
 @media (max-width:700px){.rows li{grid-template-columns:1fr;gap:6px}}
 
-/* docs */
-.docs{border-top:1px solid var(--ink)}
-.docs a{display:grid;grid-template-columns:64px minmax(0,1fr) minmax(0,1.2fr);gap:16px;align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line);text-decoration:none;transition:padding .25s}
-.docs a:hover{padding-left:12px}
-.docs b{font-size:clamp(18px,1.8vw,22px);font-weight:600;letter-spacing:-.01em}
-.docs .n{font-size:13px;color:var(--soft)}
-.docs .d{font-size:14.5px;color:var(--soft)}
-@media (max-width:700px){.docs a{grid-template-columns:40px 1fr}.docs .d{grid-column:2}}
-.lint{display:grid;grid-template-columns:1fr 1.2fr;gap:32px;align-items:center;margin-top:56px;padding:28px;border:1px solid var(--line-2);border-radius:12px}
-.lint h3{font-size:22px;font-weight:700;margin-bottom:8px}
-.lint p{font-size:14.5px;line-height:1.7;color:var(--soft)}
+/* docs list */
+.docs{border-top:1.6px solid var(--fg-1)}
+.docs a{display:grid;grid-template-columns:56px minmax(0,1fr) minmax(0,1.2fr);gap:16px;align-items:baseline;padding:18px 12px;border-bottom:1.6px solid var(--border-soft);text-decoration:none;border-radius:var(--radius-item);transition:background .18s,padding .25s}
+.docs a:hover{background:var(--color-blue-soft);padding-left:20px}
+.docs b{font-size:clamp(17px,1.7vw,20px);font-family:var(--font-mono);letter-spacing:0}
+.docs .n{font-size:13px;font-weight:700;color:var(--fg-link)}
+.docs .d{font-size:14.5px;color:var(--fg-2)}
+@media (max-width:700px){.docs a{grid-template-columns:36px 1fr}.docs .d{grid-column:2}}
+.lint{display:grid;grid-template-columns:1fr 1.2fr;gap:28px;align-items:center;margin-top:40px;padding:26px 28px}
+.lint>*{min-width:0}
+.lint h3{font-size:20px;margin-bottom:8px}
+.lint p{font-size:14.5px;line-height:var(--leading-loose);color:var(--fg-2)}
 .lint .cmd{margin-top:0}
-@media (max-width:900px){.lint{grid-template-columns:1fr}}
+@media (max-width:880px){.lint{grid-template-columns:1fr}}
 
 /* license */
-.lic{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--ink)}
-.lic>div{padding:24px 24px 8px 0}
-.lic>div+div{padding-left:24px;border-left:1px solid var(--line)}
-.lic-h{font-size:14px;color:var(--soft);margin-bottom:12px}
-.lic li{font-size:17px;padding:12px 0;border-bottom:1px solid var(--line)}
-.lic li:last-child{border-bottom:0}
-.note{margin-top:28px;font-size:14px;color:var(--soft)}
-@media (max-width:700px){.lic{grid-template-columns:1fr}.lic>div+div{padding-left:0;border-left:0;border-top:1px solid var(--line)}}
+.lic{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.lic li{font-size:15px;padding:12px 0;border-top:1.6px solid var(--border-soft);color:var(--fg-1)}
+.lic ul{margin-top:12px}
+.lic li:first-child{border-top:0}
+.lic .card:first-child h3::before{background:var(--color-green-500)}
+.lic .card:last-child h3::before{background:var(--color-blue-600)}
+.note{margin-top:22px;font-size:14px;color:var(--fg-2)}
+.note a,.lede a{color:var(--fg-link)}
+@media (max-width:700px){.lic{grid-template-columns:1fr}}
 
 /* faq */
-.faq-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:clamp(24px,5vw,80px)}
-@media (max-width:900px){.faq-grid{grid-template-columns:1fr}}
-.faq{border-top:1px solid var(--ink)}
-.faq details{border-bottom:1px solid var(--line)}
-.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:22px 0;font-size:clamp(18px,1.7vw,21px);font-weight:600;letter-spacing:-.01em}
+.faq-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:clamp(24px,5vw,72px)}
+.faq-grid>*{min-width:0}
+@media (max-width:880px){.faq-grid{grid-template-columns:1fr}}
+.faq details{background:var(--bg-surface);border:var(--bd-card);border-radius:var(--radius-md);margin-bottom:10px;transition:border-color .25s,box-shadow .25s}
+.faq details[open]{border-color:var(--border-strong);box-shadow:var(--shadow-card)}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;font-size:16.5px;font-weight:700}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font-family:var(--mono);font-weight:400;color:var(--soft);transition:transform .25s}
+.faq summary::after{content:"+";flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--color-blue-soft);color:var(--color-blue-600);font-weight:700;transition:transform .25s}
 .faq details[open] summary::after{transform:rotate(45deg)}
-.faq details p{font-size:15.5px;line-height:1.75;color:var(--soft);padding:0 0 24px;max-width:640px}
+.faq details p{font-size:15px;line-height:1.7;color:var(--fg-2);padding:0 22px 22px}
+.faq a{color:var(--fg-link)}
 
-/* closing */
-.closing{background:var(--accent);padding:clamp(96px,12vw,140px) 0}
-.closing .display{font-size:clamp(40px,8vw,101px);letter-spacing:-.04em;line-height:.98}
-.closing .cta-row{margin-top:44px}
-.closing .btn-ink::before{background:var(--bg)}
-.btn-line.ink:hover{color:var(--accent)}
+/* closing: gradient-exit band */
+.closing{background:var(--gradient-exit);color:#fff;padding:clamp(80px,10vw,120px) 0}
+.closing .eyebrow{color:var(--color-on-blue-eyebrow,#cdd8ff)}
+.closing-title{font-size:var(--text-h2-final-size,clamp(30px,5vw,52px));line-height:1.1;letter-spacing:var(--tracking-tight);font-weight:700;margin:0;color:#fff}
+.closing .cta-row{margin-top:34px}
 
 /* footer */
-.foot{background:var(--dark);color:var(--on-dark-soft);padding:56px 0 64px}
-.foot-in{display:flex;flex-wrap:wrap;align-items:center;gap:16px 40px}
-.foot .logo{color:var(--on-dark)}
-.foot p{font-size:13px}
+.foot{background:var(--bg-inverted);color:#a6acbd;padding:48px 0 56px}
+.foot-in{display:flex;flex-wrap:wrap;align-items:center;gap:18px 40px}
+.foot-brand{display:flex;align-items:center;gap:18px}
+.foot-brand .eyebrow{margin:0;color:#cdd8ff}
+.foot-copy{font-size:13px}
 .foot-links{margin-left:auto;display:flex;flex-wrap:wrap;gap:22px;font-size:13px}
 .foot-links a{text-decoration:none}
-.foot-links a:hover{color:var(--on-dark)}
+.foot-links a:hover{color:#fff}
 
-/* motion support (only matters when motion.js runs) */
 .split-line{display:block}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{transition-duration:.01ms!important}
-}
-.head2>*,.lint>*,.hero-grid>*,.heads-grid>*,.faq-grid>*{min-width:0}
-.cmd{min-width:0}
-@media (max-width:420px){.h2{font-size:30px}.display{font-size:38px}}
-.logo span{white-space:nowrap}
-@media (max-width:560px){.counter{display:none}.nav .btn-sm{margin-left:auto}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important}.btn:hover,.card:hover{transform:none}}

@@ -103,8 +103,8 @@ mm.add(
     ]);
 
     /* A a1: hero lines rise out of a mask after fonts settle */
-    const heroH = $(".hero h1");
-    const heroRest = $$(".hero .eyebrow, .hero .body-mono, .hero .cta-row, .facts > div");
+    const heroH = $(".hero-sec h1");
+    const heroRest = $$(".hero-sec .eyebrow, .hero-side p, .hero-sec .cta-row, .facts > div");
     gsap.set([heroH, ...heroRest], { autoAlpha: 0 });
     fontsReady.then(() => {
       if (!heroH) return;
@@ -116,7 +116,7 @@ mm.add(
     });
 
     /* B b2: hairline draws, then heading lines rise */
-    const ruled = $$(".facts, .compare, .finds, .docs, .lic, .faq, .cells, .rows");
+    const ruled = $$(".docs, .rows");
     ruled.forEach((el) => {
       const cs = getComputedStyle(el);
       const draw = document.createElement("i");
@@ -133,7 +133,7 @@ mm.add(
 
     fontsReady.then(() => {
       $$("[data-m='lines']").forEach((h) => {
-        if (h.closest(".hero")) return;
+        if (h.closest(".hero-sec")) return;
         const split = SplitText.create(h, { type: "lines", mask: "lines", linesClass: "split-line" });
         gsap.from(split.lines, {
           yPercent: 105, duration: 0.9, ease: "expo.out", stagger: 0.1,
@@ -143,11 +143,11 @@ mm.add(
       ScrollTrigger.refresh();
     });
 
-    $$(".head2 .body-mono, .head2 .cmd, .center-head .body-mono, .heads-copy .body-mono, .attached").forEach((el) => {
+    $$(".head2 .lede, .head2 .cmd, .center-head .lede, .heads-copy p, .compare, .tree-wrap, .lint, .cmd").forEach((el) => {
       gsap.from(el, { y: 16, opacity: 0, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" } });
     });
 
-    ["finds li", ".steps li", ".cards .card", ".cells .cell", ".rows li", ".docs li", ".lic > div", ".faq details"].forEach((sel) => {
+    [".finds li", ".steps li", ".cards .card", ".cells .card", ".rows li", ".docs li", ".lic > div", ".faq details"].forEach((sel) => {
       const items = $$(sel.startsWith(".") ? sel : "." + sel);
       if (!items.length) return;
       gsap.from(items, {
