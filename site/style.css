@@ -610,8 +610,9 @@ p{text-wrap:pretty}
 .hub .pulses path{stroke:var(--color-green-500);opacity:0}
 .hub .ring{stroke:var(--color-blue-pale)}
 .hub .core{fill:var(--color-blue-soft);stroke:var(--color-blue-edge);stroke-width:1.6}
-.head-chip{position:absolute;left:var(--x);top:var(--y);transform:translate(0,-50%);display:flex;flex-direction:column;gap:3px;padding:9px 15px;background:var(--bg-surface);border:var(--bd-card);border-radius:var(--radius-pill);box-shadow:var(--shadow-card);line-height:1.2;white-space:nowrap;transition:background .18s,border-color .18s,color .18s,box-shadow .18s}
-.head-chip.r{transform:translate(-100%,-50%);align-items:flex-end}
+.head-chip{position:absolute;left:var(--x);top:var(--y);transform:translate(0,-50%);display:flex;align-items:center;gap:9px;padding:9px 15px;background:var(--bg-surface);border:var(--bd-card);border-radius:var(--radius-pill);box-shadow:var(--shadow-card);line-height:1.2;white-space:nowrap;transition:background .18s,border-color .18s,color .18s,box-shadow .18s}
+.head-chip.r{transform:translate(-100%,-50%)}
+.hc-t{display:flex;flex-direction:column;gap:3px}
 .head-chip b{font-size:clamp(12px,1.15vw,15px)}
 .head-chip span{font-size:11.5px;font-weight:700;color:var(--color-green-ink)}
 .head-chip.on{background:var(--color-blue-600);border-color:var(--color-blue-600);color:#fff;box-shadow:var(--shadow-brand)}
@@ -751,3 +752,16 @@ p{text-wrap:pretty}
 
 .split-line{display:block}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important}.btn:hover,.card:hover{transform:none}}
+
+/* brand logos next to real service names */
+.lg{display:inline-block;width:1.15em;height:1.15em;vertical-align:-0.2em;margin-right:.32em;object-fit:contain}
+.brand{white-space:nowrap}
+.lg-h{width:22px;height:22px;margin-right:0;vertical-align:middle}
+h3 .lg-h{flex:none}
+.cells .card h3{display:flex;align-items:center;gap:8px}
+.finds h3.has-logo::before{display:none}
+.lg-chip{width:22px;height:22px;margin:0;flex:none}
+.head-chip.on .lg-chip{background:#fff;border-radius:6px;padding:2px}
+.lg-inv{filter:brightness(0) invert(1);width:1.1em;height:1.1em;margin-right:.4em}
+.foot-links .lg-inv{opacity:.7}
+@media (max-width:520px){.lg-chip{width:16px;height:16px}}
