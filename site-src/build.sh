@@ -25,6 +25,22 @@ for w in Rg Bd; do
     --layout-features='*' --output-file=dist/fonts/lineseed-$(echo $w | tr A-Z a-z).woff2
 done
 
+# cache busting: Pages serves max-age=600, so a new index.html can meet an old css/js/font.
+# append a content hash to each reference.
+python3 - <<'PY'
+import hashlib, pathlib, re
+d = pathlib.Path("dist")
+h = lambda p: hashlib.sha256((d / p).read_bytes()).hexdigest()[:10]
+css = (d / "style.css").read_text()
+for f in ("fonts/lineseed-rg.woff2", "fonts/lineseed-bd.woff2"):
+    css = re.sub(re.escape(f) + r'(\?v=[0-9a-f]+)?', f + "?v=" + h(f), css)
+(d / "style.css").write_text(css)
+idx = (d / "index.html").read_text()
+for f in ("style.css", "motion.js"):
+    idx = idx.replace(f'"{f}"', f'"{f}?v={h(f)}"')
+(d / "index.html").write_text(idx)
+PY
+
 # icons + og.png
 cp src/og.html dist/og.html
 python3 shots.py icons-og

@@ -252,4 +252,4 @@ h3 .lg-h{flex:none}
 @keyframes tw-blink{50%{opacity:0}}
 .attached b{display:inline-block}
 .nw{white-space:nowrap}
-.h2-note{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;font-size:17px;font-weight:600;color:var(--fg-2)}
+.h2-note{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px;font-size:15px;font-weight:700;color:var(--fg-1,inherit)}
