@@ -157,6 +157,27 @@ class LintTest(unittest.TestCase):
         self.assertEqual(sum(e.values()), 0, e)
         self.assertEqual(s["trust_inversion"], 2)  # curated 역전 + bad 허용값 아님
 
+    def test_private_folders_skipped(self):
+        """가이드 §3-B. `_` 폴더는 열지 않고 이름만 알린다. 프로토콜 클러스터 안은 그대로 본다."""
+        f = dict(OK_FILES)
+        f["_비공개/orphan.md"] = "# 분류 안 됨, 위반이어도 보지 않는다\n"
+        f["notes/_draft/x.md"] = "---\ntype: concept\n---\n"
+        f["_deprecated_v3/old.md"] = "# 은퇴 트리\n"
+        f["notes/d.md"] = "---\ntype: document\nsubject: [\"[[notes]]\"]\n---\n"
+        r = self.run_both(f)
+        e, _ = counts(r)
+        self.assertEqual(sum(e.values()), 0, e)
+        self.assertEqual(r["private_skipped"], ["_비공개", "notes/_draft"])
+        self.assertEqual(r["notes"], self.run_both(OK_FILES)["notes"] + 1)
+
+    def test_cluster_inside_is_not_private(self):
+        f = dict(OK_FILES)
+        f["_context-protocol/_concepts/extra.md"] = "---\ntype: concept\nbroader: \"[[nowhere]]\"\n---\n"
+        r = self.run_both(f)
+        e, _ = counts(r)
+        self.assertEqual(e["rule2_dangling"], 1)  # 클러스터 안 _concepts 는 비공개가 아니라 린트 대상
+        self.assertEqual(r["private_skipped"], [])
+
 
 if __name__ == "__main__":
     unittest.main()

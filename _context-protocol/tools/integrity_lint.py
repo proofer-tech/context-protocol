@@ -26,7 +26,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
-EXCLUDE_DIRS = {"_deprecated_v3", "_deprecated_v5", ".git", ".obsidian", ".trash", "node_modules"}
+EXCLUDE_DIRS = {"_deprecated_v3", "_deprecated_v5", ".git", ".obsidian", ".trash", "node_modules", "__pycache__", "__MACOSX"}
 SKIP_TYPES_ORPHAN = {"concept", "view", "schema", "readme", "proposal", "project-descriptor"}
 SKIP_TYPES_DECOMP = {"view", "schema", "readme", "proposal", "project-descriptor"}
 PROV_RE = re.compile(r"^##\s+(확정|제안|열린 질문|Confirmed|Proposed|Open questions)")
@@ -184,10 +184,30 @@ def link_target(v) -> str | None:
     return nfc(s) if s else None
 
 
-def walk(root: Path):
+PROTOCOL_CLUSTER = "_context-protocol"
+
+
+def is_private_dir(rel_parent: str, name: str) -> bool:
+    """가이드 §3-B. `_` 로 시작하는 폴더는 사용자 비공개 영역이다. 프로토콜 클러스터와 그 안은 예외."""
+    if not name.startswith("_") or name == PROTOCOL_CLUSTER:
+        return False
+    return PROTOCOL_CLUSTER not in rel_parent.split("/")
+
+
+def walk(root: Path, private: list | None = None):
     md, files = [], []
     for dirpath, dirnames, filenames in os.walk(root):
-        dirnames[:] = [d for d in dirnames if d not in EXCLUDE_DIRS and not d.startswith(".")]
+        rel_parent = Path(dirpath).relative_to(root).as_posix()
+        keep = []
+        for d in dirnames:
+            if d in EXCLUDE_DIRS or d.startswith("."):
+                continue
+            if is_private_dir(rel_parent, d):
+                if private is not None and not d.startswith("_deprecated_"):
+                    private.append(nfc(d if rel_parent == "." else f"{rel_parent}/{d}"))
+                continue
+            keep.append(d)
+        dirnames[:] = keep
         for f in filenames:
             if f.startswith("."):
                 continue
@@ -254,7 +274,8 @@ def to_date(v):
 
 def lint(root: Path, today: dt.date | None = None) -> dict:
     today = today or dt.date.today()
-    md_paths, all_files = walk(root)
+    private: list[str] = []
+    md_paths, all_files = walk(root, private)
     notes = [Note(root, p) for p in md_paths]
     by_rel = {n.rel: n for n in notes}
     res = Resolver(root, all_files)
@@ -413,7 +434,8 @@ def lint(root: Path, today: dt.date | None = None) -> dict:
                     continue
                 signals["validity_expired"].append({"note": n.rel, "key": k, "date": d.isoformat()})
 
-    return {"root": str(root), "today": today.isoformat(), "notes": len(notes), "errors": errors, "signals": signals}
+    return {"root": str(root), "today": today.isoformat(), "notes": len(notes), "errors": errors, "signals": signals,
+            "private_skipped": sorted(private)}
 
 
 LABELS = {
@@ -456,6 +478,8 @@ def main(argv=None) -> int:
                     print(f"\n{LABELS[k]} ({len(rows)})")
                     for row in rows:
                         print("  - " + ", ".join(f"{kk}={vv}" for kk, vv in row.items()))
+        if r["private_skipped"]:
+            print(f"\n비공개 폴더 {len(r['private_skipped'])}개는 열지 않았다(가이드 §3-B): " + ", ".join(r["private_skipped"]))
         print(f"\n규칙 위반 {n_err}건, 검토 신호 {n_sig}건. " + ("통과." if n_err == 0 else "실패."))
     if n_err or (a.signals_fail and n_sig):
         return 1
