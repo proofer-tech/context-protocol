@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - "site-src/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -31,7 +32,7 @@ jobs:
 
       - name: 키보드 밖 특수문자 검사
         run: |
-          if grep -nP '[\x{2014}\x{2013}\x{2192}\x{2190}\x{2026}\x{00B7}\x{2018}\x{2019}\x{201C}\x{201D}]' site/*; then
+          if grep -nP '[\x{2014}\x{2013}\x{2192}\x{2190}\x{2026}\x{00B7}\x{2018}\x{2019}\x{201C}\x{201D}]' site/*.html site/*.txt site/*.css site-src/src/*; then
             echo "키보드 밖 특수문자가 있다" >&2; exit 1
           fi
 

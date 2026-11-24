@@ -1,6 +1,6 @@
 # context-protocol
 
-> 폴더 하나를 에이전트의 장기기억이자 1차 정보원(SoT)으로 쓰는 워크스페이스 프로토콜. Claude Cowork, Claude Code, Codex, Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 연다. 라이센스는 PolyForm Noncommercial 1.0.0 또는 PolyForm Internal Use 1.0.0 (source-available).
+> 소버린 AI 메모리 프로토콜. 지침, 기억, 지식, 기록의 정본을 사용자가 고른 폴더에 두고, Claude Cowork, Claude Code, Codex, Cursor, Google Antigravity, Grok Build 어느 하네스로 열어도 같은 상태에서 시작하게 한다. 도구 자체 메모리는 캐시로 두고 워크스페이스 파일을 가리키는 포인터만 적는다. 라이센스는 PolyForm Noncommercial 1.0.0 또는 PolyForm Internal Use 1.0.0 (source-available).
 
 설치는 사람이 파일을 복사하는 일이 아니다. 최신 Release 의 zip 을 받아 워크스페이스 폴더를 연 에이전트에게 건네고 "이 파일을 압축해제해서 설치해줘" 라고 하면 에이전트가 설치기를 읽고 진행한다. 이미 설치된 폴더면 버전 차이만 적용한다.
 
@@ -17,6 +17,8 @@
 - [presets/preset-library.md](https://github.com/proofer-tech/context-protocol/blob/main/presets/preset-library.md): 프리셋 호출 계약 (personal-rag, team-ops, 창업, compliance, product-ideation)
 
 ## Optional
+
+- [개인 AI 주권에 대하여](https://medium.com/@hsol/%EA%B0%9C%EC%9D%B8-ai-%EC%A3%BC%EA%B6%8C%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-3085ad9ab867): 헤드리스 하네스와 개인 AI 주권, 이 프로토콜을 만든 이유
 
 - [Releases](https://github.com/proofer-tech/context-protocol/releases): 설치 패키지 zip. 같은 버전에 -bN 이 여럿이면 N 이 가장 큰 것
 - [CHANGELOG.md](https://github.com/proofer-tech/context-protocol/blob/main/CHANGELOG.md): 버전별 변경

@@ -3,572 +3,310 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>context-protocol | 폴더 하나를 에이전트의 장기기억으로</title>
-<meta name="description" content="폴더 하나를 에이전트의 장기기억이자 1차 정보원(SoT)으로 쓰는 워크스페이스 프로토콜. Claude, Codex, Cursor, Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 엽니다.">
-<meta name="theme-color" content="#0B1F4D">
+<title>context-protocol - 소버린 AI 메모리 프로토콜</title>
+<meta name="description" content="지침, 기억, 지식, 기록의 정본을 내 폴더에 두고, Claude, Codex, Cursor, Antigravity, Grok Build 어느 쪽으로 열어도 같은 상태에서 시작하게 하는 워크스페이스 프로토콜.">
+<link rel="canonical" href="https://proofer-tech.github.io/context-protocol/">
+<meta name="theme-color" content="#f3efec">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
-<meta property="og:title" content="context-protocol | 폴더 하나를 에이전트의 장기기억으로">
-<meta property="og:description" content="도구가 바뀌어도 기억은 사용자의 폴더에 남습니다. 세션과 PC 와 에이전트를 넘어 이어지는 워크스페이스 프로토콜.">
+<meta property="og:site_name" content="context-protocol">
+<meta property="og:locale" content="ko_KR">
 <meta property="og:url" content="https://proofer-tech.github.io/context-protocol/">
-<meta name="twitter:card" content="summary">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B1F4D'/%3E%3Cpath d='M8 11h7l2 2h7v10H8z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta property="og:title" content="context-protocol - 소버린 AI 메모리 프로토콜">
+<meta property="og:description" content="모델은 바꿔 끼우고, 기억은 내 폴더에 둔다. 서로 다른 AI 가 같은 기억을 쓰게 하는 워크스페이스 프로토콜.">
+<meta property="og:image" content="https://proofer-tech.github.io/context-protocol/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="context-protocol. 서로 다른 AI 가 하나의 기억을 쓴다.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" type="text/plain" href="llms.txt" title="llms.txt">
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<style>
-:root{
-  --navy:#0B1F4D; --navy-2:#132B66; --ink:#0F172A; --muted:#55607A; --line:#E3E7EF;
-  --bg:#FAFBFD; --card:#FFFFFF; --soft:#F1F4FA; --accent:#3B6BF5; --ok:#12805C;
-  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --r:16px;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;-webkit-font-smoothing:antialiased;word-break:keep-all}
-a{color:inherit}
-.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
-.eyebrow{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--accent);margin-bottom:14px}
-h1,h2,h3{letter-spacing:-.025em;line-height:1.25;margin:0}
-h2{font-size:clamp(28px,3.6vw,40px);font-weight:750}
-.lead{font-size:18px;color:var(--muted);max-width:640px}
-section{padding:104px 0}
-.sec-head{margin-bottom:48px}
-.sec-head p{margin:14px 0 0}
-code,.mono{font-family:var(--mono);font-size:.92em}
-
-/* nav */
-header.nav{position:sticky;top:0;z-index:20;background:rgba(250,251,253,.82);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
-header.nav.scrolled{border-bottom-color:var(--line)}
-.nav .wrap{display:flex;align-items:center;gap:32px;height:64px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:750;text-decoration:none;letter-spacing:-.02em}
-.logo svg{flex:none}
-.nav nav{display:flex;gap:26px;margin-left:8px}
-.nav nav a{text-decoration:none;font-size:14.5px;color:var(--muted);font-weight:500}
-.nav nav a:hover{color:var(--ink)}
-.nav .right{margin-left:auto;display:flex;gap:10px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:11px 20px;font-weight:650;font-size:15px;text-decoration:none;border:1px solid transparent;transition:transform .15s,background .15s,box-shadow .15s;cursor:pointer}
-.btn-primary{background:var(--navy);color:#fff;box-shadow:0 6px 18px -8px rgba(11,31,77,.55)}
-.btn-primary:hover{background:var(--navy-2);transform:translateY(-1px)}
-.btn-ghost{border-color:var(--line);background:#fff;color:var(--ink)}
-.btn-ghost:hover{border-color:#C9D1E1}
-.btn-sm{padding:8px 15px;font-size:14px}
-@media (max-width:860px){.nav nav{display:none}}
-.logo{white-space:nowrap}
-@media (max-width:520px){.nav .btn-ghost{display:none}.flow .col{padding:24px 18px}}
-
-/* hero */
-.hero{padding:88px 0 40px;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;inset:-40% -20% auto;height:720px;background:radial-gradient(closest-side,rgba(59,107,245,.12),transparent 70%);pointer-events:none}
-.hero .wrap{position:relative}
-.hero h1{font-size:clamp(38px,6vw,68px);font-weight:800;max-width:900px}
-.hero h1 em{font-style:normal;color:var(--accent)}
-.hero .lead{margin:22px 0 32px;font-size:19px}
-.cta-row{display:flex;flex-wrap:wrap;gap:12px}
-.trust{display:flex;flex-wrap:wrap;gap:10px 22px;margin:30px 0 0;padding:0;list-style:none;color:var(--muted);font-size:14.5px}
-.trust li{display:flex;align-items:center;gap:8px}
-.trust li::before{content:"";width:16px;height:16px;border-radius:50%;background:#E3F3EC url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.2l2.2 2.2 4.8-4.8' fill='none' stroke='%2312805C' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat}
-.badge{display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-size:13px;color:var(--muted);background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:999px}
-.badge b{color:var(--navy)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(18,128,92,.15)}
-
-/* window mockup */
-.window{margin-top:64px;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 80px -40px rgba(11,31,77,.35);overflow:hidden}
-.window .bar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid var(--line);background:#FCFDFE}
-.window .bar i{width:11px;height:11px;border-radius:50%;background:#E3E7EF}
-.window .bar span{margin-left:10px;font-size:12.5px;color:var(--muted);font-family:var(--mono)}
-.flow{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:0;align-items:stretch}
-.flow .col{padding:30px 28px}
-.flow .col+.col{border-left:1px dashed var(--line)}
-.flow h4{margin:0 0 4px;font-size:12px;letter-spacing:.06em;color:var(--muted);font-weight:650}
-.flow .step{font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:14px}
-.agent{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;font-size:14.5px;font-weight:600;background:#fff;transition:border-color .3s,box-shadow .3s}
-.agent small{margin-left:auto;font-weight:500;color:var(--muted);font-size:12px}
-.agent.on{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,107,245,.12)}
-.agent .av{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;flex:none}
-.tree{font-family:var(--mono);font-size:13px;line-height:1.9;background:var(--soft);border-radius:12px;padding:16px 18px;margin:0;white-space:pre;overflow:auto;color:#273356}
-.tree b{color:var(--navy)}
-.tree .c{color:#8A93A8}
-.tree .hl{background:rgba(59,107,245,.14);border-radius:4px;padding:1px 3px;transition:background .3s}
-.flow ul{list-style:none;margin:0;padding:0;font-size:14.5px}
-.flow ul li{padding:9px 0;border-bottom:1px solid var(--soft);display:flex;gap:10px}
-.flow ul li:last-child{border:0}
-.flow ul li span{font-family:var(--mono);font-size:12px;color:var(--accent);padding-top:3px}
-@media (max-width:860px){.flow{grid-template-columns:1fr}.flow .col+.col{border-left:0;border-top:1px dashed var(--line)}}
-
-/* demo tabs */
-.demo{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start}
-.tabs{display:flex;flex-direction:column;gap:8px}
-.tab{all:unset;cursor:pointer;padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:#fff;transition:all .15s}
-.tab .n{font-family:var(--mono);font-size:12px;color:var(--accent)}
-.tab .t{display:block;font-weight:650;font-size:16px;margin-top:2px}
-.tab .s{display:block;font-size:13.5px;color:var(--muted);margin-top:2px}
-.tab[aria-selected="true"]{border-color:var(--navy);box-shadow:0 10px 30px -18px rgba(11,31,77,.5)}
-.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.panel{background:#0D1530;color:#D7DEF0;border-radius:18px;padding:26px 28px;min-height:360px;font-family:var(--mono);font-size:13.5px;line-height:1.85;position:relative;overflow:auto}
-.panel .tag{position:absolute;top:18px;right:18px;font-family:inherit;font-size:11px;color:#9FB0DA;border:1px solid #2A3866;border-radius:999px;padding:3px 10px}
-.panel .who{color:#7FA2FF}
-.panel .me{color:#F4C46B}
-.panel .dim{color:#6E7CA3}
-.panel .ok{color:#5DD3A0}
-.panel p{margin:0 0 10px}
-.panel[hidden]{display:none}
-@media (max-width:860px){.demo{grid-template-columns:1fr}}
-
-/* cards */
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-@media (max-width:960px){.grid4{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:760px){.grid3,.grid4{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px}
-.card h3{font-size:19px;margin:12px 0 8px}
-.card p{margin:0;color:var(--muted);font-size:15px}
-.ico{width:40px;height:40px;border-radius:11px;background:var(--soft);display:grid;place-items:center;color:var(--navy)}
-.num{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:600}
-
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
-@media (max-width:760px){.steps{grid-template-columns:1fr}}
-.steps .card{position:relative}
-.prompt{margin-top:16px;font-family:var(--mono);font-size:13px;background:#0D1530;color:#E8EDFA;border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.copy{all:unset;cursor:pointer;font-size:12px;color:#9FB0DA;border:1px solid #2A3866;border-radius:7px;padding:3px 9px;font-family:var(--mono)}
-.copy:hover{color:#fff}
-
-.tool{display:flex;flex-direction:column;gap:6px}
-.tool .k{font-size:12.5px;color:var(--muted)}
-.tool .name{font-weight:700;font-size:17px}
-.pill{align-self:flex-start;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:#E3F3EC;color:var(--ok);margin-top:6px}
-.pill.soft{background:var(--soft);color:var(--muted)}
-
-.split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media (max-width:760px){.split{grid-template-columns:1fr}}
-table{width:100%;border-collapse:collapse;font-size:15px}
-td,th{text-align:left;padding:13px 4px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-size:12.5px;color:var(--muted);font-weight:600;letter-spacing:.02em}
-td code{background:var(--soft);padding:2px 7px;border-radius:6px}
-
-.dark{background:var(--navy);color:#E7ECF8}
-.dark .eyebrow{color:#9DB6FF}
-.dark .lead,.dark p{color:#B8C3E0}
-.dark .card{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12)}
-.dark .card h3{color:#fff}
-.dark .card p{color:#B8C3E0}
-.dark a.link{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3)}
-.dark a.link:hover{border-color:#fff}
-
-.license{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media (max-width:760px){.license{grid-template-columns:1fr}}
-.license ul{margin:12px 0 0;padding-left:18px;color:var(--muted);font-size:15px}
-.license li{margin:6px 0}
-.license .yes h3{color:var(--ok)}
-
-details{border-bottom:1px solid var(--line);padding:4px 0}
-summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:650;font-size:17px;display:flex;justify-content:space-between;gap:16px}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font-weight:400;color:var(--muted);font-size:22px;line-height:1}
-details[open] summary::after{content:"-"}
-details p{margin:0 0 20px;color:var(--muted);max-width:760px}
-
-.closing{text-align:center;padding:120px 0}
-.closing h2{font-size:clamp(30px,4.4vw,48px)}
-.closing p{margin:16px auto 30px}
-footer{border-top:1px solid var(--line);padding:36px 0 48px;font-size:14px;color:var(--muted)}
-footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center}
-footer .links{margin-left:auto;display:flex;gap:20px;flex-wrap:wrap}
-footer a{text-decoration:none}
-footer a:hover{color:var(--ink)}
-
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
-.reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
-</style>
+<link rel="preload" href="fonts/wanted.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"context-protocol","description":"폴더 하나를 에이전트의 장기기억이자 1차 정보원으로 쓰는 워크스페이스 프로토콜","codeRepository":"https://github.com/proofer-tech/context-protocol","url":"https://proofer-tech.github.io/context-protocol/","programmingLanguage":"Markdown","author":{"@type":"Person","name":"임한솔"}}</script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로</a>
 
 <header class="nav" id="top">
-  <div class="wrap">
-    <a class="logo" href="#top" aria-label="context-protocol 홈">
-      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0B1F4D"/><path d="M8 11h7l2 2h7v10H8z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
-      context-protocol
+  <div class="wrap nav-in">
+    <a class="logo" href="#top" aria-label="context-protocol 처음으로">
+      <svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 18h17l5 6h22v26H10z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><circle cx="32" cy="37" r="5" fill="currentColor"/></svg>
+      <span>context-protocol</span>
     </a>
-    <nav aria-label="섹션">
-      <a href="#how">작동 방식</a>
-      <a href="#tools">지원 도구</a>
+    <nav class="links" aria-label="섹션">
+      <a href="#heads">헤드리스</a>
+      <a href="#cache">도구 메모리</a>
+      <a href="#records">기록</a>
+      <a href="#install">설치</a>
       <a href="#presets">프리셋</a>
-      <a href="#agents">에이전트용</a>
       <a href="#license">라이센스</a>
     </nav>
-    <div class="right">
-      <a class="btn btn-ghost btn-sm" href="https://github.com/proofer-tech/context-protocol">GitHub</a>
-      <a class="btn btn-primary btn-sm" href="https://github.com/proofer-tech/context-protocol/releases/latest">설치하기</a>
-    </div>
+    <span class="counter mono" aria-hidden="true"><b data-counter>01</b> / <span data-total>09</span></span>
+    <a class="btn btn-ink btn-sm" href="https://github.com/proofer-tech/context-protocol">GitHub</a>
   </div>
 </header>
 
-<main>
-<section class="hero">
+<main id="main">
+
+<section class="hero sec" data-sec>
   <div class="wrap">
-    <span class="eyebrow">도구가 바뀌어도, 기억은 폴더에 남습니다</span>
-    <h1>에이전트에게 <em>매번 처음부터</em><br>설명하지 마세요.</h1>
-    <p class="lead">context-protocol 은 폴더 하나를 에이전트의 장기기억이자 1차 정보원(SoT)으로 만드는 워크스페이스 규약입니다. 결정, 맥락, 진행 상황이 도구 안이 아니라 당신의 폴더에 쌓이고, 다음 세션과 다음 도구가 그 자리에서 이어갑니다.</p>
-    <div class="cta-row">
-      <a class="btn btn-primary" href="https://github.com/proofer-tech/context-protocol/releases/latest">최신 릴리스 받기</a>
-      <a class="btn btn-ghost" href="#how">어떻게 동작하나요</a>
+    <p class="mono eyebrow">소버린 AI 메모리 프로토콜</p>
+    <div class="hero-grid">
+      <h1 class="display" data-m="lines">서로 다른 AI 가<br>하나의 기억을 쓴다.</h1>
+      <div class="hero-side">
+        <p class="mono body-mono">Claude 도, ChatGPT 도, 코딩 에이전트도 저마다 메모리를 갖고 있고 잘 동작한다. 다만 그 기억은 그 회사의 서버나 그 도구가 깔린 PC 안에만 있다.</p>
+        <p class="mono body-mono">context-protocol 은 지침, 기억, 지식, 기록의 정본을 내가 고른 폴더에 둔다. 어떤 모델로 그 폴더를 열어도 같은 상태에서 일을 시작한다.</p>
+        <div class="cta-row">
+          <a class="btn btn-ink" href="https://github.com/proofer-tech/context-protocol/releases/latest">최신 릴리스 받기</a>
+          <a class="btn btn-line" href="#install">설치 방법</a>
+        </div>
+      </div>
     </div>
-    <ul class="trust">
-      <li>파일은 내 폴더에, 형식은 마크다운</li>
-      <li>서버도 계정도 필요 없음</li>
-      <li>설치는 에이전트가 직접</li>
+    <dl class="facts">
+      <div><dt class="mono">최신 버전</dt><dd><span data-ver>8.3</span></dd></div>
+      <div><dt class="mono">붙여 본 하네스</dt><dd><span data-count="6">6</span></dd></div>
+      <div><dt class="mono">저장 위치</dt><dd><span data-count="3">3</span></dd></div>
+      <div><dt class="mono">프리셋</dt><dd><span data-count="5">5</span></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="dark sec" id="heads" data-sec>
+  <div class="wrap heads-grid">
+    <div class="heads-copy">
+      <p class="mono eyebrow">헤드리스 하네스</p>
+      <h2 class="h2" data-m="lines">머리는 바꿔 끼우고,<br>몸통은 폴더에 둔다.</h2>
+      <p class="mono body-mono">지침과 기억, 지식, 기록이 몸통이다. 모델과 앱은 그 위에 얹히는 머리다. 더 좋은 모델이 나오면 붙이고, 한 회사의 서비스가 멈추면 다른 회사 것을 붙인다. 몸통은 어떤 머리가 붙어 있든 계속 자란다.</p>
+      <p class="mono body-mono dim">도구마다 다른 진입 파일, 셸, 삭제와 git 가능 여부, 자체 메모리는 하네스 프로파일에 적는다. 새 도구가 나오면 프로파일만 더한다.</p>
+      <p class="attached mono" aria-live="polite"><span class="dot"></span><span data-attached-label>붙여 본 머리</span> <b data-attached>6종</b></p>
+    </div>
+    <figure class="hub" aria-label="여섯 개 하네스가 하나의 워크스페이스 폴더에 연결된 도식">
+      <svg viewBox="0 0 640 560" role="img" aria-hidden="true">
+        <g class="spokes" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path data-spoke="0" d="M150 92 C 230 92, 250 210, 284 250"/>
+          <path data-spoke="1" d="M126 280 C 200 280, 230 280, 268 280"/>
+          <path data-spoke="2" d="M150 468 C 230 468, 250 350, 284 310"/>
+          <path data-spoke="3" d="M490 92 C 410 92, 390 210, 356 250"/>
+          <path data-spoke="4" d="M514 280 C 440 280, 410 280, 372 280"/>
+          <path data-spoke="5" d="M490 468 C 410 468, 390 350, 356 310"/>
+        </g>
+        <g class="pulses" fill="none" stroke-width="3" stroke-linecap="round">
+          <path data-pulse="0" d="M150 92 C 230 92, 250 210, 284 250"/>
+          <path data-pulse="1" d="M126 280 C 200 280, 230 280, 268 280"/>
+          <path data-pulse="2" d="M150 468 C 230 468, 250 350, 284 310"/>
+          <path data-pulse="3" d="M490 92 C 410 92, 390 210, 356 250"/>
+          <path data-pulse="4" d="M514 280 C 440 280, 410 280, 372 280"/>
+          <path data-pulse="5" d="M490 468 C 410 468, 390 350, 356 310"/>
+        </g>
+        <circle class="ring" cx="320" cy="280" r="74" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 6"/>
+        <circle cx="320" cy="280" r="54" class="core"/>
+        <path d="M296 266h17l5 6h26v28h-48z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+        <circle cx="320" cy="285" r="3.6" fill="currentColor"/>
+      </svg>
+      <ul class="chips" role="list">
+        <li class="chip" data-chip="0" style="--x:2%;--y:16.4%"><b>Claude Cowork</b><span class="mono">지원</span></li>
+        <li class="chip" data-chip="1" style="--x:0%;--y:50%"><b>Claude Code</b><span class="mono">실측 통과</span></li>
+        <li class="chip" data-chip="2" style="--x:2%;--y:83.6%"><b>Codex</b><span class="mono">실측 통과</span></li>
+        <li class="chip r" data-chip="3" style="--x:98%;--y:16.4%"><b>Cursor</b><span class="mono">실측 통과</span></li>
+        <li class="chip r" data-chip="4" style="--x:100%;--y:50%"><b>Antigravity</b><span class="mono">실측 통과</span></li>
+        <li class="chip r" data-chip="5" style="--x:98%;--y:83.6%"><b>Grok Build</b><span class="mono">실측 통과</span></li>
+      </ul>
+      <figcaption class="mono core-label">workspace/<br><span>CONTEXT.md</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="sec" id="cache" data-sec>
+  <div class="wrap">
+    <div class="head2">
+      <h2 class="h2" data-m="lines">도구 메모리는 캐시로,<br>정본은 폴더로.</h2>
+      <p class="mono body-mono">도구 메모리를 끄라는 규약이 아니다. 거기에는 많아야 폴더 안 파일을 가리키는 한 줄만 두고, 본문은 폴더에 쓴다. 기억했다는 답만 듣고 다른 PC 나 다른 도구에서 사라지는 기록을 막는다.</p>
+    </div>
+    <div class="compare" role="table" aria-label="도구 메모리와 워크스페이스 폴더 비교">
+      <div class="crow chead" role="row"><span role="columnheader"></span><span role="columnheader" class="mono">도구 메모리</span><span role="columnheader" class="mono">워크스페이스 폴더</span></div>
+      <div class="crow" role="row"><span role="rowheader" class="mono">있는 곳</span><span role="cell">그 회사의 서버, 그 도구가 깔린 PC</span><span role="cell">내가 고른 폴더. 구글 드라이브, 로컬, git</span></div>
+      <div class="crow" role="row"><span role="rowheader" class="mono">읽는 쪽</span><span role="cell">그 도구 하나</span><span role="cell">폴더를 여는 모든 하네스</span></div>
+      <div class="crow" role="row"><span role="rowheader" class="mono">다른 PC</span><span role="cell">처음부터 없던 일이 된다</span><span role="cell">같은 폴더면 같은 내용</span></div>
+      <div class="crow" role="row"><span role="rowheader" class="mono">이 규약에서</span><span role="cell">캐시. 파일을 가리키는 포인터 한 줄</span><span role="cell">정본(SoT). 지침, 기억, 지식, 기록</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec tight" id="cross" data-sec>
+  <div class="wrap">
+    <div class="head2">
+      <h2 class="h2" data-m="lines">모델마다<br>다른 구멍을 짚는다.</h2>
+      <p class="mono body-mono">8.0 을 만든 뒤 같은 워크스페이스에 여섯 하네스를 차례로 붙여 같은 질문을 던졌다. 대부분 포털을 따라 정본까지 들어가 맞게 답했고, 틀린 곳은 문서가 덜 떼어 낸 곳이었다.</p>
+    </div>
+    <ol class="finds" role="list">
+      <li><span class="mono who">Grok Build</span><p>헤드리스로 돌렸을 때 git 허용 여부를 틀렸다. 그 규칙이 저장소 쪽 문서에 제대로 없었다. 저장소 프로파일로 옮겨 적었다.</p></li>
+      <li><span class="mono who">두 하네스</span><p>색인에 있는 본문을 세션 시작에 전부 읽어야 하느냐고 되물었다. 시작할 때는 색인만, 요청이 닿을 때 본문으로 들어가도록 고쳤다.</p></li>
+      <li><span class="mono who">Claude Code</span><p>파일을 끌어오는 문법이 frontmatter 를 빼먹는다는 것을 드러냈다. 포털이 frontmatter 만 따로 읽게 했다.</p></li>
+      <li><span class="mono who">Cowork</span><p>프로파일이 데스크톱 환경만 전제한다고 짚었다. 클라우드 실행 형태를 프로파일에 더했다.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="records" data-sec>
+  <div class="wrap">
+    <div class="head2">
+      <h2 class="h2" data-m="lines">기록은 세 갈래로<br>나뉘어 쌓인다.</h2>
+      <p class="mono body-mono">대화에서 오래 쓸 사실이나 결정이 나오면 에이전트는 시키지 않아도 종류에 맞는 자리에 기록하고 경로를 알린다. 셋은 섞지 않는다.</p>
+    </div>
+    <div class="cards">
+      <article class="card sage">
+        <h3>memory/</h3>
+        <svg class="glyph" viewBox="0 0 240 150" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="120" cy="75" r="14"/><circle cx="120" cy="75" r="32" stroke-dasharray="3 5"/><circle cx="120" cy="75" r="52"/><circle cx="120" cy="75" r="70" stroke-dasharray="3 5"/><path d="M20 75h30M190 75h30"/></g><circle cx="120" cy="75" r="4" fill="currentColor"/></svg>
+        <p class="mono">사람에 대한 기억만 둔다. 정체성, 선호, 받은 피드백, 진행 중인 일. MEMORY.md 색인으로 찾아 들어간다.</p>
+      </article>
+      <article class="card rose">
+        <h3>action-log/</h3>
+        <svg class="glyph" viewBox="0 0 240 150" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4"><path d="M16 96h208"/><path d="M40 96v-34M76 96v-18M112 96v-50M148 96v-26M184 96v-42" /><path d="M40 62l36 16 36-32 36 24 36-28" stroke-dasharray="3 5"/></g><g fill="currentColor"><circle cx="40" cy="96" r="3.5"/><circle cx="76" cy="96" r="3.5"/><circle cx="112" cy="96" r="3.5"/><circle cx="148" cy="96" r="3.5"/><circle cx="184" cy="96" r="3.5"/></g></svg>
+        <p class="mono">날짜가 있는 사건은 하루 한 파일씩 쌓는다. 무엇이 바뀌었는지 적고, 바뀐 원본도 함께 고친다.</p>
+      </article>
+      <article class="card sand">
+        <h3>주제 폴더/</h3>
+        <svg class="glyph" viewBox="0 0 240 150" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4"><path d="M120 24v30M120 54L64 92M120 54l56 38M64 92l-26 34M64 92l24 34M176 92l-22 34M176 92l26 34M120 54v72" /></g><g fill="currentColor"><circle cx="120" cy="24" r="4"/><circle cx="64" cy="92" r="3.5"/><circle cx="176" cy="92" r="3.5"/><circle cx="38" cy="126" r="3"/><circle cx="88" cy="126" r="3"/><circle cx="120" cy="126" r="3"/><circle cx="154" cy="126" r="3"/><circle cx="202" cy="126" r="3"/></g></svg>
+        <p class="mono">지식은 한 주제에 한 파일. 폴더 위치가 곧 분류라 손으로 관리하는 목록이 없다. 맞는 폴더가 없으면 새로 만든다.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="install" data-sec>
+  <div class="wrap">
+    <div class="center-head">
+      <p class="mono eyebrow">설치</p>
+      <h2 class="h2" data-m="lines">설치는 에이전트가 한다.</h2>
+      <p class="mono body-mono">사람이 파일을 복사하지 않는다. 설치 패키지를 건네면 에이전트가 설치기를 읽고 폴더를 꾸민다.</p>
+    </div>
+    <ol class="steps" role="list">
+      <li><span class="pill">1단계</span><h3>최신 zip 받기</h3><p class="mono"><a href="https://github.com/proofer-tech/context-protocol/releases/latest">Releases</a> 에서 context-protocol-&lt;버전&gt;.zip 을 받는다. 같은 버전에 -b2, -b3 이 있으면 번호가 가장 큰 것을 쓴다.</p></li>
+      <li><span class="pill">2단계</span><h3>폴더를 하네스로 열기</h3><p class="mono">Cowork 는 프로젝트에 폴더를 연결한다. Claude Code, Codex, Cursor, Antigravity, Grok Build 는 그 폴더에서 실행한다.</p></li>
+      <li><span class="pill">3단계</span><h3>zip 을 건네고 한 줄</h3><p class="mono">백엔드 종류 같은 질문에 답하면 끝난다. 이미 쓰는 폴더면 덮어쓰지 않고 버전 차이만 적용한다.</p></li>
+    </ol>
+    <div class="cmd"><code id="c1">이 파일을 압축해제해서 설치해줘</code><button class="copy mono" type="button" data-copy="c1">복사</button></div>
+    <div class="tree-wrap">
+      <p class="mono tree-cap">설치하면 생기는 것</p>
+<pre class="tree mono" aria-label="설치 후 폴더 구조"><b>&lt;워크스페이스&gt;/</b>
+  CONTEXT.md          <i>규칙 정본이자 세션 진입점</i>
+  AGENTS.md           <i>포털. Codex, Cursor 등이 읽고 CONTEXT.md 로 넘어간다</i>
+  CLAUDE.md           <i>포털. Claude 계열이 읽고 CONTEXT.md 로 넘어간다</i>
+  _project.md         <i>이 워크스페이스가 무엇인지</i>
+  memory/MEMORY.md    <i>메모리 색인</i>
+  action-log/         <i>날짜별 사건 기록</i>
+  _context-protocol/  <i>가이드, 온톨로지 규약, 백엔드와 하네스 프로파일, 도구</i></pre>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="backends" data-sec>
+  <div class="wrap">
+    <div class="head2">
+      <h2 class="h2" data-m="lines">폴더를 둘 곳은<br>설치할 때 고른다.</h2>
+      <p class="mono body-mono">어떤 하네스로 열었는지는 워크스페이스에 적지 않는다. 같은 폴더를 오늘은 Claude 로, 내일은 Codex 로 열 수 있어야 한다.</p>
+    </div>
+    <div class="cells">
+      <div class="cell"><span class="mono tag">gdrive</span><h3>구글 드라이브 동기화 폴더</h3><p class="mono">여러 PC 에서 같은 워크스페이스. 실측 검증.</p></div>
+      <div class="cell"><span class="mono tag">local</span><h3>일반 로컬 디렉토리</h3><p class="mono">PC 한 대 전제.</p></div>
+      <div class="cell"><span class="mono tag">git</span><h3>동기화 폴더 밖의 clone</h3><p class="mono">요청 하나를 커밋 하나로 묶고, 바로 반영하거나 PR 까지만 만든다. 설치할 때 고를 때만 쓴다.</p></div>
+      <div class="cell"><span class="mono tag">onedrive, dropbox</span><h3>예약</h3><p class="mono">프로파일이 아직 없어 폴백 규칙으로 동작한다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark sec" id="presets" data-sec>
+  <div class="wrap">
+    <div class="head2">
+      <h2 class="h2" data-m="lines">주제별 뼈대는<br>이름을 대면 깔린다.</h2>
+      <div>
+        <p class="mono body-mono">프리셋은 설치 대상이 아니다. 설치를 마친 뒤 이름을 대며 요청할 때만 적용된다. 목록에 없는 이름이면 비슷한 것으로 바꾸지 않고 먼저 묻는다.</p>
+        <div class="cmd on-dark"><code id="c2">personal rag 프리셋으로 세팅해줘</code><button class="copy mono" type="button" data-copy="c2">복사</button></div>
+      </div>
+    </div>
+    <ul class="rows" role="list">
+      <li><span class="mono">personal-rag</span><p>한 사람을 디지털 트윈으로 표현하는 개인 지식그래프</p></li>
+      <li><span class="mono">team-ops</span><p>한 팀의 운영 지식. 중심 타입은 Decision</p></li>
+      <li><span class="mono">창업</span><p>예비창업자와 초기창업기업의 사업 자료. 중심 타입은 가설</p></li>
+      <li><span class="mono">compliance</span><p>법령에서 사내 규정, 통제, 이행 증거까지의 사슬</p></li>
+      <li><span class="mono">product-ideation</span><p>프로젝트급 개념 하나를 축과 측면으로 분해하는 뼈대</p></li>
     </ul>
-    <span class="badge"><span class="dot"></span>최신 버전 <b id="ver">Releases</b> <span class="mono">source-available</span></span>
-
-    <div class="window reveal" aria-label="흐름 예시">
-      <div class="bar"><i></i><i></i><i></i><span>~/workspace (Google Drive, 여러 PC)</span></div>
-      <div class="flow">
-        <div class="col">
-          <div class="step">01 아무 도구로 열기</div>
-          <h4>에이전트</h4>
-          <div class="agent" data-a="0"><span class="av" style="background:#C96442">C</span>Claude Cowork<small>프로젝트 연결</small></div>
-          <div class="agent" data-a="1"><span class="av" style="background:#1F2937">&gt;_</span>Claude Code<small>터미널</small></div>
-          <div class="agent" data-a="2"><span class="av" style="background:#10A37F">O</span>Codex<small>CLI</small></div>
-          <div class="agent" data-a="3"><span class="av" style="background:#111">Cu</span>Cursor<small>에디터</small></div>
-          <div class="agent" data-a="4"><span class="av" style="background:#4285F4">A</span>Antigravity<small>agy</small></div>
-          <div class="agent" data-a="5"><span class="av" style="background:#333">G</span>Grok Build<small>대화형</small></div>
-        </div>
-        <div class="col">
-          <div class="step">02 같은 규칙으로 읽고 쓰기</div>
-          <h4>워크스페이스</h4>
-<pre class="tree"><b>workspace/</b>
-  <span data-t="0" class="">CONTEXT.md</span>        <span class="c"># 규칙 정본, 진입점</span>
-  <span data-t="1">AGENTS.md  CLAUDE.md</span> <span class="c"># 포털</span>
-  _project.md
-  <span data-t="2">memory/MEMORY.md</span>  <span class="c"># 사람에 대한 기억</span>
-  <span data-t="3">action-log/</span>       <span class="c"># 날짜별 사건</span>
-  <span data-t="4">고객사/계약/</span>       <span class="c"># 폴더 = 분류</span>
-  _context-protocol/</pre>
-        </div>
-        <div class="col">
-          <div class="step">03 다음 세션이 이어받기</div>
-          <h4>남는 것</h4>
-          <ul>
-            <li><span>M</span>선호와 피드백은 <code>memory/</code> 에</li>
-            <li><span>L</span>오늘 정한 일은 <code>action-log/</code> 에</li>
-            <li><span>K</span>지식은 맞는 주제 폴더에 한 파일씩</li>
-            <li><span>X</span>다른 PC, 다른 도구에서도 같은 내용</li>
-          </ul>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
-<section id="demo" style="padding-top:64px">
+<section class="sec" id="docs" data-sec>
   <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">한 번의 결정이 이어지는 방식</span>
-      <h2>월요일엔 Claude, 수요일엔 Codex.<br>그래도 같은 이야기를 이어갑니다.</h2>
+    <div class="head2">
+      <h2 class="h2" data-m="lines">규범은 전부<br>마크다운이다.</h2>
+      <p class="mono body-mono">어떤 모델이든 파일은 읽을 줄 안다. 처음 읽는다면 이 순서가 빠르다.</p>
     </div>
-    <div class="demo">
-      <div class="tabs" role="tablist" aria-label="세션 흐름">
-        <button class="tab" role="tab" aria-selected="true" aria-controls="p1" id="t1"><span class="n">01</span><span class="t">결정이 생긴다</span><span class="s">대화 중에 정한 것</span></button>
-        <button class="tab" role="tab" aria-selected="false" aria-controls="p2" id="t2"><span class="n">02</span><span class="t">알맞은 자리에 기록</span><span class="s">"기억해줘" 를 기다리지 않음</span></button>
-        <button class="tab" role="tab" aria-selected="false" aria-controls="p3" id="t3"><span class="n">03</span><span class="t">다른 도구가 이어받음</span><span class="s">처음 보는 세션도 바로</span></button>
-      </div>
-      <div>
-        <div class="panel" role="tabpanel" id="p1" aria-labelledby="t1">
-          <span class="tag">예시</span>
-          <p class="dim"># 월요일, Claude Cowork</p>
-          <p><span class="me">나</span>  A사 견적은 인건비 기준으로 가고, 유지보수는 별도 계약으로 빼자.</p>
-          <p><span class="who">에이전트</span>  네, 견적서 초안을 그 기준으로 고쳤습니다.</p>
-          <p class="dim">  보통은 여기서 끝납니다. 세션이 닫히면 "왜 유지보수를 뺐는지" 는 사라지죠.</p>
-        </div>
-        <div class="panel" role="tabpanel" id="p2" aria-labelledby="t2" hidden>
-          <span class="tag">예시</span>
-          <p class="dim"># 같은 세션, 답변 직후</p>
-          <p><span class="who">에이전트</span>  기록했습니다.</p>
-          <p><span class="ok">+</span> 고객사/A사/결정-유지보수-별도계약.md <span class="dim">  지식은 주제 폴더에</span></p>
-          <p><span class="ok">+</span> action-log/2026-11-23.md <span class="dim">          날짜 있는 사건은 로그에</span></p>
-          <p><span class="ok">~</span> 고객사/A사/견적.md <span class="dim">                  바뀐 원본도 같이 갱신</span></p>
-          <p class="dim">  세 종류를 섞지 않고, 맞는 폴더가 없으면 폴더를 새로 만듭니다.</p>
-        </div>
-        <div class="panel" role="tabpanel" id="p3" aria-labelledby="t3" hidden>
-          <span class="tag">예시</span>
-          <p class="dim"># 수요일, 다른 PC 의 Codex</p>
-          <p><span class="me">나</span>  A사 계약서 초안 잡아줘.</p>
-          <p><span class="dim">  CONTEXT.md 읽음, memory/MEMORY.md 읽음, 고객사/A사/ 검색</span></p>
-          <p><span class="who">에이전트</span>  월요일에 유지보수를 별도 계약으로 빼기로 하셨으니, 본계약에서는 하자보수 기간만 두고 운영 지원 조항은 넣지 않았습니다.</p>
-          <p class="dim">  "없다" 고 말하기 전에 워크스페이스부터 찾는 것이 규칙입니다.</p>
-        </div>
-      </div>
+    <ol class="docs" role="list">
+      <li><a href="https://github.com/proofer-tech/context-protocol/blob/main/package/README.md"><span class="mono n">01</span><b>package/README.md</b><span class="mono d">설치가 실제로 어떻게 진행되는가</span></a></li>
+      <li><a href="https://github.com/proofer-tech/context-protocol/blob/main/_context-protocol/CONTEXT_GUIDE.md"><span class="mono n">02</span><b>CONTEXT_GUIDE.md</b><span class="mono d">레이어 모델, 하드 룰, 조회와 쓰기 프로토콜</span></a></li>
+      <li><a href="https://github.com/proofer-tech/context-protocol/blob/main/_context-protocol/_ontology.md"><span class="mono n">03</span><b>_ontology.md</b><span class="mono d">폴더가 곧 온톨로지라는 방식, 쓰기 전 분해</span></a></li>
+      <li><a href="https://github.com/proofer-tech/context-protocol/tree/main/_context-protocol/harnesses"><span class="mono n">04</span><b>harnesses/</b><span class="mono d">하네스 능력 계약과 프로파일</span></a></li>
+      <li><a href="https://github.com/proofer-tech/context-protocol/tree/main/_context-protocol/backends"><span class="mono n">05</span><b>backends/</b><span class="mono d">저장 위치 능력 계약과 프로파일</span></a></li>
+      <li><a href="llms.txt"><span class="mono n">06</span><b>llms.txt</b><span class="mono d">이 페이지의 에이전트용 요약</span></a></li>
+    </ol>
+    <div class="lint">
+      <div><h3>무결성 린트</h3><p class="mono">설치한 워크스페이스가 규칙을 지키는지 에이전트 없이 확인한다. 위반이 있으면 종료 코드 1 이라 CI 에 걸 수 있다.</p></div>
+      <div class="cmd"><code id="c3">python3 _context-protocol/tools/integrity_lint.py .</code><button class="copy mono" type="button" data-copy="c3">복사</button></div>
     </div>
   </div>
 </section>
 
-<section id="why" style="padding-top:40px">
+<section class="sec" id="license" data-sec>
   <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">무엇이 다른가요</span>
-      <h2>기억을 도구 밖으로 꺼냈습니다.</h2>
-      <p class="lead">에이전트의 기억은 보통 한 계정, 한 PC, 한 도구에 묶여 있습니다. 이 프로토콜은 그 기억을 사용자가 소유한 폴더로 옮기고, 어떤 에이전트든 지킬 수 있는 규칙을 붙입니다.</p>
+    <div class="head2">
+      <h2 class="h2" data-m="lines">소스는 공개,<br>사내 업무에는 그대로.</h2>
+      <p class="mono body-mono">PolyForm Noncommercial 1.0.0 과 PolyForm Internal Use 1.0.0 중 하나를 골라 쓴다. OSI 기준의 오픈소스가 아니라 source-available 이다. 법적 효력은 <a href="https://github.com/proofer-tech/context-protocol/blob/main/LICENSE">원문</a>에만 있다.</p>
     </div>
-    <div class="grid3">
-      <div class="card reveal">
-        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h7l2 2h9v10H3z"/></svg></div>
-        <h3>폴더가 곧 온톨로지</h3>
-        <p>파일이 어느 폴더에 있느냐가 "이것이 무엇인가" 에 대한 분류입니다. 손으로 관리하는 목록이나 별도 DB 가 없습니다.</p>
-      </div>
-      <div class="card reveal">
-        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-        <h3>세 갈래로 쌓이는 기록</h3>
-        <p>사람에 대한 기억은 <code>memory/</code>, 날짜가 있는 사건은 <code>action-log/</code>, 지식은 주제 폴더. 섞지 않아서 나중에 찾을 수 있습니다.</p>
-      </div>
-      <div class="card reveal">
-        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div>
-        <h3>함정까지 규칙으로</h3>
-        <p>클라우드 동기화 폴더의 미다운로드 파일, 프록시 마운트의 삭제 실패처럼 실제로 겪은 문제를 하네스와 백엔드 프로파일로 흡수했습니다.</p>
-      </div>
+    <div class="lic">
+      <div><p class="mono lic-h">쓸 수 있다</p><ul role="list"><li>개인 워크스페이스, 연구, 학습, 취미 프로젝트</li><li>학교, 공공기관, 비영리 단체</li><li>영리 기업의 사내 업무. 사내 SoT, 평가, PoC, 사내 수정</li><li>비상업 조건으로 수정해 다시 배포하기</li></ul></div>
+      <div><p class="mono lic-h">별도 상업 라이센스</p><ul role="list"><li>고객사에 설치해 주거나 납품물에 포함하기</li><li>호스팅 서비스, 유료 교육, 컨설팅 상품으로 제공하기</li><li>이 프로토콜이나 파생물을 판매하기</li><li>영리 목적으로 회사 밖에 배포하기</li></ul></div>
+    </div>
+    <p class="mono note">회사나 기관에서 도입을 검토한다면 <a href="https://github.com/proofer-tech/context-protocol/blob/main/docs/%EC%A1%B0%EC%A7%81-%EB%8F%84%EC%9E%85-%EA%B0%80%EC%9D%B4%EB%93%9C.md">조직 도입 가이드</a>, 상업 라이센스는 <a href="https://github.com/proofer-tech/context-protocol/issues">이슈</a>로 문의.</p>
+  </div>
+</section>
+
+<section class="sec" id="faq" data-sec>
+  <div class="wrap faq-grid">
+    <h2 class="h2" data-m="lines">자주 묻는<br>질문.</h2>
+    <div class="faq">
+      <details><summary>도구 메모리를 꺼야 하나요?</summary><p class="mono">아니다. 도구 메모리는 캐시로 두고, 거기에는 워크스페이스 파일을 가리키는 포인터 한 줄만 적는다. 본문은 폴더의 memory/ 에 쓴다.</p></details>
+      <details><summary>앱이나 서비스인가요?</summary><p class="mono">아니다. 마크다운 규약과 설치기, 보조 도구 몇 개다. 서버도 계정도 없고, 이미 쓰는 하네스가 폴더를 읽고 쓰는 방식을 정한다.</p></details>
+      <details><summary>하네스마다 할 수 있는 일이 다르면요?</summary><p class="mono">차이는 없애지 않고 프로파일에 적는다. 파일 업로드만 되는 채팅에서는 폴더에 쓸 수 없어 열람 모드로만 쓴다.</p></details>
+      <details><summary>이미 쓰던 폴더에 새 버전을 깔면 덮어쓰나요?</summary><p class="mono">아니다. 같은 방법으로 새 zip 을 건네면 기존 설치를 알아보고 버전 차이만 적용한다. 변경 내역은 <a href="https://github.com/proofer-tech/context-protocol/blob/main/CHANGELOG.md">CHANGELOG</a> 에 있다.</p></details>
+      <details><summary>기존 파일은 어떻게 정리되나요?</summary><p class="mono">폴더와 템플릿 생성은 비파괴라 바로 한다. 기존 파일을 옮기는 일은 파일별 이동 계획과 이유를 먼저 보여 주고 승인을 받은 뒤에만 한다.</p></details>
     </div>
   </div>
 </section>
 
-<section id="how" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section class="closing" data-sec>
   <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">작동 방식</span>
-      <h2>설치는 에이전트가 합니다.</h2>
-      <p class="lead">사람이 파일을 복사하지 않습니다. 설치 패키지를 건네면 에이전트가 설치기를 읽고 폴더를 꾸밉니다.</p>
-    </div>
-    <div class="steps">
-      <div class="card reveal">
-        <span class="num">01</span>
-        <h3>최신 zip 받기</h3>
-        <p><a href="https://github.com/proofer-tech/context-protocol/releases/latest">Releases</a> 에서 <code>context-protocol-&lt;버전&gt;.zip</code> 을 받습니다. 빌드 번호(<code>-b2</code>)가 여럿이면 가장 큰 것을 씁니다.</p>
-      </div>
-      <div class="card reveal">
-        <span class="num">02</span>
-        <h3>폴더를 에이전트로 열기</h3>
-        <p>Cowork 는 프로젝트에 폴더를 연결하고, Claude Code, Codex, Cursor 등은 그 폴더에서 실행합니다.</p>
-      </div>
-      <div class="card reveal">
-        <span class="num">03</span>
-        <h3>zip 을 건네고 한 줄</h3>
-        <p>백엔드 종류 같은 질문에 답하면 끝입니다. 이미 쓰는 폴더라면 버전 차이만 적용합니다.</p>
-        <div class="prompt"><span id="cmd">이 파일을 압축해제해서 설치해줘</span><button class="copy" data-copy="cmd">복사</button></div>
-      </div>
-    </div>
-    <p style="margin-top:28px;color:var(--muted);font-size:15px">도구별 차이와 막혔을 때의 대응은 <a href="https://github.com/proofer-tech/context-protocol/blob/main/docs/%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C.md">설치 가이드</a> 에 있습니다.</p>
-  </div>
-</section>
-
-<section id="tools">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">지원 도구</span>
-      <h2>여섯 개의 에이전트, 하나의 폴더.</h2>
-      <p class="lead">도구마다 다른 진입 파일, 셸, 메모리 방식을 하네스 프로파일로 흡수합니다. 목록에 없는 도구도 폴더에 쓸 수 있으면 <code>generic</code> 폴백으로 동작합니다.</p>
-    </div>
-    <div class="grid4">
-      <div class="card tool reveal"><span class="k">데스크톱 앱</span><span class="name">Claude Cowork</span><span class="pill">지원</span></div>
-      <div class="card tool reveal"><span class="k">코딩 에이전트</span><span class="name">Claude Code</span><span class="pill">실측 통과</span></div>
-      <div class="card tool reveal"><span class="k">CLI, ChatGPT Work 모드</span><span class="name">Codex</span><span class="pill">실측 통과</span></div>
-      <div class="card tool reveal"><span class="k">코드 에디터</span><span class="name">Cursor</span><span class="pill">실측 통과</span></div>
-      <div class="card tool reveal"><span class="k">agy CLI</span><span class="name">Google Antigravity</span><span class="pill">실측 통과</span></div>
-      <div class="card tool reveal"><span class="k">대화형</span><span class="name">Grok Build</span><span class="pill">실측 통과</span></div>
-      <div class="card tool reveal"><span class="k">파일 첨부만 하는 제품</span><span class="name">대화형 챗</span><span class="pill soft">열람 모드, 미검증</span></div>
-      <div class="card tool reveal"><span class="k">그 밖의 도구</span><span class="name">generic</span><span class="pill soft">폴백</span></div>
-    </div>
-
-    <div class="split" style="margin-top:56px">
-      <div>
-        <h3 style="font-size:22px">저장 위치(백엔드)도 고릅니다</h3>
-        <p style="color:var(--muted)">여러 PC 에서 같은 워크스페이스를 쓰고 싶다면 동기화 폴더를, 팀의 승인 흐름이 필요하다면 git 을 고르세요.</p>
-      </div>
-      <table>
-        <thead><tr><th>백엔드</th><th>쓰임</th></tr></thead>
-        <tbody>
-          <tr><td><code>gdrive</code></td><td>구글 드라이브 동기화 폴더. 여러 PC 에서 같은 워크스페이스 (실측 검증)</td></tr>
-          <tr><td><code>local</code></td><td>일반 로컬 디렉토리. PC 한 대 전제</td></tr>
-          <tr><td><code>git</code></td><td>동기화 폴더 밖의 clone. 요청 하나가 커밋 하나, 수시반영 또는 PR 승인반영</td></tr>
-          <tr><td><code>onedrive</code>, <code>dropbox</code></td><td>예약. 폴백 규칙으로 동작</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section id="presets" class="dark">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">프리셋</span>
-      <h2 style="color:#fff">주제에 맞는 뼈대를 한 줄로.</h2>
-      <p class="lead">설치가 끝난 뒤 이름을 대고 요청하면 폴더, 개념 노트, 템플릿이 깔리고 첫 항목까지 채웁니다.</p>
-      <div class="prompt" style="max-width:460px;background:rgba(255,255,255,.06)"><span id="cmd2">personal rag 프리셋으로 세팅해줘</span><button class="copy" data-copy="cmd2">복사</button></div>
-    </div>
-    <div class="grid3">
-      <div class="card reveal"><span class="num">personal-rag</span><h3>개인 지식그래프</h3><p>한 사람을 디지털 트윈으로 표현합니다.</p></div>
-      <div class="card reveal"><span class="num">team-ops</span><h3>팀 운영 지식</h3><p>중심 타입은 Decision. 팀이 왜 그렇게 정했는지 남깁니다.</p></div>
-      <div class="card reveal"><span class="num">창업</span><h3>초기 창업 자료</h3><p>예비창업자와 초기기업용. 중심 타입은 가설입니다.</p></div>
-      <div class="card reveal"><span class="num">compliance</span><h3>규정 준수 사슬</h3><p>법령에서 사내 규정, 통제, 이행 증거까지 잇습니다.</p></div>
-      <div class="card reveal"><span class="num">product-ideation</span><h3>제품 아이데이션</h3><p>프로젝트급 개념 하나를 축과 측면으로 분해합니다.</p></div>
-      <div class="card reveal" style="border-style:dashed"><span class="num">your-preset</span><h3>맞는 게 없다면</h3><p>목록에 없는 프리셋은 비슷한 것으로 대신하지 않고 먼저 묻습니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="agents">
-  <div class="wrap">
-    <div class="split">
-      <div>
-        <span class="eyebrow">에이전트와 빌더를 위해</span>
-        <h2>사람보다 에이전트가<br>먼저 읽는 문서.</h2>
-        <p class="lead" style="margin-top:14px">규범은 전부 마크다운입니다. 처음 읽는다면 이 순서가 빠릅니다.</p>
-      </div>
-      <table>
-        <tbody>
-          <tr><td class="num">1</td><td><a href="https://github.com/proofer-tech/context-protocol/blob/main/package/README.md">package/README.md</a><br><span style="color:var(--muted);font-size:14px">설치가 실제로 어떻게 진행되는가</span></td></tr>
-          <tr><td class="num">2</td><td><a href="https://github.com/proofer-tech/context-protocol/blob/main/_context-protocol/CONTEXT_GUIDE.md">CONTEXT_GUIDE.md</a><br><span style="color:var(--muted);font-size:14px">레이어 모델, 하드 룰, 조회와 쓰기 프로토콜</span></td></tr>
-          <tr><td class="num">3</td><td><a href="https://github.com/proofer-tech/context-protocol/blob/main/_context-protocol/_ontology.md">_ontology.md</a><br><span style="color:var(--muted);font-size:14px">폴더가 곧 온톨로지라는 방식, 쓰기 전 분해</span></td></tr>
-          <tr><td class="num">4</td><td><a href="https://github.com/proofer-tech/context-protocol/tree/main/_context-protocol/harnesses">harnesses/</a>, <a href="https://github.com/proofer-tech/context-protocol/tree/main/_context-protocol/backends">backends/</a><br><span style="color:var(--muted);font-size:14px">도구와 저장 위치를 흡수하는 능력 계약</span></td></tr>
-          <tr><td class="num">+</td><td><a href="llms.txt">llms.txt</a><br><span style="color:var(--muted);font-size:14px">이 페이지의 에이전트용 요약</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card reveal" style="margin-top:40px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
-      <div>
-        <h3 style="margin:0 0 4px">무결성 린트</h3>
-        <p>설치한 워크스페이스가 규칙을 지키는지 에이전트 없이 확인합니다. 위반이 있으면 종료 코드 1, CI 에 걸 수 있습니다.</p>
-      </div>
-      <div class="prompt" style="margin:0;flex:1 1 420px"><span id="cmd3">python3 _context-protocol/tools/integrity_lint.py .</span><button class="copy" data-copy="cmd3">복사</button></div>
-    </div>
-  </div>
-</section>
-
-<section id="license" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">라이센스</span>
-      <h2>소스 공개, 사내 업무엔 자유롭게.</h2>
-      <p class="lead">PolyForm Noncommercial 1.0.0 과 PolyForm Internal Use 1.0.0 중 하나를 골라 씁니다. 아래는 요약이고, 법적 효력은 <a href="https://github.com/proofer-tech/context-protocol/blob/main/LICENSE">원문</a>에만 있습니다.</p>
-    </div>
-    <div class="license">
-      <div class="card yes">
-        <h3>할 수 있어요</h3>
-        <ul>
-          <li>개인 워크스페이스, 연구, 학습, 취미 프로젝트</li>
-          <li>학교, 공공기관, 비영리 단체에서 쓰기</li>
-          <li>영리 기업의 사내 업무 (사내 SoT, 평가, PoC, 사내 수정)</li>
-          <li>비상업 조건으로 수정해 다시 배포하기</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>별도 상업 라이센스가 필요해요</h3>
-        <ul>
-          <li>고객사에 설치해 주거나 납품물에 포함하기</li>
-          <li>호스팅 서비스, 유료 교육, 컨설팅 상품으로 제공하기</li>
-          <li>이 프로토콜이나 파생물을 판매하기</li>
-          <li>영리 목적으로 회사 밖에 배포하기</li>
-        </ul>
-      </div>
-    </div>
-    <p style="margin-top:22px;color:var(--muted);font-size:15px">회사나 기관에서 도입을 검토한다면 <a href="https://github.com/proofer-tech/context-protocol/blob/main/docs/%EC%A1%B0%EC%A7%81-%EB%8F%84%EC%9E%85-%EA%B0%80%EC%9D%B4%EB%93%9C.md">조직 도입 가이드</a>를, 상업 라이센스 문의는 <a href="https://github.com/proofer-tech/context-protocol/issues">이슈</a>로 남겨 주세요.</p>
-  </div>
-</section>
-
-<section id="faq">
-  <div class="wrap" style="max-width:860px">
-    <div class="sec-head">
-      <span class="eyebrow">자주 묻는 질문</span>
-      <h2>궁금한 점</h2>
-    </div>
-    <details>
-      <summary>앱이나 서비스인가요?</summary>
-      <p>아닙니다. 마크다운으로 된 규약과 설치기, 몇 개의 보조 도구 묶음입니다. 서버나 계정이 없고, 이미 쓰는 에이전트 도구가 폴더를 읽고 쓰는 방식을 정합니다.</p>
-    </details>
-    <details>
-      <summary>"기억해줘" 라고 말해야 기록되나요?</summary>
-      <p>아니요. 대화에서 오래 남을 사실, 결정, 날짜 있는 사건이 나오면 답변 뒤에 알맞은 자리에 기록하고 경로를 알려줍니다. 사용자가 명시한 것(확정)과 에이전트가 제안만 한 것(제안)은 구분해서 남깁니다.</p>
-    </details>
-    <details>
-      <summary>도구의 자체 메모리와 무엇이 다른가요?</summary>
-      <p>도구 메모리는 한 계정이나 한 PC, 한 도구에 묶인 캐시입니다. 이 프로토콜에서는 워크스페이스가 1차 정보원이고, 도구 메모리에는 많아야 워크스페이스 파일을 가리키는 한 줄만 둡니다. 그래서 다른 PC, 다른 도구에서도 같은 기억을 봅니다.</p>
-    </details>
-    <details>
-      <summary>데이터는 어디에 있나요?</summary>
-      <p>사용자가 고른 폴더에만 있습니다. 구글 드라이브 동기화 폴더, 로컬 디렉토리, git 저장소 중에서 고를 수 있고, 민감한 정보는 사용자가 지정한 비공개 워크스페이스로 보냅니다.</p>
-    </details>
-    <details>
-      <summary>이미 쓰던 폴더에 새 버전을 깔면 덮어쓰나요?</summary>
-      <p>아니요. 같은 방법으로 새 zip 을 건네면 에이전트가 기존 설치를 알아보고 버전 차이만 적용합니다. 버전별 변경은 <a href="https://github.com/proofer-tech/context-protocol/blob/main/CHANGELOG.md">CHANGELOG</a> 에 있습니다.</p>
-    </details>
-    <details>
-      <summary>기존 파일은 어떻게 정리되나요?</summary>
-      <p>폴더와 템플릿 생성은 비파괴라 바로 하지만, 기존 파일을 옮기는 일은 파일별 이동 계획과 이유를 먼저 보여주고 승인을 받은 뒤에만 합니다.</p>
-    </details>
-  </div>
-</section>
-
-<section class="closing">
-  <div class="wrap">
-    <h2>설명은 줄이고, 일은 이어서.</h2>
-    <p class="lead">최신 zip 하나와 한 줄이면 지금 쓰는 폴더가 에이전트의 장기기억이 됩니다.</p>
-    <div class="cta-row" style="justify-content:center">
-      <a class="btn btn-primary" href="https://github.com/proofer-tech/context-protocol/releases/latest">최신 릴리스 받기</a>
-      <a class="btn btn-ghost" href="https://github.com/proofer-tech/context-protocol">GitHub 에서 보기</a>
+    <h2 class="display" data-m="lines">다음 모델이 나와도<br>붙여 보면 된다.</h2>
+    <div class="cta-row">
+      <a class="btn btn-ink" href="https://github.com/proofer-tech/context-protocol/releases/latest">최신 릴리스 받기</a>
+      <a class="btn btn-line ink" href="https://medium.com/@hsol/%EA%B0%9C%EC%9D%B8-ai-%EC%A3%BC%EA%B6%8C%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-3085ad9ab867">개인 AI 주권에 대하여</a>
     </div>
   </div>
 </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <a class="logo" href="#top">
-      <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0B1F4D"/><path d="M8 11h7l2 2h7v10H8z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
-      context-protocol
-    </a>
-    <span>폴더 하나를 에이전트의 장기기억으로. Copyright 2026 임한솔, 팀 프루퍼.</span>
-    <div class="links">
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a class="logo" href="#top"><svg width="20" height="20" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 18h17l5 6h22v26H10z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><circle cx="32" cy="37" r="5" fill="currentColor"/></svg><span>context-protocol</span></a>
+    <p class="mono">Copyright 2026 임한솔. Proofer</p>
+    <nav class="mono foot-links" aria-label="바닥 링크">
+      <a href="https://github.com/proofer-tech/context-protocol">GitHub</a>
       <a href="https://github.com/proofer-tech/context-protocol/blob/main/CHANGELOG.md">CHANGELOG</a>
       <a href="llms.txt">llms.txt</a>
-      <a href="https://github.com/proofer-tech/context-protocol/blob/main/LICENSE">License</a>
-      <a href="https://github.com/proofer-tech/context-protocol/issues">문의</a>
-    </div>
+      <a href="https://github.com/proofer-tech/context-protocol/blob/main/LICENSE">LICENSE</a>
+    </nav>
   </div>
 </footer>
-
-<script>
-(function(){
-  var nav=document.querySelector('header.nav');
-  addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>8)},{passive:true});
-
-  // tabs
-  var tabs=[].slice.call(document.querySelectorAll('.tab'));
-  function sel(t){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});}
-  tabs.forEach(function(t,i){
-    t.addEventListener('click',function(){sel(t)});
-    t.addEventListener('keydown',function(e){var d=e.key==='ArrowDown'||e.key==='ArrowRight'?1:e.key==='ArrowUp'||e.key==='ArrowLeft'?-1:0;if(d){e.preventDefault();var n=tabs[(i+d+tabs.length)%tabs.length];n.focus();sel(n);}});
-  });
-
-  // copy
-  document.querySelectorAll('.copy').forEach(function(b){
-    b.addEventListener('click',function(){
-      var txt=document.getElementById(b.dataset.copy).textContent;
-      (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){b.textContent='복사됨';setTimeout(function(){b.textContent='복사'},1400)},function(){});
-    });
-  });
-
-  // agent cycle in mockup
-  var agents=document.querySelectorAll('.agent'),spans=document.querySelectorAll('.tree [data-t]'),k=0;
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function tick(){agents.forEach(function(a,i){a.classList.toggle('on',i===k%agents.length)});spans.forEach(function(s,i){s.classList.toggle('hl',i===k%spans.length)});k++;}
-  tick(); if(!reduce) setInterval(tick,1600);
-
-  // reveal
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
-    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
-  } else document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
-
-  // latest release tag
-  fetch('https://api.github.com/repos/proofer-tech/context-protocol/releases/latest').then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.tag_name)document.getElementById('ver').textContent=j.tag_name;}).catch(function(){});
-})();
-</script>
+<script src="motion.js" defer></script>
 </body>
 </html>

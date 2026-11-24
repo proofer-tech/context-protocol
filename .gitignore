@@ -25,3 +25,7 @@ Icon?
 *.gslides
 *.pyc
 __pycache__/
+
+# 소개 페이지 빌드 산출물(배포본은 site/)
+/site-src/node_modules/
+/site-src/dist/

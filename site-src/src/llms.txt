@@ -1,0 +1,27 @@
+# context-protocol
+
+> 소버린 AI 메모리 프로토콜. 지침, 기억, 지식, 기록의 정본을 사용자가 고른 폴더에 두고, Claude Cowork, Claude Code, Codex, Cursor, Google Antigravity, Grok Build 어느 하네스로 열어도 같은 상태에서 시작하게 한다. 도구 자체 메모리는 캐시로 두고 워크스페이스 파일을 가리키는 포인터만 적는다. 라이센스는 PolyForm Noncommercial 1.0.0 또는 PolyForm Internal Use 1.0.0 (source-available).
+
+설치는 사람이 파일을 복사하는 일이 아니다. 최신 Release 의 zip 을 받아 워크스페이스 폴더를 연 에이전트에게 건네고 "이 파일을 압축해제해서 설치해줘" 라고 하면 에이전트가 설치기를 읽고 진행한다. 이미 설치된 폴더면 버전 차이만 적용한다.
+
+## Start here
+
+- [package/README.md](https://github.com/proofer-tech/context-protocol/blob/main/package/README.md): zip 을 푼 에이전트가 가장 먼저 읽는 설치 절차
+- [CONTEXT_GUIDE.md](https://github.com/proofer-tech/context-protocol/blob/main/_context-protocol/CONTEXT_GUIDE.md): 레이어 모델, 하드 룰, 마운트 함정, 조회와 쓰기 프로토콜의 정본
+- [_ontology.md](https://github.com/proofer-tech/context-protocol/blob/main/_context-protocol/_ontology.md): 구조 우선 온톨로지 규약, 쓰기 전 분해
+
+## Contracts
+
+- [harnesses/agent-harness.md](https://github.com/proofer-tech/context-protocol/blob/main/_context-protocol/harnesses/agent-harness.md): 에이전트 도구(하네스) 능력 계약과 generic 폴백
+- [backends/storage-backend.md](https://github.com/proofer-tech/context-protocol/blob/main/_context-protocol/backends/storage-backend.md): 저장 위치(gdrive, local, git) 능력 계약
+- [presets/preset-library.md](https://github.com/proofer-tech/context-protocol/blob/main/presets/preset-library.md): 프리셋 호출 계약 (personal-rag, team-ops, 창업, compliance, product-ideation)
+
+## Optional
+
+- [개인 AI 주권에 대하여](https://medium.com/@hsol/%EA%B0%9C%EC%9D%B8-ai-%EC%A3%BC%EA%B6%8C%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-3085ad9ab867): 헤드리스 하네스와 개인 AI 주권, 이 프로토콜을 만든 이유
+
+- [Releases](https://github.com/proofer-tech/context-protocol/releases): 설치 패키지 zip. 같은 버전에 -bN 이 여럿이면 N 이 가장 큰 것
+- [CHANGELOG.md](https://github.com/proofer-tech/context-protocol/blob/main/CHANGELOG.md): 버전별 변경
+- [docs/설치-가이드.md](https://github.com/proofer-tech/context-protocol/blob/main/docs/%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C.md): 도구별 차이와 막혔을 때의 대응
+- [docs/조직-도입-가이드.md](https://github.com/proofer-tech/context-protocol/blob/main/docs/%EC%A1%B0%EC%A7%81-%EB%8F%84%EC%9E%85-%EA%B0%80%EC%9D%B4%EB%93%9C.md): 조직 도입 검토
+- [LICENSE](https://github.com/proofer-tech/context-protocol/blob/main/LICENSE): 이용 조건 원문
