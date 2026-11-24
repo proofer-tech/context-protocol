@@ -1,7 +1,7 @@
 name: pages
 
 # site/ 의 정적 소개 페이지를 GitHub Pages 로 배포한다.
-# https://proofer-tech.github.io/context-protocol/
+# https://context-protocol.proofer.tech/
 # 업로드와 배포를 한 잡에 두면 배포 단계가 방금 올린 artifact 를 목록에서 못 찾는 일이 잦아서
 # (Found 0 artifact(s)) 공식 템플릿처럼 build 와 deploy 잡으로 나눈다.
 
