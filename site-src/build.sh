@@ -45,4 +45,11 @@ PY
 cp src/og.html dist/og.html
 python3 shots.py icons-og
 rm dist/og.html
+python3 - <<'PY'
+import hashlib, pathlib
+d = pathlib.Path("dist")
+v = hashlib.sha256((d / "og.png").read_bytes()).hexdigest()[:10]
+idx = (d / "index.html").read_text().replace('og.png"', f'og.png?v={v}"')
+(d / "index.html").write_text(idx)
+PY
 ls -la dist dist/fonts
