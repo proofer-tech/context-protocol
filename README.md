@@ -157,7 +157,7 @@ python3 _context-protocol/tools/integrity_lint.py <워크스페이스 루트>
 
 ## 라이센스
 
-Copyright 2026 임한솔. 아래 두 라이센스 중 하나를 골라 쓴다([LICENSE](LICENSE)).
+Copyright 2026 hsol.info. 아래 두 라이센스 중 하나를 골라 쓴다([LICENSE](LICENSE)).
 
 - [PolyForm Noncommercial License 1.0.0](LICENSES/PolyForm-Noncommercial-1.0.0.txt)
 - [PolyForm Internal Use License 1.0.0](LICENSES/PolyForm-Internal-Use-1.0.0.txt)
@@ -172,5 +172,5 @@ Copyright 2026 임한솔. 아래 두 라이센스 중 하나를 골라 쓴다([L
 | 영리 기업의 사내 업무에 쓰기 (사내 SoT, 평가, PoC, 사내 수정) | 이 프로토콜이나 파생물을 판매하기 |
 | 비상업 조건으로 수정해 다시 배포하기 | 영리 목적으로 회사 밖에 배포하기 |
 
-다시 배포할 때는 [LICENSE](LICENSE) 첫 줄의 `Required Notice: Copyright 2026 임한솔 (...)` 을 그대로 함께
+다시 배포할 때는 [LICENSE](LICENSE) 첫 줄의 `Required Notice: Copyright 2026 hsol.info (...)` 을 그대로 함께
 전달한다. 상업 라이센스나 쓰임 판단이 필요하면 [이슈](https://github.com/proofer-tech/context-protocol/issues) 로 문의한다.
