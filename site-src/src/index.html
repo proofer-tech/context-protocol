@@ -132,14 +132,16 @@
 <section class="sec sec-soft" id="cross" data-sec>
   <div class="wrap">
     <div class="head2">
-      <div><p class="eyebrow">CROSS-MODEL REVIEW</p><h2 class="h2" data-m="lines">하네스를 바꿔 가며<br>같은 질문을 던졌습니다</h2></div>
-      <p class="lede">8.0을 만든 뒤 같은 워크스페이스에 여섯 하네스를 차례로 연결해, 어떤 지시 파일을 읽었는지, 자기 하네스와 저장소가 무엇인지, 이 폴더에서 git과 삭제를 해도 되는지 물었습니다. 대부분 포털을 따라 정본까지 들어가 맞게 답했고, 틀린 답은 규칙이 제자리에 적혀 있지 않은 문서를 가리켰습니다.</p>
+      <div><p class="eyebrow">SUPPORTED HARNESSES</p><h2 class="h2" data-m="lines">쓰던 하네스 그대로<br>지원합니다</h2></div>
+      <p class="lede">하네스마다 처음 읽는 파일이 다릅니다. context-protocol은 하네스별 진입 파일을 깔아 두어, 어느 하네스로 열어도 같은 정본으로 들어가 같은 규칙으로 일합니다. 아래는 하네스마다 실제로 연결해 확인한 방식입니다.</p>
     </div>
     <ol class="finds" role="list">
-      <li class="card"><h3 class="has-logo"><img class="lg lg-h" src="logos/grok.svg" width="20" height="20" alt="" aria-hidden="true">Grok Build</h3><p>헤드리스로 돌렸을 때 git 허용 여부를 틀렸습니다. 그 규칙이 저장소 문서에 제대로 적혀 있지 않아 저장소 프로파일로 옮겨 적었습니다.</p></li>
-      <li class="card"><h3>두 하네스</h3><p>색인에 있는 본문을 세션 시작에 모두 읽어야 하는지 되물었습니다. 시작할 때는 색인만 읽고, 요청이 닿으면 본문을 열도록 적었습니다.</p></li>
-      <li class="card"><h3 class="has-logo"><img class="lg lg-h" src="logos/claudecode.svg" width="20" height="20" alt="" aria-hidden="true">Claude Code</h3><p>파일을 끌어오는 문법이 frontmatter를 빠뜨렸습니다. 포털에 frontmatter만 따로 읽으라는 지시를 넣었습니다.</p></li>
-      <li class="card"><h3 class="has-logo"><img class="lg lg-h" src="logos/claude.svg" width="20" height="20" alt="" aria-hidden="true">Cowork</h3><p>프로파일이 데스크톱 실행만 전제하고 있다고 짚었습니다. 클라우드 실행 형태를 프로파일에 더했습니다.</p></li>
+      <li class="card"><h3 class="has-logo"><img class="lg lg-h" src="logos/claude.svg" width="20" height="20" alt="" aria-hidden="true">Claude Cowork</h3><p>연결한 폴더의 CLAUDE.md가 프로젝트 지침으로 들어가고, 그 지시를 따라 CONTEXT.md로 들어갑니다. 데스크톱과 클라우드 실행을 모두 다룹니다.</p></li>
+      <li class="card"><h3 class="has-logo"><img class="lg lg-h" src="logos/claudecode.svg" width="20" height="20" alt="" aria-hidden="true">Claude Code</h3><p>작업 폴더의 CLAUDE.md가 @CONTEXT.md로 정본을 바로 끌어옵니다. 터미널 CLI와 IDE 확장 모두 같습니다.</p></li>
+      <li class="card"><h3 class="has-logo"><img class="lg lg-h" src="logos/codex.svg" width="20" height="20" alt="" aria-hidden="true">Codex</h3><p>작업 폴더의 AGENTS.md를 프로젝트 지침으로 읽습니다. git 저장소가 아닌 드라이브 폴더에서도 같습니다.</p></li>
+      <li class="card"><h3 class="has-logo"><img class="lg lg-h" src="logos/cursor.svg" width="20" height="20" alt="" aria-hidden="true">Cursor</h3><p>AGENTS.md와 CLAUDE.md를 함께 읽고 같은 정본으로 들어갑니다. .cursor/rules 같은 별도 규칙 파일은 만들지 않습니다.</p></li>
+      <li class="card"><h3 class="has-logo"><img class="lg lg-h" src="logos/antigravity.svg" width="20" height="20" alt="" aria-hidden="true">Antigravity</h3><p>AGENTS.md를 읽고 정본으로 들어갑니다. IDE 1.20.5 이상에서 동작합니다.</p></li>
+      <li class="card"><h3 class="has-logo"><img class="lg lg-h" src="logos/grok.svg" width="20" height="20" alt="" aria-hidden="true">Grok Build</h3><p>AGENTS.md와 CLAUDE.md를 모두 읽고 정본으로 들어갑니다. 헤드리스로 돌릴 때는 프롬프트에 CONTEXT.md를 먼저 읽으라고 넣습니다.</p></li>
     </ol>
   </div>
 </section>
@@ -147,7 +149,7 @@
 <section class="sec" id="records" data-sec>
   <div class="wrap">
     <div class="head2">
-      <div><p class="eyebrow">RECORDS</p><h2 class="h2" data-m="lines">기록이 쌓이는<br>세 갈래</h2></div>
+      <div><p class="eyebrow">RECORDS</p><h2 class="h2" data-m="lines">기록은 쓰임새별로<br>나눠서 쌓입니다</h2></div>
       <p class="lede">대화에서 오래 쓸 사실이나 결정이 나오면, 에이전트는 따로 부탁받지 않아도 답한 뒤 종류에 맞는 자리에 적고 경로를 알려 줍니다. 셋은 섞지 않습니다.</p>
     </div>
     <div class="cards">
@@ -164,7 +166,7 @@
       <article class="card rec">
         <img class="rec-photo" src="img/topic-drawer.webp" width="1000" height="747" loading="lazy" alt="파란 행잉 폴더가 줄지어 꽂힌 서랍과 초록 클립이 달린 폴더 하나">
         <h3>주제 폴더/</h3>
-        <p>정리된 지식. 한 주제에 한 파일을 둡니다. 폴더 위치로 분류하니 손으로 관리하는 목록이 없고, 맞는 폴더가 없으면 새로 만듭니다.</p>
+        <p>정리된 지식. 한 주제에 한 파일을 둡니다. 파일이 들어 있는 폴더가 곧 분류라서 따로 고쳐 줄 목차 파일이 없습니다. 맞는 폴더가 없으면 새로 만듭니다.</p>
       </article>
     </div>
   </div>
@@ -174,7 +176,7 @@
   <div class="wrap">
     <div class="center-head">
       <p class="eyebrow">INSTALL</p>
-      <h2 class="h2" data-m="lines">zip 하나를<br>에이전트에게 건네면 됩니다</h2>
+      <h2 class="h2" data-m="lines">zip 파일 하나로 끝나는<br>설치 과정</h2>
       <p class="lede">사람은 zip을 건네고 질문에 답합니다. 설치기를 읽고 폴더를 꾸미는 일은 에이전트가 합니다.</p>
     </div>
     <ol class="steps" role="list">
@@ -200,7 +202,7 @@
 <section class="sec" id="backends" data-sec>
   <div class="wrap">
     <div class="head2">
-      <div><p class="eyebrow">STORAGE</p><h2 class="h2" data-m="lines">폴더를 둘 곳은<br>설치할 때 고릅니다</h2></div>
+      <div><p class="eyebrow">STORAGE</p><h2 class="h2" data-m="lines">자유롭게 선택 가능한<br>파일베이스</h2></div>
       <p class="lede"><span class="brand"><img class="lg" src="logos/googledrive.svg" width="20" height="20" alt="" aria-hidden="true">구글 드라이브</span>에 두면 어느 PC에서 열어도 같은 폴더가 보입니다. PR로 검토를 거쳐 반영하려면 <span class="brand"><img class="lg" src="logos/git.svg" width="20" height="20" alt="" aria-hidden="true">git</span>을 고르면 됩니다.</p>
     </div>
     <div class="cells">
@@ -215,7 +217,7 @@
 <section class="sec sec-dark" id="presets" data-sec>
   <div class="wrap">
     <div class="head2">
-      <div><p class="eyebrow">PRESETS</p><h2 class="h2" data-m="lines">주제별 뼈대는<br>이름으로 부릅니다</h2></div>
+      <div><p class="eyebrow">PRESETS</p><h2 class="h2" data-m="lines">실사용 검증된<br>주제별 프리셋</h2></div>
       <div>
         <p class="lede">프리셋은 설치 대상이 아닙니다. 설치를 마친 뒤 이름을 대며 요청할 때만 적용됩니다. 목록에 없는 이름을 대면 비슷한 것으로 대신하지 않고 먼저 묻습니다.</p>
         <div class="cmd on-dark"><code id="c2">personal rag 프리셋으로 세팅해줘</code><button class="copy" type="button" data-copy="c2">복사</button></div>
@@ -234,8 +236,8 @@
 <section class="sec" id="docs" data-sec>
   <div class="wrap">
     <div class="head2">
-      <div><p class="eyebrow">FOR AGENTS</p><h2 class="h2" data-m="lines">규범은 모두<br>마크다운 파일입니다</h2></div>
-      <p class="lede">처음 읽는다면 이 순서가 빠릅니다.</p>
+      <div><p class="eyebrow">FOR AGENTS</p><h2 class="h2" data-m="lines">규범은 모두<br>읽을 수 있게 쓰입니다</h2></div>
+      <p class="lede">규범은 전부 마크다운 문서입니다. 실행 코드나 바이너리가 섞여 있지 않아서 사람도 에이전트도 같은 글을 그대로 열어 읽습니다. 처음 읽는다면 아래 순서가 빠릅니다.</p>
     </div>
     <ol class="docs" role="list">
       <li><a href="https://github.com/proofer-tech/context-protocol/blob/main/package/README.md"><span class="n">01</span><b>package/README.md</b><span class="d">설치가 실제로 어떻게 진행되는가</span></a></li>
@@ -255,7 +257,7 @@
 <section class="sec sec-soft" id="license" data-sec>
   <div class="wrap">
     <div class="head2">
-      <div><p class="eyebrow">LICENSE</p><h2 class="h2" data-m="lines">소스는 공개하고<br>사내 업무에는 그대로 씁니다</h2></div>
+      <div><p class="eyebrow">LICENSE</p><h2 class="h2" data-m="lines">무료로 사용하세요<br>단, 판매와 납품은 <span class="nw">따로 문의해주세요</span></h2></div>
       <p class="lede">PolyForm Noncommercial 1.0.0과 PolyForm Internal Use 1.0.0 중 하나를 골라 씁니다. OSI 기준의 오픈소스가 아니라 source-available입니다. 법적 효력은 <a href="https://github.com/proofer-tech/context-protocol/blob/main/LICENSE">원문</a>에만 있습니다.</p>
     </div>
     <div class="lic">
@@ -282,7 +284,7 @@
 <section class="closing" data-sec>
   <div class="wrap">
     <p class="eyebrow">NEXT MODEL</p>
-    <h2 class="closing-title" data-m="lines">다음 모델이 나와도<br><mark class="mk">같은 폴더에서</mark> 이어 갑니다</h2>
+    <h2 class="closing-title" data-m="lines">다음 모델이 나와도<br>이젠 <mark class="mk">걱정하지 마세요</mark></h2>
     <div class="cta-row">
       <a class="btn btn-cta" href="https://github.com/proofer-tech/context-protocol/releases/latest">최신 릴리스 받기</a>
       <a class="btn btn-onblue" href="https://medium.com/@hsol/%EA%B0%9C%EC%9D%B8-ai-%EC%A3%BC%EA%B6%8C%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-3085ad9ab867">개인 AI 주권에 대하여</a>

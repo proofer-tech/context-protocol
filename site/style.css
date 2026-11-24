@@ -647,7 +647,7 @@ p{text-wrap:pretty}
 }
 
 /* finds */
-.finds{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.finds{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 @media (max-width:1000px){.finds{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.finds{grid-template-columns:1fr}}
 
@@ -769,7 +769,7 @@ h3 .lg-h{flex:none}
 
 /* text reveals */
 .mk{--mk:rgba(52,79,224,.16);color:inherit;background:linear-gradient(var(--mk),var(--mk)) no-repeat 0 92%/100% 40%;padding:0 .04em;border-radius:3px}
-.closing .mk{--mk:rgba(69,175,102,.55)}
+.closing .mk{--mk:rgba(255,255,255,.24)}
 .tw-c.cur{position:relative}
 .tw-c.cur::after{content:"";position:absolute;left:100%;top:.1em;bottom:.08em;width:.07em;margin-left:.04em;background:var(--color-blue-600);animation:tw-blink 1s steps(1) infinite}
 @keyframes tw-blink{50%{opacity:0}}
