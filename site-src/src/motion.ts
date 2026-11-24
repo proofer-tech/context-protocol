@@ -71,7 +71,7 @@ function attach(i: number, animate: boolean) {
   chips.forEach((c, k) => c.classList.toggle("on", k === i));
   if (attached) attached.textContent = NAMES[i];
   const lab = $("[data-attached-label]");
-  if (lab) lab.textContent = "지금 붙은 머리";
+  if (lab) lab.textContent = "지금 연결된 하네스";
   pulses.forEach((p) => gsap.set(p, { opacity: 0 }));
   pulseTween?.kill();
   const p = pulses[i];
@@ -155,6 +155,10 @@ mm.add(
         scrollTrigger: { trigger: items[0].parentElement, start: "top 85%" },
       });
     });
+
+    /* C c2: hero photo settles from 1.08 to 1 with scroll */
+    const heroImg = $(".hero-photo img");
+    if (heroImg) gsap.fromTo(heroImg, { scale: 1.08 }, { scale: 1, ease: "none", scrollTrigger: { trigger: ".hero-photo", start: "top bottom", end: "bottom 40%", scrub: 0.6 } });
 
     /* card glyphs draw on enter */
     $$(".glyph").forEach((g) => {

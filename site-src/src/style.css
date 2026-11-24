@@ -129,7 +129,10 @@ p{text-wrap:pretty}
 /* record cards */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 @media (max-width:880px){.cards{grid-template-columns:1fr}}
-.rec .glyph{width:100%;height:auto;margin:6px 0 22px;padding:18px 0;border-radius:var(--radius-sm);background:var(--color-blue-soft)}
+.rec-photo{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;margin:0 0 20px;border-radius:var(--radius-sm);background:var(--bg-muted)}
+.hero-photo{margin-top:clamp(40px,5vw,64px);border-radius:var(--radius-2xl);overflow:hidden;box-shadow:var(--shadow-raised);border:var(--bd-card);background:#f6f7fa}
+.hero-photo img{width:100%;height:auto;aspect-ratio:2000/1116;object-fit:cover}
+.hero-photo+.facts{margin-top:14px}
 .rec h3{font-family:var(--font-mono);letter-spacing:0}
 
 /* steps (tracebit 4단 세로선 구조를 DS 값으로) */
