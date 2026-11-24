@@ -14,7 +14,7 @@
 
 - [harnesses/agent-harness.md](https://github.com/proofer-tech/context-protocol/blob/main/_context-protocol/harnesses/agent-harness.md): 에이전트 도구(하네스) 능력 계약과 generic 폴백
 - [backends/storage-backend.md](https://github.com/proofer-tech/context-protocol/blob/main/_context-protocol/backends/storage-backend.md): 저장 위치(gdrive, local, git) 능력 계약
-- [presets/preset-library.md](https://github.com/proofer-tech/context-protocol/blob/main/presets/preset-library.md): 프리셋 호출 계약 (personal-rag, team-ops, 창업, compliance, product-ideation)
+- [presets/preset-library.md](https://github.com/proofer-tech/context-protocol/blob/main/presets/preset-library.md): 프리셋 호출 계약 (personal-rag, team-ops, startup, compliance, product-ideation)
 
 ## Optional
 
