@@ -2,9 +2,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
-import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
-gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, ScrambleTextPlugin);
+gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin);
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => Array.from(r.querySelectorAll(s)) as T[];
@@ -150,8 +149,7 @@ mm.add(
       gsap.from(draw, { scaleX: 0, duration: 1.1, ease: "power4.inOut", scrollTrigger: { trigger: el, start: "top 88%" } });
     });
 
-    /* headings: each section gets its own reveal */
-    const HANGUL = "가나다라마바사아자차카타파하기억폴더모델";
+    /* headings: one mask reveal everywhere; only the key phrases get a highlighter */
     const st = (h: Element) => ({ trigger: h, start: "top 85%" });
     fontsReady.then(() => {
       $$("[data-m]").forEach((h) => {
@@ -160,28 +158,6 @@ mm.add(
         if (kind === "lines") {
           const s = SplitText.create(h, { type: "lines", mask: "lines", linesClass: "split-line" });
           gsap.from(s.lines, { yPercent: 105, duration: 0.9, ease: "expo.out", stagger: 0.1, scrollTrigger: st(h) });
-        } else if (kind === "chars") {
-          const s = SplitText.create(h, { type: "words,chars" });
-          gsap.from(s.chars, { yPercent: 80, opacity: 0, duration: 0.6, ease: "back.out(1.8)", stagger: 0.03, scrollTrigger: st(h) });
-        } else if (kind === "words") {
-          const s = SplitText.create(h, { type: "words" });
-          gsap.from(s.words, { y: "0.45em", opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.08, scrollTrigger: st(h) });
-        } else if (kind === "blur") {
-          const s = SplitText.create(h, { type: "lines", linesClass: "split-line" });
-          gsap.from(s.lines, { filter: "blur(14px)", opacity: 0, y: 6, duration: 1.1, ease: "power2.out", stagger: 0.15, clearProps: "filter", scrollTrigger: st(h) });
-        } else if (kind === "scramble") {
-          const s = SplitText.create(h, { type: "lines", linesClass: "split-line" });
-          const lines = s.lines as HTMLElement[];
-          gsap.set(lines, { opacity: 0 });
-          ScrollTrigger.create({
-            ...st(h), once: true,
-            onEnter: () => lines.forEach((l, i) => {
-              const t = l.textContent || "";
-              gsap.timeline({ delay: i * 0.18 })
-                .set(l, { opacity: 1 })
-                .to(l, { duration: 1.1, ease: "none", scrambleText: { text: t, chars: HANGUL, revealDelay: 0.25, speed: 0.5 } });
-            }),
-          });
         }
         $$(".mk", h).forEach((m) => {
           gsap.fromTo(m, { backgroundSize: "0% 40%" }, { backgroundSize: "100% 40%", duration: 0.8, delay: 0.55, ease: "power2.inOut", scrollTrigger: st(h) });
