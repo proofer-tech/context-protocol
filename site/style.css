@@ -525,8 +525,8 @@ p, .p   { margin: 0; font-size: 15px; line-height: var(--leading-body); }
    시각 체계: Proofer Design System (tokens.css, bundle.css 현행 클래스)
    구조 레퍼런스: tracebit.com(섹션 머리, 허브 도식, 단계), decimal.app(셀 격자, 연결 도식) */
 
-@font-face{font-family:"LINE Seed Sans KR";src:url(fonts/lineseed-rg.woff2?v=c3a5f22335) format("woff2");font-weight:400;font-display:swap}
-@font-face{font-family:"LINE Seed Sans KR";src:url(fonts/lineseed-bd.woff2?v=5b69eae2be) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"LINE Seed Sans KR";src:url(fonts/lineseed-rg.woff2?v=21d147b0a1) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"LINE Seed Sans KR";src:url(fonts/lineseed-bd.woff2?v=2f26ca8b8f) format("woff2");font-weight:700;font-display:swap}
 
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:76px}
@@ -664,7 +664,8 @@ p{text-wrap:pretty}
 .rec h3{font-family:var(--font-mono);letter-spacing:0}
 
 /* steps (tracebit 4단 세로선 구조를 DS 값으로) */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+@media (max-width:1100px){.steps{grid-template-columns:repeat(2,1fr)}}
 .steps li{padding:4px 0 4px 24px;border-left:1.6px solid var(--border-strong)}
 .steps h3{font-size:clamp(18px,2vw,22px);margin:16px 0 8px}
 .steps p{font-size:14.5px;line-height:var(--leading-loose);color:var(--fg-2)}
