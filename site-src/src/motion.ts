@@ -2,8 +2,9 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
-gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin);
+gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, ScrambleTextPlugin);
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => Array.from(r.querySelectorAll(s)) as T[];
@@ -69,7 +70,15 @@ function attach(i: number, animate: boolean) {
   active = i;
   spokes.forEach((p, k) => p.classList.toggle("on", k === i));
   chips.forEach((c, k) => c.classList.toggle("on", k === i));
-  if (attached) attached.textContent = NAMES[i];
+  if (attached) {
+    if (animate) {
+      gsap.killTweensOf(attached);
+      gsap.timeline()
+        .to(attached, { yPercent: -70, opacity: 0, duration: 0.14, ease: "power2.in" })
+        .call(() => { attached.textContent = NAMES[i]; })
+        .fromTo(attached, { yPercent: 70, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.32, ease: "back.out(2)" });
+    } else attached.textContent = NAMES[i];
+  }
   const lab = $("[data-attached-label]");
   if (lab) lab.textContent = "지금 연결된 하네스";
   pulses.forEach((p) => gsap.set(p, { opacity: 0 }));
@@ -102,17 +111,27 @@ mm.add(
       new Promise((r) => setTimeout(r, 1200)),
     ]);
 
-    /* A a1: hero lines rise out of a mask after fonts settle */
+    /* hero: the question types itself out, caret stays blinking at the end */
     const heroH = $(".hero-sec h1");
-    const heroRest = $$(".hero-sec .eyebrow, .hero-side p, .hero-sec .cta-row, .facts > div");
+    const heroRest = $$(".hero-sec .eyebrow, .hero-side p, .hero-sec .cta-row");
     gsap.set([heroH, ...heroRest], { autoAlpha: 0 });
     fontsReady.then(() => {
       if (!heroH) return;
-      const split = SplitText.create(heroH, { type: "lines", mask: "lines", linesClass: "split-line" });
+      const split = SplitText.create(heroH, { type: "words,chars", charsClass: "tw-c" });
+      const chars = split.chars as HTMLElement[];
+      gsap.set(chars, { opacity: 0 });
       const tl = gsap.timeline();
-      tl.set(heroH, { autoAlpha: 1 })
-        .from(split.lines, { yPercent: 105, duration: 1, ease: "expo.out", stagger: 0.12 })
-        .fromTo(heroRest, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.06 }, 0.25);
+      tl.set(heroH, { autoAlpha: 1 });
+      let prev: HTMLElement | null = null;
+      chars.forEach((c, i) => {
+        tl.call(() => {
+          gsap.set(c, { opacity: 1 });
+          prev?.classList.remove("cur");
+          c.classList.add("cur");
+          prev = c;
+        }, undefined, 0.15 + i * 0.065);
+      });
+      tl.fromTo(heroRest, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.06 }, 0.15 + chars.length * 0.065 - 0.3);
     });
 
     /* B b2: hairline draws, then heading lines rise */
@@ -131,13 +150,41 @@ mm.add(
       gsap.from(draw, { scaleX: 0, duration: 1.1, ease: "power4.inOut", scrollTrigger: { trigger: el, start: "top 88%" } });
     });
 
+    /* headings: each section gets its own reveal */
+    const HANGUL = "가나다라마바사아자차카타파하기억폴더모델";
+    const st = (h: Element) => ({ trigger: h, start: "top 85%" });
     fontsReady.then(() => {
-      $$("[data-m='lines']").forEach((h) => {
+      $$("[data-m]").forEach((h) => {
         if (h.closest(".hero-sec")) return;
-        const split = SplitText.create(h, { type: "lines", mask: "lines", linesClass: "split-line" });
-        gsap.from(split.lines, {
-          yPercent: 105, duration: 0.9, ease: "expo.out", stagger: 0.1,
-          scrollTrigger: { trigger: h, start: "top 85%" },
+        const kind = h.dataset.m;
+        if (kind === "lines") {
+          const s = SplitText.create(h, { type: "lines", mask: "lines", linesClass: "split-line" });
+          gsap.from(s.lines, { yPercent: 105, duration: 0.9, ease: "expo.out", stagger: 0.1, scrollTrigger: st(h) });
+        } else if (kind === "chars") {
+          const s = SplitText.create(h, { type: "words,chars" });
+          gsap.from(s.chars, { yPercent: 80, opacity: 0, duration: 0.6, ease: "back.out(1.8)", stagger: 0.03, scrollTrigger: st(h) });
+        } else if (kind === "words") {
+          const s = SplitText.create(h, { type: "words" });
+          gsap.from(s.words, { y: "0.45em", opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.08, scrollTrigger: st(h) });
+        } else if (kind === "blur") {
+          const s = SplitText.create(h, { type: "lines", linesClass: "split-line" });
+          gsap.from(s.lines, { filter: "blur(14px)", opacity: 0, y: 6, duration: 1.1, ease: "power2.out", stagger: 0.15, clearProps: "filter", scrollTrigger: st(h) });
+        } else if (kind === "scramble") {
+          const s = SplitText.create(h, { type: "lines", linesClass: "split-line" });
+          const lines = s.lines as HTMLElement[];
+          gsap.set(lines, { opacity: 0 });
+          ScrollTrigger.create({
+            ...st(h), once: true,
+            onEnter: () => lines.forEach((l, i) => {
+              const t = l.textContent || "";
+              gsap.timeline({ delay: i * 0.18 })
+                .set(l, { opacity: 1 })
+                .to(l, { duration: 1.1, ease: "none", scrambleText: { text: t, chars: HANGUL, revealDelay: 0.25, speed: 0.5 } });
+            }),
+          });
+        }
+        $$(".mk", h).forEach((m) => {
+          gsap.fromTo(m, { backgroundSize: "0% 40%" }, { backgroundSize: "100% 40%", duration: 0.8, delay: 0.55, ease: "power2.inOut", scrollTrigger: st(h) });
         });
       });
       ScrollTrigger.refresh();
@@ -167,18 +214,6 @@ mm.add(
         drawSVG: "0%", duration: 1.2, ease: "power2.inOut", stagger: 0.05,
         scrollTrigger: { trigger: g, start: "top 85%" },
       });
-    });
-
-    /* fact numbers count from 0 (values are the real counts) */
-    $$("[data-count]").forEach((el) => {
-      const to = Number(el.dataset.count);
-      const o = { v: 0 };
-      fontsReady.then(() =>
-        gsap.to(o, {
-          v: to, duration: 1.1, ease: "power2.out", delay: 0.5,
-          onUpdate: () => (el.textContent = String(Math.round(o.v))),
-        })
-      );
     });
 
     /* signature: heads attach to one body.
