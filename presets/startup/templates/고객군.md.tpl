@@ -56,7 +56,7 @@ status: target / tested / parked
 
 `grep -rl '\[\[{{title}}\]\]' objects/제공물/ objects/근거/`
 
-규모까지 함께 보는 조회는 [[창업-린트]] 레시피 (e) 에 있다.
+규모까지 함께 보는 조회는 [[startup-lint]] 레시피 (e) 에 있다.
 
 ## 접었을 때
 

@@ -9,7 +9,7 @@ updated: 2026-10-29
 Dataview 와 `.base` 를 쓰지 않으므로 검증과 집계를 파일 스캔으로 한다.
 
 점검 대상 주의: 여기 적힌 명령은 **프리셋을 적용한 대상 워크스페이스**에서 돌린다.
-프리셋 폴더(`presets/창업/`)는 설계 문서와 플레이스홀더만 있는 템플릿이라 훑으면
+프리셋 폴더(`presets/startup/`)는 설계 문서와 플레이스홀더만 있는 템플릿이라 훑으면
 오탐이 난다. 위키링크 스윕과 Obsidian 잔재 검사에서 제외한다.
 
 실행 위치 주의: 대상 워크스페이스가 Drive 마운트면 샌드박스 셸에서 안 보이는
@@ -36,14 +36,14 @@ cloud-only 파일이 있다. 빈 grep 결과는 아무것도 증명하지 못한
 ## 점검 목록
 
 코어 규칙 1~6 은 프로토콜 lint 가 본다. 여기서는 프리셋이 더한 7~18 을 본다. 규칙
-본문은 [[창업-스키마]] 에, 프로퍼티 표는 [[창업-객체타입]] 에 있다.
+본문은 [[startup-schema]] 에, 프로퍼티 표는 [[startup-object-types]] 에 있다.
 
 | # | 점검 | 종류 | 방법 |
 |---|---|---|---|
 | 7 | `type:` 이 허용 값인가 | 구조 | `objects/` 전체에서 `^type:` 수집 -> 10개 값(concept + document + 8타입)만 나와야 한다 |
 | 8 | 필수 프로퍼티와 `ownedBy` 존재 | 구조 | 타입별 PK 와 O 표시 필드를 루프로 대조. 사업체 를 뺀 7종은 `ownedBy` 존재도 본다 |
 | 9 | 위키링크 해소 | 구조 | 모든 `[[...]]` 를 수집해 동명 md 파일이 실재하는지 대조 |
-| 10 | 술어 어휘 준수 | 구조 | `links:` 하위 키를 수집해 창업-스키마 표와 대조 |
+| 10 | 술어 어휘 준수 | 구조 | `links:` 하위 키를 수집해 startup-schema 표와 대조 |
 | 11 | 정/역 중복 | 구조 | 비정본 술어 8쌍을 스윕하고 상대 노트와 대조 |
 | 12 | 객체에 broader 없음, ownedBy 대상이 사업체 | 구조 | `broader:` 존재 검사 + `links.ownedBy` 값이 `objects/사업체/` 의 노트인지 대조 |
 | 13 | 가설 에 `falsifiable` | 구조 | 프로퍼티 또는 대응 본문 섹션이 비면 위반 |
@@ -56,7 +56,7 @@ cloud-only 파일이 있다. 빈 grep 결과는 아무것도 증명하지 못한
 | 추가 | Obsidian 잔재 없음 | 구조 | `.base` 파일, dataview 블록이 없어야 한다 |
 
 타입 폴더명은 `사업체 제공물 고객군 가설 근거 마일스톤 자금 제출문서` 여덟이다
-([[창업-레이아웃]]). **이 이름을 임의로 바꾸면 그 타입의 검사가 조용히 건너뛰어진다.**
+([[startup-layout]]). **이 이름을 임의로 바꾸면 그 타입의 검사가 조용히 건너뛰어진다.**
 `근거` 를 `증거` 로 고치는 식의 동의어 교체가 특히 위험하다. 규칙 14 와 15 가 통째로
 침묵하고 에러는 안 난다.
 
@@ -65,10 +65,10 @@ cloud-only 파일이 있다. 빈 grep 결과는 아무것도 증명하지 못한
 ```sh
 # 7. type 값 분포. concept, document, 8개 타입명만 나와야 한다.
 #    objects/ 아래에서 document 가 나오는 자리는 동명 서브폴더 안의 부속 노트뿐이다
-#    (서브폴더 규칙은 창업-레이아웃). 그 밖에 document 가 나오면 타입 배정이 빠진 것이다
+#    (서브폴더 규칙은 startup-layout). 그 밖에 document 가 나오면 타입 배정이 빠진 것이다
 grep -rh '^type:' objects/ | sort | uniq -c
 
-# 8. 타입별 필수 프로퍼티. 창업-객체타입 의 O 표시를 그대로 옮긴 것이다.
+# 8. 타입별 필수 프로퍼티. startup-object-types 의 O 표시를 그대로 옮긴 것이다.
 #    서술 필드를 본문 섹션으로 쓰는 워크스페이스면 대응 헤딩으로 바꿔 검사한다.
 #    Owned 구현 7종은 ownedBy 존재도 함께 본다. 값이 사업체 인지는 12-b 가 본다
 for d in 사업체 제공물 고객군 가설 근거 마일스톤 자금 제출문서; do
@@ -101,7 +101,7 @@ find . -name '*.md' -not -path './_*' -exec basename {} .md \; | sort -u
 
 # 10. 사용된 술어 (links: 블록의 2단 들여쓰기 키)
 grep -rhoE '^  [a-zA-Z]+:' objects/ | sort | uniq -c
-#    어휘 전체(창업-스키마): claims claimedIn supports refutes supportedBy refutedBy
+#    어휘 전체(startup-schema): claims claimedIn supports refutes supportedBy refutedBy
 #    tests testedBy assumes cites ownedBy offers pursues holds targets servedBy
 #    describes aboutSegment supersedes supersededBy fundedBy funds requires delivers
 #    sourceFile relatedObjects relatedViews references
@@ -300,7 +300,7 @@ done
 `assumes` 블록을 awk 로 자르는 이유는 규칙 14 와 같다. 파일 전체에서 가설 이름을 찾으면
 본문에 지나가듯 언급된 위키링크까지 걸려 후보가 잡음으로 덮인다. 걸린 것은 셋 중 하나다.
 
-1. 피봇을 하다 말았다. **이 경우가 가장 많다.** [[창업]] 의 피봇 절차 둘째 단계를
+1. 피봇을 하다 말았다. **이 경우가 가장 많다.** [[startup]] 의 피봇 절차 둘째 단계를
    안 한 것이고, 그 상태로 신청서를 쓰면 옛 타깃이 그대로 들어간다.
 2. 가설은 반증됐는데 제품은 다른 이유로 유효하다. `assumes` 를 끊고 지금 딛고 선
    전제를 새 가설로 적는다. 끊기만 하면 전제 없는 제품이 된다.

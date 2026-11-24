@@ -46,7 +46,7 @@ stage: idea / prototype / preRevenue / earlyRevenue
 현재 구성. 누가 무엇을 맡는가 한 문단.
 
 개별 인물의 이력과 관계가 여기 안 들어갈 만큼 커지면 Person 타입을 만들 시점이다.
-절차는 [[창업-객체타입]] 의 워크드 예시에 있다. 미리 만들지 않는다.
+절차는 [[startup-object-types]] 의 워크드 예시에 있다. 미리 만들지 않는다.
 
 ## 이 사업체에 달린 것
 
@@ -57,5 +57,5 @@ stage: idea / prototype / preRevenue / earlyRevenue
 
 ## 이 프리셋을 벗을 때
 
-졸업 신호 셋은 [[창업]] 에 있다. 여기에는 신호가 걸린 날짜와 판단만 한 줄 남긴다.
+졸업 신호 셋은 [[startup]] 에 있다. 여기에는 신호가 걸린 날짜와 판단만 한 줄 남긴다.
 이 섹션은 비어 있어도 된다.

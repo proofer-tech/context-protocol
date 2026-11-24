@@ -52,7 +52,7 @@ status: watching / preparing / applied / selected / rejected / contracted / clos
 이 공고가 요구하는 서류를 제출문서 로 건다. **제출물 체크리스트 자리다.** 아직
 제출문서 가 없는 것이 곧 할 일이고, 그 조회가 마감 직전에 값이 가장 크다.
 
-`[[창업-린트]]` 레시피 (b) 가 그것을 낸다.
+`[[startup-lint]]` 레시피 (b) 가 그것을 낸다.
 
 ## 딛고 선 전제 - assumes
 

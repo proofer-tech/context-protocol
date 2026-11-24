@@ -149,10 +149,11 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
   용도별 사전 설정 3종은 `personal-rag-variants.md`
 - `team-ops/` - 한 팀이 어떻게 일하는지를 여러 사람이 함께 쌓는 운영 지식그래프.
   중심 타입은 Decision
-- `창업/` - 예비창업자와 초기창업기업의 사업 자료를 검증 상태가 드러나는
-  지식그래프로 세운다. 중심 타입은 가설. **이 프리셋만 폴더명과 타입명이 한글이다.**
-  컨테이너(`objects/` `object-sets/` `object-views/` `datasources/`)와 YAML 키, 술어,
-  enum 값은 다른 프리셋과 같은 영문이다. 조회 규칙과 매핑 줄은 `창업-조회규칙.md`
+- `startup/` - 예비창업자와 초기창업기업의 사업 자료를 검증 상태가 드러나는
+  지식그래프로 세운다. 중심 타입은 가설. **이 프리셋만 타입명이 한글이다.** 프리셋 id 와
+  파일명, 컨테이너(`objects/` `object-sets/` `object-views/` `datasources/`), YAML 키, 술어,
+  enum 값은 다른 프리셋과 같은 영문이다. 예전 이름 `창업` 으로 불러도 이 프리셋으로 받는다.
+  조회 규칙과 매핑 줄은 `startup-lookup.md`
 - `compliance/` - 외부 법령을 사내 규정과 통제로 내려받아 이행 증거까지 추적한다.
   책임 주체가 사람이 아니라 조직 단위인 것이 전제
 - `product-ideation/` - 워크스페이스 안의 프로젝트급 개념 하나(프로젝트, 제품, 사업
