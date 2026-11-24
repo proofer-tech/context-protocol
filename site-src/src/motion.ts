@@ -179,9 +179,9 @@ mm.add(
       });
     });
 
-    /* C c2: hero photo settles from 1.08 to 1 with scroll */
-    const heroImg = $(".hero-photo img");
-    if (heroImg) gsap.fromTo(heroImg, { scale: 1.08 }, { scale: 1, ease: "none", scrollTrigger: { trigger: ".hero-photo", start: "top bottom", end: "bottom 40%", scrub: 0.6 } });
+    /* C c2: hero background drifts in slightly as the hero scrolls away */
+    const heroImg = $(".hero-bg img");
+    if (heroImg) gsap.fromTo(heroImg, { scale: 1 }, { scale: 1.06, ease: "none", scrollTrigger: { trigger: ".hero-sec", start: "top top", end: "bottom top", scrub: 0.6 } });
 
     /* card glyphs draw on enter */
     $$(".glyph").forEach((g) => {
