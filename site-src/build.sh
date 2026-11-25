@@ -3,7 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 rm -rf dist && mkdir -p dist/fonts
-cp src/index.html src/llms.txt src/icon.svg src/proofer-wordmark-dark-bg.png src/proofer-mark.png dist/
+cp src/index.html src/llms.txt src/robots.txt src/sitemap.xml src/icon.svg src/proofer-wordmark-dark-bg.png src/proofer-mark.png dist/
 cp -r src/img dist/img
 cp -r src/logos dist/logos
 cat src/ds/tokens.css src/ds/bundle-core.css src/style.css > dist/style.css
