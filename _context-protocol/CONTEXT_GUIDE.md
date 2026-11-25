@@ -11,7 +11,10 @@ subject:
 > Prereq: an agent harness that can read and write the workspace folder. The
 > tool that does host-side file work is a harness capability (§0-B); on Claude
 > Cowork it is the Desktop Commander (DC) MCP plugin.
-> Guide version: 8.5 (8.5 drops the pasted project-instructions block: Claude
+> Guide version: 8.6 (8.6 files every deliverable the agent produces in the
+> concept folder it belongs to, written there directly; a chat attachment or a
+> harness's own save folder is only a copy, CONTEXT.md item 5. 8.5 drops the
+> pasted project-instructions block: Claude
 > Cowork reads the connected folder's CLAUDE.md portal as its project
 > instructions, so no harness that can install pastes anything, and
 > workspace-specific narrowing rules move to the last item of CONTEXT.md,

@@ -6,7 +6,8 @@ subject:
 
 # Context Workspace - Migrate / Update (existing folder)
 
-> Protocol version: 8.5 (no pasted project-instructions block: Claude Cowork reads
+> Protocol version: 8.6 (deliverables are filed in the workspace; a chat
+> attachment is only a copy). 8.5 (no pasted project-instructions block: Claude Cowork reads
 > the CLAUDE.md portal, and workspace narrowing rules live in CONTEXT.md). 8.4
 > (every folder whose name starts with `_`, outside
 > `_context-protocol/`, is the user's private area). 8.3 (opt-in `git` backend with a direct or review merge mode,
@@ -68,7 +69,7 @@ This is the single source of truth for what "latest" means and what each version
 introduced. Step 1 reads it to compute the exact gap. Keep it in sync with the
 `Guide version:` stamp in the `<guide_content>` block below.
 
-- LATEST_VERSION: **8.5**
+- LATEST_VERSION: **8.6**
 - Format: MAJOR.MINOR. A bare integer stamp `N` means `N.0`.
   - MAJOR bump = a breaking change to the contract, not automatically a rebuild.
     Read that version's Reconcile cell before choosing a path. Only 3 -> 4 was a
@@ -120,6 +121,7 @@ moving TO that version from the one before it:
 | 8.3 | MINOR | Two opt-in additions from the 2026-11 organizational adoption reviews (an institution and a company asked for approval-gated writes, version history and trust levels before using the protocol as a company SoT). Constraint set by the user: nothing changes for a workspace that does not opt in. (a) Backend `git`: WS is the root of a git clone outside any cloud-synced folder; sessions pull before reading, commit each request, and push to the default branch (`git_merge: direct`) or push a branch and open a PR that a person merges (`git_merge: review`), with per-folder exceptions in `git_merge_paths`; the agent never merges or approves a PR, never force-pushes, and drops from direct to review when the remote protects the branch; a harness that cannot run git there (`proxy_mount: yes`) writes files and runs no git command. `git` is never inferred, not from the path and not from an existing `.git`, because a code repository with the protocol installed must not start receiving commits unasked. The capability contract gains a ninth key `vcs` (none / git) so guide §6 can name the procedure without naming git; every earlier profile and the fallback are `vcs: none`. (b) Optional predicate `trust_tier` (verified / sourced / unverified) on documents: answers resting on sourced or unverified documents say so (guide §3 item 7), and a curated note cannot rank above the lowest tier among its `grounded_on` originals that carry one (a new review signal, "신뢰 역전", from OCP's rule that derivation does not launder trust). Documents without the key are read and linted as before | Write `_context-protocol/backends/git.md` from `<backend_profiles>`, and refresh `storage-backend.md`, `gdrive.md` and `local.md` from the same block with the Step 2-1 item 5 rule (sections the workspace copy has and the block lacks stay as local subsections and are reported). Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp, §0-A, §3 item 7, §6, §8). Concept scheme: add the `trust_tier` row before `derived_from` and the "신뢰 역전" bullet under "검토 신호". `_views/integrity-lint.md`: insert the "신뢰 역전" block before "근거 drift". The entry canon, `ws_backend` and the instruction block are unchanged; ask nothing that Step 0 would not already ask under 8.2, and do not switch a workspace to `git` unless the user asks (then Step 0 question 4 applies). The package README copies `tools/integrity_lint.py`; this installer carries no tools. Bump stamps to 8.3. No rebuild |
 | 8.4 | MINOR | Private folders. A user can keep material in the workspace and out of every agent's reach by naming its folder with a leading `_`. Any folder whose name starts with `_`, at any depth, is the user's private area, except the reserved protocol cluster `_context-protocol/` (with everything inside it, also in a nested workspace); `_project.md` is a file and unaffected. Agents never search, list, open, read, lint or write inside one, never move anything into one, never create one, and do not open one when a path into it is named, whoever names it; only the user renaming the folder without the `_` opens it, because a rename cannot be injected through a document or a chat line. A search that misses says it excluded private folders, by name only. Stated in the docs as a convention for protocol agents and not access control: secrets belong in a private workspace that is not connected (guide §2 L1b). The headless lint prunes them and lists their names. Adopted 2026-11-24 at the user's request (임한솔) | Insert the private-folders bullet into the entry canon's item 2 right after the "not found" bullet (template `<context_md>`), in the canon's own language when it is not English. Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp, §3-A last bullet, §3-B, §10, §12.2) and `_context-protocol/tools/integrity_lint.py` from the package when the workspace keeps it. Then list, by name only and without opening them, every folder outside the cluster whose name starts with `_` (skip `_deprecated_*` trees, already excluded). For each, ask the user once whether it is private (keep the name) or content that only happened to carry the prefix (the user renames it, or approves the agent renaming it; then fix links and log the move). Until answered, treat it as private. Never rebuild |
 | 8.5 | MINOR | No pasted instruction block. Claude Cowork injects the connected folder's CLAUDE.md portal as the project's instructions every session (measured 2026-10-25 and observed 2026-11-25 on cloud Cowork), so the block the installers printed for Cowork since 5.0 only repeated what the portal already says. `claude-cowork` gets `bootstrap_block: no`; `chat-upload` keeps `yes`, it has no file entry and cannot install. The two things only the block carried move into CONTEXT.md: workspace-specific narrowing rules (approval gates, role gates, tier-1 bans; the block's item 4) become its last item "Workspace rules", and in a public/private split each CONTEXT.md names its sibling and which side holds sensitive content. Adopted 2026-11-25 at the user's request (임한솔) | Replace the entry canon's preamble sentence about the pasted block with the `<context_md>` 8.5 wording, and extend item 8's narrowing-rule sentence the same way, in the canon's own language when it is not English. Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp, §8 step 3) and `_context-protocol/harnesses/` from `<harness_profiles>` (`agent-harness.md` contract row, `claude-cowork.md`). Then, on Claude Cowork, read the project instructions this session received: if they hold the context-protocol bootstrap block with rules beyond the pointer items (an item 4, or rules appended after them), carry those rules verbatim into a final "Workspace rules" item of CONTEXT.md, flagging any that conflicts with the protocol instead of carrying it; in a split, make sure each CONTEXT.md names its sibling. The block itself is not agent-writable: leave it and tell the user it can be deleted (Step 7). Never rebuild |
+| 8.6 | MINOR | Deliverables are filed. Every file the agent produces for the user (doc, deck, image, video, script, export) is content: it goes to the concept folder it belongs to, classified like any other content (item 5), and is written there directly with host-side tools. A chat attachment, a harness's own save or output folder (on Claude: `Claude outputs/` next to the connected folder's files, `Claude/`, a project's `claude/` doc namespace) and a project doc saved by bare filename are copies, never the place. Observed 2026-11-25: on Claude Cowork files sent as chat attachments piled up in `Claude outputs/` at the connected folder's root, outside every concept folder. `claude-cowork` `deliver_file` changes from chat attachment to writing into the workspace and reporting the path. Adopted 2026-11-25 at the user's request (임한솔) | Insert the deliverables paragraph at the end of the entry canon's item 5 (template `<context_md>`), in the canon's own language when it is not English. Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp) and `_context-protocol/harnesses/` from `<harness_profiles>` (`agent-harness.md` `deliver_file` row, `claude-cowork.md`). Do not move files already in `Claude outputs/`: list them for the user, who decides which belong in a concept folder. Never rebuild |
 
 Instruction-layer reality check (learned 2026-08-18, applies to every version
 whose delta touches `<project_instructions>`): the printed Cowork project
@@ -419,6 +421,9 @@ Likewise `_context-protocol/backends/` (7.0+) and root `backends/` (6.x).
      - 8.5: does the entry canon's preamble say nothing is pasted (8.5), and
        does `_context-protocol/harnesses/claude-cowork.md` carry
        `bootstrap_block` no? Any miss = an 8.5 delta.
+     - 8.6: does the entry canon's item 5 end with the deliverables paragraph
+       ("Deliverables (8.6)", or the same rule in the canon's own language)?
+       Any miss = an 8.6 delta.
      The detected version is the highest registry version whose features are all
      present; every version above it with a missing feature is a delta to apply.
   3. Reconcile stamp vs structure. The structure wins when they disagree: if the
@@ -1076,6 +1081,12 @@ there - so the portals do not change when the protocol version moves.
    proposed and they have not adopted (제안); a transcript kept as-is is a raw
    record (`canon_note`) and the decomposed notes win over it. Procedure and
    both brakes: `_context-protocol/_ontology.md`.
+   Deliverables (8.6): every file you produce for the user (doc, deck, image,
+   video, script, export) is content too. File it in the concept folder it
+   belongs to, classified as above, and write it there directly with host-side
+   tools. A chat attachment, a harness's own save or output folder (on Claude:
+   `Claude outputs/`, `Claude/`, a project's `claude/`) and a project doc saved
+   by bare filename are copies, never its place. Report the workspace path.
 6. When the user names a preset ("<preset> 프리셋으로 ...", "use the <preset>
    preset to ..."), run the preset invocation contract, in this order: find the
    preset in the protocol workspace's `presets/preset-library.md` (stop and ask if
@@ -1904,7 +1915,7 @@ broader: "[[context-workspace]]"
 related:
   - "[[storage-backend]]"
 definition: 워크스페이스를 열어 읽고 쓰는 에이전트 실행 환경(Claude Code, Cowork, Codex, Cursor, Google Antigravity, Grok Build, 파일 업로드형 대화 등). 자동으로 읽는 진입 파일, 호스트 파일 도구, 자체 메모리, 마운트 성질이 하네스마다 다르다. 8.0 부터 코어는 그 차이를 하네스 프로파일로만 흡수한다.
-updated: 2026-10-25
+updated: 2026-11-25
 ---
 
 # 에이전트 하네스
@@ -1939,7 +1950,7 @@ updated: 2026-10-25
 | `agent_memory` | 이름과 위치 / none | GUIDE §2 의 L0, §6 의 override 대상 |
 | `fs_write` | yes / no | no 면 GUIDE §12 축적이 열람 모드로 바뀐다 |
 | `ask_tool` | 도구 이름 / none | 설치기와 인테이크 문답. none 이면 번호를 붙인 평문 질문 |
-| `deliver_file` | 방법 | 산출물을 사용자에게 건네는 방법 |
+| `deliver_file` | 방법 | 산출물을 사용자에게 건네는 방법. 8.6 부터 산출물의 자리는 워크스페이스의 개념 폴더이고, 이 방법은 사본을 건네는 길이다 |
 | `bootstrap_block` | yes / no | 사람이 붙여넣는 지침 계층에 기대는가. 8.5 부터 설치할 수 있는 하네스는 모두 no 이고, 파일 진입점이 없는 `chat-upload` 만 yes 다 |
 
 Layer A 는 7.x 에서 상수였다. 근거는 "세션에 연결된 폴더는 프록시 마운트를 지난다" 였는데,
@@ -2020,7 +2031,7 @@ bootstrap_block: no
 type: document
 harness_id: claude-cowork
 title: Harness profile - Claude Cowork
-updated: 2026-10-25
+updated: 2026-11-25
 ---
 
 # 하네스 프로파일: Claude Cowork
@@ -2039,7 +2050,7 @@ Claude 데스크톱 앱의 Cowork 모드. 에이전트는 샌드박스에서 돌
 | `agent_memory` | 호스트 auto-memory 디렉토리. claude.ai 계정 메모리가 붙는 경우도 있다 | 실측 |
 | `fs_write` | yes | |
 | `ask_tool` | AskUserQuestion | |
-| `deliver_file` | 채팅 첨부(SendUserFile). 연결 폴더 파일은 스테이징한 뒤 첨부 | |
+| `deliver_file` | 워크스페이스의 개념 폴더에 직접 쓰고 경로를 보고한다(8.6). 채팅 첨부(SendUserFile)는 사용자가 요청할 때만 주는 사본이다 | 2026-11-25 관측: 채팅 첨부가 연결 폴더 루트의 `Claude outputs/` 에 쌓여 어느 개념 폴더에도 속하지 않았다 |
 | `bootstrap_block` | no. 8.4 까지는 yes(프로젝트 지침 붙여넣기) | 실측(2026-10-25, 클라우드 Cowork)과 2026-11-25 세션 관측: 연결 폴더의 CLAUDE.md 포털이 프로젝트 지침으로 주입되어 붙여넣은 블록 없이 CONTEXT.md 에 닿는다. 8.5 에서 붙여넣기를 없앴다. 데스크톱 로컬 Cowork 는 아직 따로 실측하지 않았다 |
 
 ## 실행 형태
@@ -3334,7 +3345,10 @@ updated: YYYY-MM-DD
 > Prereq: an agent harness that can read and write the workspace folder. The
 > tool that does host-side file work is a harness capability (§0-B); on Claude
 > Cowork it is the Desktop Commander (DC) MCP plugin.
-> Guide version: 8.5 (8.5 drops the pasted project-instructions block: Claude
+> Guide version: 8.6 (8.6 files every deliverable the agent produces in the
+> concept folder it belongs to, written there directly; a chat attachment or a
+> harness's own save folder is only a copy, CONTEXT.md item 5. 8.5 drops the
+> pasted project-instructions block: Claude
 > Cowork reads the connected folder's CLAUDE.md portal as its project
 > instructions, so no harness that can install pastes anything, and
 > workspace-specific narrowing rules move to the last item of CONTEXT.md,

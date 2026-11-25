@@ -2,7 +2,7 @@
 type: document
 harness_id: claude-cowork
 title: Harness profile - Claude Cowork
-updated: 2026-10-25
+updated: 2026-11-25
 ---
 
 # 하네스 프로파일: Claude Cowork
@@ -21,7 +21,7 @@ Claude 데스크톱 앱의 Cowork 모드. 에이전트는 샌드박스에서 돌
 | `agent_memory` | 호스트 auto-memory 디렉토리. claude.ai 계정 메모리가 붙는 경우도 있다 | 실측 |
 | `fs_write` | yes | |
 | `ask_tool` | AskUserQuestion | |
-| `deliver_file` | 채팅 첨부(SendUserFile). 연결 폴더 파일은 스테이징한 뒤 첨부 | |
+| `deliver_file` | 워크스페이스의 개념 폴더에 직접 쓰고 경로를 보고한다(8.6). 채팅 첨부(SendUserFile)는 사용자가 요청할 때만 주는 사본이다 | 2026-11-25 관측: 채팅 첨부가 연결 폴더 루트의 `Claude outputs/` 에 쌓여 어느 개념 폴더에도 속하지 않았다 |
 | `bootstrap_block` | no. 8.4 까지는 yes(프로젝트 지침 붙여넣기) | 실측(2026-10-25, 클라우드 Cowork)과 2026-11-25 세션 관측: 연결 폴더의 CLAUDE.md 포털이 프로젝트 지침으로 주입되어 붙여넣은 블록 없이 CONTEXT.md 에 닿는다. 8.5 에서 붙여넣기를 없앴다. 데스크톱 로컬 Cowork 는 아직 따로 실측하지 않았다 |
 
 ## 실행 형태

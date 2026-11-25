@@ -432,6 +432,12 @@ there - so the portals do not change when the protocol version moves.
    proposed and they have not adopted (제안); a transcript kept as-is is a raw
    record (`canon_note`) and the decomposed notes win over it. Procedure and
    both brakes: `_context-protocol/_ontology.md`.
+   Deliverables (8.6): every file you produce for the user (doc, deck, image,
+   video, script, export) is content too. File it in the concept folder it
+   belongs to, classified as above, and write it there directly with host-side
+   tools. A chat attachment, a harness's own save or output folder (on Claude:
+   `Claude outputs/`, `Claude/`, a project's `claude/`) and a project doc saved
+   by bare filename are copies, never its place. Report the workspace path.
 6. When the user names a preset ("<preset> 프리셋으로 ...", "use the <preset>
    preset to ..."), run the preset invocation contract, in this order: find the
    preset in the protocol workspace's `presets/preset-library.md` (stop and ask if
@@ -1260,7 +1266,7 @@ broader: "[[context-workspace]]"
 related:
   - "[[storage-backend]]"
 definition: 워크스페이스를 열어 읽고 쓰는 에이전트 실행 환경(Claude Code, Cowork, Codex, Cursor, Google Antigravity, Grok Build, 파일 업로드형 대화 등). 자동으로 읽는 진입 파일, 호스트 파일 도구, 자체 메모리, 마운트 성질이 하네스마다 다르다. 8.0 부터 코어는 그 차이를 하네스 프로파일로만 흡수한다.
-updated: 2026-10-25
+updated: 2026-11-25
 ---
 
 # 에이전트 하네스
@@ -1295,7 +1301,7 @@ updated: 2026-10-25
 | `agent_memory` | 이름과 위치 / none | GUIDE §2 의 L0, §6 의 override 대상 |
 | `fs_write` | yes / no | no 면 GUIDE §12 축적이 열람 모드로 바뀐다 |
 | `ask_tool` | 도구 이름 / none | 설치기와 인테이크 문답. none 이면 번호를 붙인 평문 질문 |
-| `deliver_file` | 방법 | 산출물을 사용자에게 건네는 방법 |
+| `deliver_file` | 방법 | 산출물을 사용자에게 건네는 방법. 8.6 부터 산출물의 자리는 워크스페이스의 개념 폴더이고, 이 방법은 사본을 건네는 길이다 |
 | `bootstrap_block` | yes / no | 사람이 붙여넣는 지침 계층에 기대는가. 8.5 부터 설치할 수 있는 하네스는 모두 no 이고, 파일 진입점이 없는 `chat-upload` 만 yes 다 |
 
 Layer A 는 7.x 에서 상수였다. 근거는 "세션에 연결된 폴더는 프록시 마운트를 지난다" 였는데,
@@ -1376,7 +1382,7 @@ bootstrap_block: no
 type: document
 harness_id: claude-cowork
 title: Harness profile - Claude Cowork
-updated: 2026-10-25
+updated: 2026-11-25
 ---
 
 # 하네스 프로파일: Claude Cowork
@@ -1395,7 +1401,7 @@ Claude 데스크톱 앱의 Cowork 모드. 에이전트는 샌드박스에서 돌
 | `agent_memory` | 호스트 auto-memory 디렉토리. claude.ai 계정 메모리가 붙는 경우도 있다 | 실측 |
 | `fs_write` | yes | |
 | `ask_tool` | AskUserQuestion | |
-| `deliver_file` | 채팅 첨부(SendUserFile). 연결 폴더 파일은 스테이징한 뒤 첨부 | |
+| `deliver_file` | 워크스페이스의 개념 폴더에 직접 쓰고 경로를 보고한다(8.6). 채팅 첨부(SendUserFile)는 사용자가 요청할 때만 주는 사본이다 | 2026-11-25 관측: 채팅 첨부가 연결 폴더 루트의 `Claude outputs/` 에 쌓여 어느 개념 폴더에도 속하지 않았다 |
 | `bootstrap_block` | no. 8.4 까지는 yes(프로젝트 지침 붙여넣기) | 실측(2026-10-25, 클라우드 Cowork)과 2026-11-25 세션 관측: 연결 폴더의 CLAUDE.md 포털이 프로젝트 지침으로 주입되어 붙여넣은 블록 없이 CONTEXT.md 에 닿는다. 8.5 에서 붙여넣기를 없앴다. 데스크톱 로컬 Cowork 는 아직 따로 실측하지 않았다 |
 
 ## 실행 형태
@@ -2700,7 +2706,10 @@ updated: YYYY-MM-DD
 > Prereq: an agent harness that can read and write the workspace folder. The
 > tool that does host-side file work is a harness capability (§0-B); on Claude
 > Cowork it is the Desktop Commander (DC) MCP plugin.
-> Guide version: 8.5 (8.5 drops the pasted project-instructions block: Claude
+> Guide version: 8.6 (8.6 files every deliverable the agent produces in the
+> concept folder it belongs to, written there directly; a chat attachment or a
+> harness's own save folder is only a copy, CONTEXT.md item 5. 8.5 drops the
+> pasted project-instructions block: Claude
 > Cowork reads the connected folder's CLAUDE.md portal as its project
 > instructions, so no harness that can install pastes anything, and
 > workspace-specific narrowing rules move to the last item of CONTEXT.md,

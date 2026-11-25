@@ -7,7 +7,7 @@ broader: "[[context-workspace]]"
 related:
   - "[[storage-backend]]"
 definition: 워크스페이스를 열어 읽고 쓰는 에이전트 실행 환경(Claude Code, Cowork, Codex, Cursor, Google Antigravity, Grok Build, 파일 업로드형 대화 등). 자동으로 읽는 진입 파일, 호스트 파일 도구, 자체 메모리, 마운트 성질이 하네스마다 다르다. 8.0 부터 코어는 그 차이를 하네스 프로파일로만 흡수한다.
-updated: 2026-10-25
+updated: 2026-11-25
 ---
 
 # 에이전트 하네스
@@ -42,7 +42,7 @@ updated: 2026-10-25
 | `agent_memory` | 이름과 위치 / none | GUIDE §2 의 L0, §6 의 override 대상 |
 | `fs_write` | yes / no | no 면 GUIDE §12 축적이 열람 모드로 바뀐다 |
 | `ask_tool` | 도구 이름 / none | 설치기와 인테이크 문답. none 이면 번호를 붙인 평문 질문 |
-| `deliver_file` | 방법 | 산출물을 사용자에게 건네는 방법 |
+| `deliver_file` | 방법 | 산출물을 사용자에게 건네는 방법. 8.6 부터 산출물의 자리는 워크스페이스의 개념 폴더이고, 이 방법은 사본을 건네는 길이다 |
 | `bootstrap_block` | yes / no | 사람이 붙여넣는 지침 계층에 기대는가. 8.5 부터 설치할 수 있는 하네스는 모두 no 이고, 파일 진입점이 없는 `chat-upload` 만 yes 다 |
 
 Layer A 는 7.x 에서 상수였다. 근거는 "세션에 연결된 폴더는 프록시 마운트를 지난다" 였는데,
