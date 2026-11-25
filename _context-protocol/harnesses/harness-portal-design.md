@@ -53,7 +53,7 @@ Commander 로 작업하라", "auto-memory 를 override 하라" 는 지시를 받
 | 하네스 | 자동으로 읽는 진입 파일 | 다른 파일 끌어오기 | 비고 |
 |---|---|---|---|
 | Claude Code | CLAUDE.md. 2.1.277(2026-09-18)부터 CLAUDE.md 가 없는 폴더에서는 AGENTS.md | `@경로` | 둘 다 있으면 CLAUDE.md. AGENTS.md 대체 읽기는 /config 에서 끌 수 있다 |
-| Cowork | 연결 폴더의 CLAUDE.md, 붙여넣은 프로젝트 지침 | 미확인 | 2026-10-25 세션 관측: 연결 폴더 CLAUDE.md 가 프로젝트 지침으로 주입됐다. AGENTS.md 를 읽는지는 미확인 |
+| Cowork | 연결 폴더의 CLAUDE.md (8.4 까지는 붙여넣은 프로젝트 지침도) | 미확인 | 2026-10-25, 2026-11-25 세션 관측: 연결 폴더 CLAUDE.md 가 프로젝트 지침으로 주입됐다. 그래서 8.5 에서 붙여넣기를 없앴다. AGENTS.md 를 읽는지는 미확인 |
 | Codex | AGENTS.override.md, AGENTS.md, 설정의 fallback 파일명 | 문서에 없음 | 프로젝트 루트(보통 git 루트)부터 현재 폴더까지 이어 붙이고 가까운 쪽이 뒤에 온다. 합계 32 KiB 상한(`project_doc_max_bytes`) |
 | Cursor | 루트와 하위 폴더의 AGENTS.md, `.cursor/rules/*.mdc` | 문서에 없음 | 하위 폴더 AGENTS.md 는 상위와 합쳐지고 가까운 쪽이 우선 |
 | Google Antigravity | AGENTS.md(IDE 1.20.5 부터), GEMINI.md, `.agents/rules` | 미확인 | 둘 다 있을 때 우선순위는 문서에 없다. 근거가 서드파티 글(2026-08-05)이라 실측 필요 |

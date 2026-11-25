@@ -22,7 +22,7 @@ Claude 데스크톱 앱의 Cowork 모드. 에이전트는 샌드박스에서 돌
 | `fs_write` | yes | |
 | `ask_tool` | AskUserQuestion | |
 | `deliver_file` | 채팅 첨부(SendUserFile). 연결 폴더 파일은 스테이징한 뒤 첨부 | |
-| `bootstrap_block` | yes. 프로젝트 지침 붙여넣기 | |
+| `bootstrap_block` | no. 8.4 까지는 yes(프로젝트 지침 붙여넣기) | 실측(2026-10-25, 클라우드 Cowork)과 2026-11-25 세션 관측: 연결 폴더의 CLAUDE.md 포털이 프로젝트 지침으로 주입되어 붙여넣은 블록 없이 CONTEXT.md 에 닿는다. 8.5 에서 붙여넣기를 없앴다. 데스크톱 로컬 Cowork 는 아직 따로 실측하지 않았다 |
 
 ## 실행 형태
 

@@ -169,6 +169,18 @@ workspace. Each CONTEXT.md notes the sibling workspace's `ws_rel_path` (a
 workspace-relative or home-relative location, never an absolute path; guide
 §4.9). Sensitive memories live only under WS_PRIV.
 
+Until 8.4 the pasted Cowork block also named both split entry points; from 8.5
+there is no block, so the sibling note in each CONTEXT.md is the only place that
+links them. Write it in both, and say in it which side holds sensitive content.
+
+Workspace rules: when the user or the adopting organization states rules that
+NARROW the generic ones (approval gates, role gates, tier-1 bans), append them to
+`WS/CONTEXT.md` as a final item "Workspace rules", briefly and in the user's
+words. They override every generic item above it and are not unlocked by user
+direction (item 8). Until 8.4 they sat in item 4 of the pasted block; from 8.5
+CONTEXT.md is what every portal reads first, so they live here. Never put them
+in a portal.
+
 Do not pre-create cache/ or temp files in WS. (proxy_mount: yes) delete and
 atomic-replace are denied on ANY connected folder, cloud or plain local (guide
 §4.5); on other harnesses a sync backend still uploads every stray file. cache/
@@ -298,73 +310,24 @@ subagents, so it adds no end-of-run latency.
 
 ### Step 4 - Mandatory final output
 
-Switched by the harness's `bootstrap_block`.
+Print no instruction block, on any harness (8.5). The portals are the entry:
+the harness loads AGENTS.md or CLAUDE.md on its own and they lead to
+CONTEXT.md. On Claude Cowork the connected folder's CLAUDE.md arrives as the
+project's instructions every session, so nothing is pasted there either
+(harness profile `claude-cowork`). A harness with `bootstrap_block: yes` has no
+file entry (`chat-upload`), cannot install (Step 0) and never reaches this step.
 
-- `bootstrap_block: no` (Claude Code, Codex, Cursor, Antigravity, Grok Build):
-  print no block. The portals are the entry: the harness loads AGENTS.md or
-  CLAUDE.md on its own and they lead to CONTEXT.md. Tell the user (in their
-  language) what was created, which backend was recorded, and that the next
-  session only has to be started in this folder. Sessions should start at the
-  WS root: the nearest portal to the working directory decides the workspace.
-- `bootstrap_block: yes` (Claude Cowork, a Claude project): continue below.
-
-Print the block between <project_instructions> tags verbatim, inside a single
-copyable code fence, then tell the user (in their language). Leave `WS` as the
-relative alias defined at the top of the block; do NOT substitute an absolute
-path - a hardcoded mount path breaks on the user's other PCs (guide §4.9). The
-block is meant to be pasted identically on every machine.
-If a public/private split was chosen, keep both workspaces as relative aliases
-(WS_PUB / WS_PRIV, each self-located by its `ws_rel_path`) and name both
-entry points in item 1. Sensitive routing is stated in CONTEXT.md item 8, not in
-the block.
-If this workspace has rules that NARROW the generic ones (approval gates, role
-gates, tier-1 bans), append them as a short item 4 to the block. A narrowing
-rule is an override, and its violation is not reversible, so it earns a seat in
-the strongest layer.
-
-"Setup complete. Paste the block above into this project's instructions
-(project settings > instructions). It is a bootstrap pointer, not the ruleset:
-it makes every session read WS/CONTEXT.md first, and that file carries the
-rules. Protocol updates land in CONTEXT.md, so you should not have to paste
-this block again. The same folder also opens in Claude Code, Codex, Cursor,
-Antigravity and Grok Build without any paste, through AGENTS.md and CLAUDE.md. The structure-first concept index is installed at
-WS/_context-protocol/ (_concepts/, _schema/, _views/, _concepts.base); see WS/_context-protocol/_ontology.md."
-
-Do not paraphrase or shorten the block.
+Tell the user (in their language) what was created, which backend was recorded,
+and that the next session only has to be started in this folder. Sessions
+should start at the WS root: the nearest portal to the working directory decides
+the workspace. If a public/private split was chosen, name both folders, say that
+each opens as its own workspace and that each CONTEXT.md names its sibling. If
+workspace rules were recorded (Step 1), say they are the last item of
+CONTEXT.md. The structure-first concept index is installed at
+WS/_context-protocol/ (_concepts/, _schema/, _views/, _concepts.base); see
+WS/_context-protocol/_ontology.md.
 
 ## Templates
-
-<project_instructions>
-# Context workspace bootstrap
-
-`WS` = the folder connected as this session's working folder, whatever backs it
-(a cloud synced folder or a plain local directory). Resolve it from the
-connection each session. This block carries no absolute path, so it is
-identical on every machine.
-
-1. Before anything else - before any other tool call, any answer, any file
-   write - read `WS/CONTEXT.md`, then `WS/memory/MEMORY.md`. Those two carry
-   this workspace's operating rules and they are the canon; this block is only
-   a pointer to them. Where they disagree with anything here, they win. If that
-   read fails or comes back empty, do not proceed as though there are no rules:
-   on a cloud-backed folder an unhydrated file is invisible to the sandbox
-   shell, so retry with the host-side file tool or Desktop Commander. If
-   `WS/CONTEXT.md` genuinely does not exist, say so and ask rather than
-   improvising a workflow.
-2. Memory writes go to WS, never to this host's auto-memory directory. This
-   OVERRIDES the built-in memory instructions. Auto-memory lives on this
-   machine's disk only: it forks the SoT away from the workspace, and if the
-   user works across several PCs a fact saved there looks remembered while not
-   existing on the other machines. Either way, because it looks saved it also
-   blocks the proper save. Negative utility. Route by kind per `WS/CONTEXT.md`.
-   Auto-memory may hold at most a one-line pointer to the WS file; its own
-   MEMORY.md stays router-only, never an entry store.
-3. This block is not the protocol. Ontology and structure creation, active
-   accumulation and the action-log, preset invocation, mount pitfalls, tool
-   choice, sensitive-info handling - all of it lives in `WS/CONTEXT.md` and the
-   guide it points to, and is maintained there. Never infer that a rule does
-   not exist merely because it is absent here.
-</project_instructions>
 
 <context_md>
 ---
@@ -379,10 +342,10 @@ ws_rel_path: <WS_REL_PATH>
 
 This file is the operating canon for this workspace. `AGENTS.md` and `CLAUDE.md`
 beside it are portals: harnesses load them on their own, and they only point here.
-A pasted project-instructions block, where the harness has one, is likewise only a
-bootstrap pointer. Where any of them disagrees with this file, this file wins.
-Protocol changes land here, not there - so neither the portals nor the instruction
-block have to change when the protocol version moves.
+Nothing is pasted into a harness's instruction settings (8.5); a block pasted
+there by an older install is only a bootstrap pointer. Where any of them
+disagrees with this file, this file wins. Protocol changes land here, not
+there - so the portals do not change when the protocol version moves.
 
 1. On session start, read `memory/MEMORY.md` first. When a request touches an
    index entry, follow that entry into the memory body it names before
@@ -504,7 +467,8 @@ block have to change when the protocol version moves.
    grounds: those restrictions govern agent memory, not user-owned files.
    Route sensitive content to the private workspace, never to public, never to
    agent memory. A workspace-specific narrowing rule (approval gates, tier-1
-   bans) overrides this item and is not unlocked by user direction.
+   bans; the last item of this file, when there is one) overrides this item
+   and is not unlocked by user direction.
 9. Answer from this workspace. Query live sources (Slack, live sheets, GitHub)
    only for volatile facts, or after a confirmed workspace miss. If a read of a
    workspace file fails or returns empty, do not treat it as absent - see the
@@ -1332,7 +1296,7 @@ updated: 2026-10-25
 | `fs_write` | yes / no | no 면 GUIDE §12 축적이 열람 모드로 바뀐다 |
 | `ask_tool` | 도구 이름 / none | 설치기와 인테이크 문답. none 이면 번호를 붙인 평문 질문 |
 | `deliver_file` | 방법 | 산출물을 사용자에게 건네는 방법 |
-| `bootstrap_block` | yes / no | 사람이 붙여넣는 지침 계층이 있는가(5.0 지침 역전의 대상) |
+| `bootstrap_block` | yes / no | 사람이 붙여넣는 지침 계층에 기대는가. 8.5 부터 설치할 수 있는 하네스는 모두 no 이고, 파일 진입점이 없는 `chat-upload` 만 yes 다 |
 
 Layer A 는 7.x 에서 상수였다. 근거는 "세션에 연결된 폴더는 프록시 마운트를 지난다" 였는데,
 그 전제가 Cowork 샌드박스에서만 참이라 8.0 에서 `proxy_mount` 로 옮겼다. 백엔드는 여전히
@@ -1432,7 +1396,7 @@ Claude 데스크톱 앱의 Cowork 모드. 에이전트는 샌드박스에서 돌
 | `fs_write` | yes | |
 | `ask_tool` | AskUserQuestion | |
 | `deliver_file` | 채팅 첨부(SendUserFile). 연결 폴더 파일은 스테이징한 뒤 첨부 | |
-| `bootstrap_block` | yes. 프로젝트 지침 붙여넣기 | |
+| `bootstrap_block` | no. 8.4 까지는 yes(프로젝트 지침 붙여넣기) | 실측(2026-10-25, 클라우드 Cowork)과 2026-11-25 세션 관측: 연결 폴더의 CLAUDE.md 포털이 프로젝트 지침으로 주입되어 붙여넣은 블록 없이 CONTEXT.md 에 닿는다. 8.5 에서 붙여넣기를 없앴다. 데스크톱 로컬 Cowork 는 아직 따로 실측하지 않았다 |
 
 ## 실행 형태
 
@@ -2736,7 +2700,11 @@ updated: YYYY-MM-DD
 > Prereq: an agent harness that can read and write the workspace folder. The
 > tool that does host-side file work is a harness capability (§0-B); on Claude
 > Cowork it is the Desktop Commander (DC) MCP plugin.
-> Guide version: 8.4 (8.4 makes every folder whose name starts with `_`,
+> Guide version: 8.5 (8.5 drops the pasted project-instructions block: Claude
+> Cowork reads the connected folder's CLAUDE.md portal as its project
+> instructions, so no harness that can install pastes anything, and
+> workspace-specific narrowing rules move to the last item of CONTEXT.md,
+> §8. 8.4 makes every folder whose name starts with `_`,
 > outside the protocol's own `_context-protocol/`, the user's private area:
 > no search, read, lint or write, even when a path into it is named, §3-B.
 > 8.3 adds the opt-in `git` backend, a local clone with
@@ -3356,9 +3324,12 @@ and guides never expire; edit only on explicit change.
 ```
 
 3. Write the two portals, AGENTS.md and CLAUDE.md (§0-B). Where the harness
-   also has a pasted instruction layer (`bootstrap_block: yes`) or an
-   agent-memory index, plant a router there too: "on session start, read the
-   workspace CONTEXT.md first".
+   has an agent-memory index, plant a router there too: "on session start,
+   read the workspace CONTEXT.md first". Nothing is pasted into a harness's
+   instruction settings (8.5): Claude Cowork reads the CLAUDE.md portal as
+   its project instructions. Workspace-specific narrowing rules (approval
+   gates, role gates, tier-1 bans) go in the last item of CONTEXT.md, never in
+   a portal.
 4. In the first session, verify the §3 lookup order and §3-A hard rules fire.
 5. Create the ontology layer (structure-first, section 10). No schedule to
    register - views render live in Obsidian.

@@ -2,7 +2,7 @@
 type: readme
 ---
 
-# context-protocol 8.4 - 설치 패키지
+# context-protocol 8.5 - 설치 패키지
 
 Agent: read this file first, then follow "설치 순서" below. The installers are
 self-contained; do not improvise a workflow of your own.
@@ -16,7 +16,7 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
 루트의 `CONTEXT.md` 한 곳에 살고, `AGENTS.md` 와 `CLAUDE.md` 는 각 도구가 스스로
 읽는 입구로서 `CONTEXT.md` 를 가리키기만 한다.
 
-- 버전: 8.4
+- 버전: 8.5
 - 필요한 것: 작업 폴더 한 곳. 여러 PC 에서 같이 쓰려면 클라우드 동기화 폴더,
   이 PC 에서만 쓸 것이면 로컬 디렉토리 (또는 공개/비공개 두 곳)
 - 설치를 돌리는 도구: 폴더에 파일을 쓸 수 있는 에이전트면 된다. 파일을 첨부만 하는
@@ -47,7 +47,7 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
    - 없다 -> `CONTEXT_SETUP.md` 를 읽고 그 안의 Setup 단계를 그대로 실행한다.
    - 있다 -> `CONTEXT_MIGRATE.md` 를 읽고 버전을 판별해 델타만 적용한다.
      **덮어쓰지 않는다.** 기존 워크스페이스에 SETUP 을 돌리면 그 폴더가 쌓아 둔 규칙과
-     기록이 사라진다. 7.x 설치본은 이 경로로 8.4 가 된다. 규칙이 `CLAUDE.md` 에서
+     기록이 사라진다. 7.x 설치본은 이 경로로 8.5 가 된다. 규칙이 `CLAUDE.md` 에서
      `CONTEXT.md` 로 옮겨지고 `CLAUDE.md` 는 포털로 바뀐다.
    - 코드 저장소처럼 그 도구용 `AGENTS.md` 나 `CLAUDE.md` 만 있고 위 파일이 하나도
      없으면 신규 설치다. 개발 규칙이 적힌 `CLAUDE.md` 라도 프로토콜 frontmatter 가 없으면
@@ -61,16 +61,15 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
    한글(hwp, hwpx) 문서를 만났을 때 가이드 §4.10 이 `hwp2md.py` 를 부른다. `integrity_lint.py`
    는 `_views/integrity-lint.md` 의 규칙을 Obsidian 없이 돌리는 실행판이다. 사용자나 CI 가
    부를 때만 쓴다.
-7. **붙여넣기 단계는 도구에 따라 다르다.** 프로젝트 지침을 붙여넣는 층이 있는 도구
-   (Claude Cowork, Claude 프로젝트)에서는 설치기가 마지막에 지침 블록을 출력한다. 사용자가
-   그것을 프로젝트 설정 > 지침에 붙여넣어야 다음 세션부터 자동으로 워크스페이스를 읽는다.
-   서버에 저장되는 값이라 에이전트가 대신할 수 없다. Claude Code, Codex, Cursor,
-   Antigravity, Grok Build 는 포털 파일을 스스로 읽으므로 붙여넣을 것이 없다.
+7. **붙여넣을 것이 없다(8.5).** 어느 도구든 포털 파일(`AGENTS.md`, `CLAUDE.md`)을 스스로
+   읽는다. Claude Cowork 도 연결한 폴더의 `CLAUDE.md` 를 프로젝트 지침으로 받으므로 설치기가
+   지침 블록을 출력하지 않는다. 8.4 이하에서 프로젝트 설정 > 지침에 붙여넣은 블록은 지워도 되고,
+   남겨 둬도 `CONTEXT.md` 를 가리키기만 하므로 해가 없다.
 
 ## 완료 보고에 넣을 것
 
-무엇이 생겼는지, 어느 백엔드로 잡혔는지, 그리고 붙여넣기 단계가 남았는지(남았다면
-그 블록). 그것으로 끝낸다.
+무엇이 생겼는지, 어느 백엔드로 잡혔는지, 워크스페이스 전용 규칙을 어디에 적었는지. 그것으로
+끝낸다.
 
 **다음에 뭘 더 할지 제안하지 않는다.** 사용자는 프로토콜을 깔아 달라고 했고 그것은
 끝났다. 방금 설치된 구조에 대해 아직 아무것도 모르는 사람에게 다음 선택지를 내밀면
@@ -89,9 +88,11 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
   같은가. 6.4 가 고친 자리다
 - `_context-protocol/harnesses/` 에 `agent-harness.md` 와 프로파일 일곱 개가 있고, 가이드에
   §0-B 가, concept-scheme 에 `harness_id` 가 있는가. 8.0 이 더한 자리다
-- 가이드 스탬프가 8.4 인가
+- 가이드 스탬프가 8.5 인가
 - `CONTEXT.md` 2번에 비공개 폴더 항목("Private folders (8.4)" 또는 같은 뜻의 그 워크스페이스 말)이 있고
   가이드에 §3-B 가 있는가. 8.4 가 더한 자리다. 기존 `_` 폴더마다 비공개인지 사용자에게 물었는가
+- 설치기가 지침 블록을 출력하지 않았고, 워크스페이스 전용 규칙(승인 게이트 등)이 있다면 `CONTEXT.md`
+  마지막 항목 "Workspace rules" 에 있는가. 8.5 가 바꾼 자리다
 - `memory/MEMORY.md` 가 `memory/` 안의 본문만 가리키는가. 개념, 프로젝트, 프로토콜 문서 줄이
   남아 있으면 8.1 전환이 덜 끝난 것이다. 8.1 이 고친 자리다
 - `action-log/action-log.md` 에 "## 파일 형식" 절이 있는가. 6.3 이 고친 자리다.
@@ -125,9 +126,9 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
   로컬 백엔드에서는 이 함정이 없다. 맥에서 에이전트를 백그라운드 데몬으로 띄웠다면 호스트
   측 도구까지 같은 에러(`Resource deadlock avoided`)로 막힐 수 있다. 파일이 없는 것이 아니라
   프로세스 설정 문제다. 가이드 §4.1 과 백엔드 프로파일에 진단과 대응이 있다.
-- **규칙은 `CONTEXT.md` 에 산다.** 포털 두 개와 붙여넣는 지침 블록은 거기로 가는 입구일
-  뿐이다. 프로토콜이 올라가도 입구는 그대로이므로 다시 붙여넣을 일이 거의 없다. 7.x 때
-  붙여넣은 블록도 `CLAUDE.md` 포털을 거쳐 `CONTEXT.md` 로 이어진다.
+- **규칙은 `CONTEXT.md` 에 산다.** 포털 두 개는 거기로 가는 입구일 뿐이다. 프로토콜이
+  올라가도 입구는 그대로다. 예전 설치에서 붙여넣은 지침 블록도 `CLAUDE.md` 포털을 거쳐
+  `CONTEXT.md` 로 이어진다.
 - **파일을 첨부만 하는 대화형 제품은 검증되지 않은 열람 모드다.** 폴더를 열 수 없어
   기록이 쌓이지 않는다. 쓸 수 있다면 폴더를 여는 방식(ChatGPT 는 Work 모드)을 먼저 쓴다.
   열람 모드의 붙여넣기 지침은 설치 후 `_context-protocol/harnesses/chat-upload.md` 에 있다.

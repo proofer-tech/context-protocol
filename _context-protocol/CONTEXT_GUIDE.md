@@ -11,7 +11,11 @@ subject:
 > Prereq: an agent harness that can read and write the workspace folder. The
 > tool that does host-side file work is a harness capability (§0-B); on Claude
 > Cowork it is the Desktop Commander (DC) MCP plugin.
-> Guide version: 8.4 (8.4 makes every folder whose name starts with `_`,
+> Guide version: 8.5 (8.5 drops the pasted project-instructions block: Claude
+> Cowork reads the connected folder's CLAUDE.md portal as its project
+> instructions, so no harness that can install pastes anything, and
+> workspace-specific narrowing rules move to the last item of CONTEXT.md,
+> §8. 8.4 makes every folder whose name starts with `_`,
 > outside the protocol's own `_context-protocol/`, the user's private area:
 > no search, read, lint or write, even when a path into it is named, §3-B.
 > 8.3 adds the opt-in `git` backend, a local clone with
@@ -631,9 +635,12 @@ and guides never expire; edit only on explicit change.
 ```
 
 3. Write the two portals, AGENTS.md and CLAUDE.md (§0-B). Where the harness
-   also has a pasted instruction layer (`bootstrap_block: yes`) or an
-   agent-memory index, plant a router there too: "on session start, read the
-   workspace CONTEXT.md first".
+   has an agent-memory index, plant a router there too: "on session start,
+   read the workspace CONTEXT.md first". Nothing is pasted into a harness's
+   instruction settings (8.5): Claude Cowork reads the CLAUDE.md portal as
+   its project instructions. Workspace-specific narrowing rules (approval
+   gates, role gates, tier-1 bans) go in the last item of CONTEXT.md, never in
+   a portal.
 4. In the first session, verify the §3 lookup order and §3-A hard rules fire.
 5. Create the ontology layer (structure-first, section 10). No schedule to
    register - views render live in Obsidian.

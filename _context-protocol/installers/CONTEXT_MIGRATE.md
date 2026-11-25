@@ -6,7 +6,9 @@ subject:
 
 # Context Workspace - Migrate / Update (existing folder)
 
-> Protocol version: 8.4 (every folder whose name starts with `_`, outside
+> Protocol version: 8.5 (no pasted project-instructions block: Claude Cowork reads
+> the CLAUDE.md portal, and workspace narrowing rules live in CONTEXT.md). 8.4
+> (every folder whose name starts with `_`, outside
 > `_context-protocol/`, is the user's private area). 8.3 (opt-in `git` backend with a direct or review merge mode,
 > backend capability `vcs`, optional `trust_tier`; a workspace that uses neither
 > behaves as in 8.2). 8.2 (action-log entries carry a check level, see the
@@ -66,7 +68,7 @@ This is the single source of truth for what "latest" means and what each version
 introduced. Step 1 reads it to compute the exact gap. Keep it in sync with the
 `Guide version:` stamp in the `<guide_content>` block below.
 
-- LATEST_VERSION: **8.4**
+- LATEST_VERSION: **8.5**
 - Format: MAJOR.MINOR. A bare integer stamp `N` means `N.0`.
   - MAJOR bump = a breaking change to the contract, not automatically a rebuild.
     Read that version's Reconcile cell before choosing a path. Only 3 -> 4 was a
@@ -117,6 +119,7 @@ moving TO that version from the one before it:
 | 8.2 | MINOR | Check level on action-log entries. An entry recorded a reported completion (a person, another session or a fleet worker saying it was done) with the same weight as one the writing agent observed, so a later session built on it as fact. The 확정/제안 sections already separated provenance for conversation content, but dated events had no such mark. Adopted 2026-11-14 from the oh-my-hermes review (its `reported done` vs `verified`) | Replace `action-log/action-log.md` with canon's concept note (the `## 파일 형식` block gains `  - 확인:`, `## 규칙` gains the 확인 bullet), preserving the workspace's own `scheme` and `broader`; refresh guide §12.3 and the stamp from <guide_content>; in installed presets, update the 엔트리 형식 sentence and examples of `*-actions.md` / `창업-액션.md` to carry 확인 (the preset folders in the protocol workspace are the canon). Do NOT add 확인 lines to existing day files: dated logs are history, and entries without the line read as reported. Never rebuild |
 | 8.3 | MINOR | Two opt-in additions from the 2026-11 organizational adoption reviews (an institution and a company asked for approval-gated writes, version history and trust levels before using the protocol as a company SoT). Constraint set by the user: nothing changes for a workspace that does not opt in. (a) Backend `git`: WS is the root of a git clone outside any cloud-synced folder; sessions pull before reading, commit each request, and push to the default branch (`git_merge: direct`) or push a branch and open a PR that a person merges (`git_merge: review`), with per-folder exceptions in `git_merge_paths`; the agent never merges or approves a PR, never force-pushes, and drops from direct to review when the remote protects the branch; a harness that cannot run git there (`proxy_mount: yes`) writes files and runs no git command. `git` is never inferred, not from the path and not from an existing `.git`, because a code repository with the protocol installed must not start receiving commits unasked. The capability contract gains a ninth key `vcs` (none / git) so guide §6 can name the procedure without naming git; every earlier profile and the fallback are `vcs: none`. (b) Optional predicate `trust_tier` (verified / sourced / unverified) on documents: answers resting on sourced or unverified documents say so (guide §3 item 7), and a curated note cannot rank above the lowest tier among its `grounded_on` originals that carry one (a new review signal, "신뢰 역전", from OCP's rule that derivation does not launder trust). Documents without the key are read and linted as before | Write `_context-protocol/backends/git.md` from `<backend_profiles>`, and refresh `storage-backend.md`, `gdrive.md` and `local.md` from the same block with the Step 2-1 item 5 rule (sections the workspace copy has and the block lacks stay as local subsections and are reported). Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp, §0-A, §3 item 7, §6, §8). Concept scheme: add the `trust_tier` row before `derived_from` and the "신뢰 역전" bullet under "검토 신호". `_views/integrity-lint.md`: insert the "신뢰 역전" block before "근거 drift". The entry canon, `ws_backend` and the instruction block are unchanged; ask nothing that Step 0 would not already ask under 8.2, and do not switch a workspace to `git` unless the user asks (then Step 0 question 4 applies). The package README copies `tools/integrity_lint.py`; this installer carries no tools. Bump stamps to 8.3. No rebuild |
 | 8.4 | MINOR | Private folders. A user can keep material in the workspace and out of every agent's reach by naming its folder with a leading `_`. Any folder whose name starts with `_`, at any depth, is the user's private area, except the reserved protocol cluster `_context-protocol/` (with everything inside it, also in a nested workspace); `_project.md` is a file and unaffected. Agents never search, list, open, read, lint or write inside one, never move anything into one, never create one, and do not open one when a path into it is named, whoever names it; only the user renaming the folder without the `_` opens it, because a rename cannot be injected through a document or a chat line. A search that misses says it excluded private folders, by name only. Stated in the docs as a convention for protocol agents and not access control: secrets belong in a private workspace that is not connected (guide §2 L1b). The headless lint prunes them and lists their names. Adopted 2026-11-24 at the user's request (임한솔) | Insert the private-folders bullet into the entry canon's item 2 right after the "not found" bullet (template `<context_md>`), in the canon's own language when it is not English. Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp, §3-A last bullet, §3-B, §10, §12.2) and `_context-protocol/tools/integrity_lint.py` from the package when the workspace keeps it. Then list, by name only and without opening them, every folder outside the cluster whose name starts with `_` (skip `_deprecated_*` trees, already excluded). For each, ask the user once whether it is private (keep the name) or content that only happened to carry the prefix (the user renames it, or approves the agent renaming it; then fix links and log the move). Until answered, treat it as private. Never rebuild |
+| 8.5 | MINOR | No pasted instruction block. Claude Cowork injects the connected folder's CLAUDE.md portal as the project's instructions every session (measured 2026-10-25 and observed 2026-11-25 on cloud Cowork), so the block the installers printed for Cowork since 5.0 only repeated what the portal already says. `claude-cowork` gets `bootstrap_block: no`; `chat-upload` keeps `yes`, it has no file entry and cannot install. The two things only the block carried move into CONTEXT.md: workspace-specific narrowing rules (approval gates, role gates, tier-1 bans; the block's item 4) become its last item "Workspace rules", and in a public/private split each CONTEXT.md names its sibling and which side holds sensitive content. Adopted 2026-11-25 at the user's request (임한솔) | Replace the entry canon's preamble sentence about the pasted block with the `<context_md>` 8.5 wording, and extend item 8's narrowing-rule sentence the same way, in the canon's own language when it is not English. Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp, §8 step 3) and `_context-protocol/harnesses/` from `<harness_profiles>` (`agent-harness.md` contract row, `claude-cowork.md`). Then, on Claude Cowork, read the project instructions this session received: if they hold the context-protocol bootstrap block with rules beyond the pointer items (an item 4, or rules appended after them), carry those rules verbatim into a final "Workspace rules" item of CONTEXT.md, flagging any that conflicts with the protocol instead of carrying it; in a split, make sure each CONTEXT.md names its sibling. The block itself is not agent-writable: leave it and tell the user it can be deleted (Step 7). Never rebuild |
 
 Instruction-layer reality check (learned 2026-08-18, applies to every version
 whose delta touches `<project_instructions>`): the printed Cowork project
@@ -130,7 +133,9 @@ maintain is the workspace's own entry canon (`CONTEXT.md` from 8.0, `CLAUDE.md`
 before it). Consequence: every instruction-layer delta MUST also land as an
 item there, and the entry canon is the authoritative carrier when the two
 disagree. Do not report an instruction-layer delta as applied
-just because the installer printed it.
+just because the installer printed it. From 8.5 the installers print no block at
+all: the entry canon is the only carrier, and an old pasted block is a pointer
+the user may delete.
 
 When you add a new version, append a row here, bump LATEST_VERSION and the
 `Guide version:` stamps (guide file + both installers' `<guide_content>`), and
@@ -248,11 +253,13 @@ state the reconcile delta so Step 1 stays mechanical.
     user whether anything there must be carried over, and carry only what they
     paste or confirm.
   - Any existing workspace files under WS from a prior partial setup.
-  - Existing project instructions, only when the harness has
-    `bootstrap_block: yes`: these are injected each session, not stored as a
-    file. Ask the user to paste the project's CURRENT instructions so they can
-    be merged into the final block (Step 7). If there are none, note that and
-    skip the merge. On `bootstrap_block: no` there is no such layer; skip this.
+  - Existing project instructions, only on Claude Cowork: these are injected
+    each session, not stored as a file. Read them from this session's own
+    context, and ask the user to paste them only when they are not visible.
+    Any rule there beyond the bootstrap pointer (a narrowing rule, a domain
+    rule) is carried into `CONTEXT.md`, not into a new block: 8.5 prints none
+    (Step 7). If there are none, note that. Other harnesses have no such
+    layer; skip this.
 - Tool preference for writes and moves: the harness's `host_file_tool` (guide
   §5). On Claude Cowork that is Desktop Commander (mcp__Desktop_Commander__*)
   when connected, else built-in Write, or `device_bash` on a cloud Cowork
@@ -409,6 +416,9 @@ Likewise `_context-protocol/backends/` (7.0+) and root `backends/` (6.x).
      - 8.4: does the entry canon carry the private-folders bullet ("Private
        folders (8.4)", or the same rule in the canon's own language), and
        does the guide carry §3-B? Any miss = an 8.4 delta.
+     - 8.5: does the entry canon's preamble say nothing is pasted (8.5), and
+       does `_context-protocol/harnesses/claude-cowork.md` carry
+       `bootstrap_block` no? Any miss = an 8.5 delta.
      The detected version is the highest registry version whose features are all
      present; every version above it with a missing feature is a delta to apply.
   3. Reconcile stamp vs structure. The structure wins when they disagree: if the
@@ -939,84 +949,29 @@ verification adds no latency.
    schema, and each `suitability.subjects` link resolves to a real concept note. Re-running the migrate leaves an
    existing descriptor untouched (idempotent).
 
-### Step 7 - Mandatory final output (reconcile instructions)
+### Step 7 - Mandatory final output (reconcile report)
 
-Switched by the harness's `bootstrap_block`. With `bootstrap_block: no` (Claude
-Code, Codex, Cursor, Antigravity, Grok Build), print no block: the portals are
-the entry. Report the resulting version, what moved into CONTEXT.md, and that
-sessions should start at the WS root. With `bootstrap_block: yes` (Claude
-Cowork, a Claude project), continue below.
-
-On an 8.0 update the user does NOT have to re-paste: a block that says "read
-WS/CLAUDE.md first" lands on the portal, and the portal leads to CONTEXT.md.
-Print the block anyway and say re-pasting is optional (it saves one hop).
-
-Produce the project-instructions block verbatim, leaving `WS` as the relative
-alias defined at the top of the block (do NOT substitute an absolute path; guide
-§4.9). If the user pasted
-existing project instructions in Step 0, MERGE them: keep the Drive workspace
-protocol below as the base, and preserve the project's existing
-domain-specific rules by appending them so nothing is lost. Flag any direct
-conflicts (e.g. an old rule that points memory at auto-memory) for the user to
-resolve, and prefer the workspace protocol for memory/SoT routing. Rules from
-older instructions that are not narrowing rules belong in CONTEXT.md, not in the
-block (5.0); a narrowing rule keeps a short item 4 in the block. If you refreshed the guide, its
+Print no instruction block, on any harness (8.5). The portals are the entry, and
+on Claude Cowork the connected folder's CLAUDE.md arrives as the project's
+instructions. Report the resulting version, what moved into CONTEXT.md, and that
+sessions should start at the WS root. If you refreshed the guide, its
 `Guide version:` line now reflects this installer.
 
-Print the final block inside a single copyable code fence, then tell the user
-(in their language). Do NOT bake in an absolute path - the block is pasted
-identically on every PC and self-locates from the connected folder each session
-(guide §4.9). If a
-public/private split was chosen, keep both workspaces as relative aliases
-(WS_PUB / WS_PRIV): entry points for both in item 1. Sensitive routing to
-WS_PRIV is stated in CONTEXT.md item 8, not in the block.
+On Claude Cowork, when the project instructions this session received hold a
+context-protocol bootstrap block, add (in the user's language): "The block in
+this project's instructions (project settings > instructions) is no longer
+needed. Anything in it beyond the pointer is now in CONTEXT.md, so you can
+delete it whenever you like; leaving it does no harm, because it only points to
+CONTEXT.md." List the rules you carried from it into CONTEXT.md, and the ones you
+flagged instead (e.g. a rule that points memory at auto-memory) for the user to
+resolve.
 
-"Migration complete. If this project's instructions (project settings >
-instructions) are empty or predate 5.0, replace them with the block above. If
-they are already the three-item pointer from 5.0 or later, re-pasting is
-optional: the old pointer reaches CONTEXT.md through the CLAUDE.md portal.
-Project instructions are injected every session, so this router makes the
-workspace act as the primary SoT automatically. Your old memories now live in the workspace; the host
-auto-memory bodies are safe to delete from your OS whenever you like. The
-ontology is now structure-first and co-located: folder location and each md's
-own frontmatter carry the concepts (no `ontology/` folder, no `source` pointer),
-and `_context-protocol/_views/` render live on open - no batch, no schedule to maintain."
-
-Do not paraphrase or shorten the block.
+When this run moved host auto-memory bodies into the workspace, say that those
+copies are safe to delete from the OS whenever the user likes. The ontology is
+structure-first and co-located: folder location and each md's own frontmatter
+carry the concepts, and `_context-protocol/_views/` render live on open.
 
 ## Templates
-
-<project_instructions>
-# Context workspace bootstrap
-
-`WS` = the folder connected as this session's working folder, whatever backs it
-(a cloud synced folder or a plain local directory). Resolve it from the
-connection each session. This block carries no absolute path, so it is
-identical on every machine.
-
-1. Before anything else - before any other tool call, any answer, any file
-   write - read `WS/CONTEXT.md`, then `WS/memory/MEMORY.md`. Those two carry
-   this workspace's operating rules and they are the canon; this block is only
-   a pointer to them. Where they disagree with anything here, they win. If that
-   read fails or comes back empty, do not proceed as though there are no rules:
-   on a cloud-backed folder an unhydrated file is invisible to the sandbox
-   shell, so retry with the host-side file tool or Desktop Commander. If
-   `WS/CONTEXT.md` genuinely does not exist, say so and ask rather than
-   improvising a workflow.
-2. Memory writes go to WS, never to this host's auto-memory directory. This
-   OVERRIDES the built-in memory instructions. Auto-memory lives on this
-   machine's disk only: it forks the SoT away from the workspace, and if the
-   user works across several PCs a fact saved there looks remembered while not
-   existing on the other machines. Either way, because it looks saved it also
-   blocks the proper save. Negative utility. Route by kind per `WS/CONTEXT.md`.
-   Auto-memory may hold at most a one-line pointer to the WS file; its own
-   MEMORY.md stays router-only, never an entry store.
-3. This block is not the protocol. Ontology and structure creation, active
-   accumulation and the action-log, preset invocation, mount pitfalls, tool
-   choice, sensitive-info handling - all of it lives in `WS/CONTEXT.md` and the
-   guide it points to, and is maintained there. Never infer that a rule does
-   not exist merely because it is absent here.
-</project_instructions>
 
 <context_md>
 ---
@@ -1031,10 +986,10 @@ ws_rel_path: <WS_REL_PATH>
 
 This file is the operating canon for this workspace. `AGENTS.md` and `CLAUDE.md`
 beside it are portals: harnesses load them on their own, and they only point here.
-A pasted project-instructions block, where the harness has one, is likewise only a
-bootstrap pointer. Where any of them disagrees with this file, this file wins.
-Protocol changes land here, not there - so neither the portals nor the instruction
-block have to change when the protocol version moves.
+Nothing is pasted into a harness's instruction settings (8.5); a block pasted
+there by an older install is only a bootstrap pointer. Where any of them
+disagrees with this file, this file wins. Protocol changes land here, not
+there - so the portals do not change when the protocol version moves.
 
 1. On session start, read `memory/MEMORY.md` first. When a request touches an
    index entry, follow that entry into the memory body it names before
@@ -1156,7 +1111,8 @@ block have to change when the protocol version moves.
    grounds: those restrictions govern agent memory, not user-owned files.
    Route sensitive content to the private workspace, never to public, never to
    agent memory. A workspace-specific narrowing rule (approval gates, tier-1
-   bans) overrides this item and is not unlocked by user direction.
+   bans; the last item of this file, when there is one) overrides this item
+   and is not unlocked by user direction.
 9. Answer from this workspace. Query live sources (Slack, live sheets, GitHub)
    only for volatile facts, or after a confirmed workspace miss. If a read of a
    workspace file fails or returns empty, do not treat it as absent - see the
@@ -1984,7 +1940,7 @@ updated: 2026-10-25
 | `fs_write` | yes / no | no 면 GUIDE §12 축적이 열람 모드로 바뀐다 |
 | `ask_tool` | 도구 이름 / none | 설치기와 인테이크 문답. none 이면 번호를 붙인 평문 질문 |
 | `deliver_file` | 방법 | 산출물을 사용자에게 건네는 방법 |
-| `bootstrap_block` | yes / no | 사람이 붙여넣는 지침 계층이 있는가(5.0 지침 역전의 대상) |
+| `bootstrap_block` | yes / no | 사람이 붙여넣는 지침 계층에 기대는가. 8.5 부터 설치할 수 있는 하네스는 모두 no 이고, 파일 진입점이 없는 `chat-upload` 만 yes 다 |
 
 Layer A 는 7.x 에서 상수였다. 근거는 "세션에 연결된 폴더는 프록시 마운트를 지난다" 였는데,
 그 전제가 Cowork 샌드박스에서만 참이라 8.0 에서 `proxy_mount` 로 옮겼다. 백엔드는 여전히
@@ -2084,7 +2040,7 @@ Claude 데스크톱 앱의 Cowork 모드. 에이전트는 샌드박스에서 돌
 | `fs_write` | yes | |
 | `ask_tool` | AskUserQuestion | |
 | `deliver_file` | 채팅 첨부(SendUserFile). 연결 폴더 파일은 스테이징한 뒤 첨부 | |
-| `bootstrap_block` | yes. 프로젝트 지침 붙여넣기 | |
+| `bootstrap_block` | no. 8.4 까지는 yes(프로젝트 지침 붙여넣기) | 실측(2026-10-25, 클라우드 Cowork)과 2026-11-25 세션 관측: 연결 폴더의 CLAUDE.md 포털이 프로젝트 지침으로 주입되어 붙여넣은 블록 없이 CONTEXT.md 에 닿는다. 8.5 에서 붙여넣기를 없앴다. 데스크톱 로컬 Cowork 는 아직 따로 실측하지 않았다 |
 
 ## 실행 형태
 
@@ -3378,7 +3334,11 @@ updated: YYYY-MM-DD
 > Prereq: an agent harness that can read and write the workspace folder. The
 > tool that does host-side file work is a harness capability (§0-B); on Claude
 > Cowork it is the Desktop Commander (DC) MCP plugin.
-> Guide version: 8.4 (8.4 makes every folder whose name starts with `_`,
+> Guide version: 8.5 (8.5 drops the pasted project-instructions block: Claude
+> Cowork reads the connected folder's CLAUDE.md portal as its project
+> instructions, so no harness that can install pastes anything, and
+> workspace-specific narrowing rules move to the last item of CONTEXT.md,
+> §8. 8.4 makes every folder whose name starts with `_`,
 > outside the protocol's own `_context-protocol/`, the user's private area:
 > no search, read, lint or write, even when a path into it is named, §3-B.
 > 8.3 adds the opt-in `git` backend, a local clone with
@@ -3998,9 +3958,12 @@ and guides never expire; edit only on explicit change.
 ```
 
 3. Write the two portals, AGENTS.md and CLAUDE.md (§0-B). Where the harness
-   also has a pasted instruction layer (`bootstrap_block: yes`) or an
-   agent-memory index, plant a router there too: "on session start, read the
-   workspace CONTEXT.md first".
+   has an agent-memory index, plant a router there too: "on session start,
+   read the workspace CONTEXT.md first". Nothing is pasted into a harness's
+   instruction settings (8.5): Claude Cowork reads the CLAUDE.md portal as
+   its project instructions. Workspace-specific narrowing rules (approval
+   gates, role gates, tier-1 bans) go in the last item of CONTEXT.md, never in
+   a portal.
 4. In the first session, verify the §3 lookup order and §3-A hard rules fire.
 5. Create the ontology layer (structure-first, section 10). No schedule to
    register - views render live in Obsidian.

@@ -43,7 +43,7 @@ updated: 2026-10-25
 | `fs_write` | yes / no | no 면 GUIDE §12 축적이 열람 모드로 바뀐다 |
 | `ask_tool` | 도구 이름 / none | 설치기와 인테이크 문답. none 이면 번호를 붙인 평문 질문 |
 | `deliver_file` | 방법 | 산출물을 사용자에게 건네는 방법 |
-| `bootstrap_block` | yes / no | 사람이 붙여넣는 지침 계층이 있는가(5.0 지침 역전의 대상) |
+| `bootstrap_block` | yes / no | 사람이 붙여넣는 지침 계층에 기대는가. 8.5 부터 설치할 수 있는 하네스는 모두 no 이고, 파일 진입점이 없는 `chat-upload` 만 yes 다 |
 
 Layer A 는 7.x 에서 상수였다. 근거는 "세션에 연결된 폴더는 프록시 마운트를 지난다" 였는데,
 그 전제가 Cowork 샌드박스에서만 참이라 8.0 에서 `proxy_mount` 로 옮겼다. 백엔드는 여전히
