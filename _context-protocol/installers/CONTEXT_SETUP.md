@@ -436,8 +436,8 @@ there - so the portals do not change when the protocol version moves.
    video, script, export) is content too. File it in the concept folder it
    belongs to, classified as above, and write it there directly with host-side
    tools. A chat attachment, a harness's own save or output folder (on Claude:
-   `Claude outputs/`, `Claude/`, a project's `claude/`) and a project doc saved
-   by bare filename are copies, never its place. Report the workspace path.
+   `Claude outputs/`, a project's `claude/`) and a project doc saved by bare
+   filename are copies, never its place. Report the workspace path.
 6. When the user names a preset ("<preset> 프리셋으로 ...", "use the <preset>
    preset to ..."), run the preset invocation contract, in this order: find the
    preset in the protocol workspace's `presets/preset-library.md` (stop and ask if
