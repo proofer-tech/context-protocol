@@ -2,7 +2,7 @@
 type: readme
 ---
 
-# context-protocol 8.6 - 설치 패키지
+# context-protocol 8.7 - 설치 패키지
 
 Agent: read this file first, then follow "설치 순서" below. The installers are
 self-contained; do not improvise a workflow of your own.
@@ -16,7 +16,7 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
 루트의 `CONTEXT.md` 한 곳에 살고, `AGENTS.md` 와 `CLAUDE.md` 는 각 도구가 스스로
 읽는 입구로서 `CONTEXT.md` 를 가리키기만 한다.
 
-- 버전: 8.6
+- 버전: 8.7
 - 필요한 것: 작업 폴더 한 곳. 여러 PC 에서 같이 쓰려면 클라우드 동기화 폴더,
   이 PC 에서만 쓸 것이면 로컬 디렉토리 (또는 공개/비공개 두 곳)
 - 설치를 돌리는 도구: 폴더에 파일을 쓸 수 있는 에이전트면 된다. 파일을 첨부만 하는
@@ -47,7 +47,7 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
    - 없다 -> `CONTEXT_SETUP.md` 를 읽고 그 안의 Setup 단계를 그대로 실행한다.
    - 있다 -> `CONTEXT_MIGRATE.md` 를 읽고 버전을 판별해 델타만 적용한다.
      **덮어쓰지 않는다.** 기존 워크스페이스에 SETUP 을 돌리면 그 폴더가 쌓아 둔 규칙과
-     기록이 사라진다. 7.x 설치본은 이 경로로 8.6 이 된다. 규칙이 `CLAUDE.md` 에서
+     기록이 사라진다. 7.x 설치본은 이 경로로 8.7 이 된다. 규칙이 `CLAUDE.md` 에서
      `CONTEXT.md` 로 옮겨지고 `CLAUDE.md` 는 포털로 바뀐다.
    - 코드 저장소처럼 그 도구용 `AGENTS.md` 나 `CLAUDE.md` 만 있고 위 파일이 하나도
      없으면 신규 설치다. 개발 규칙이 적힌 `CLAUDE.md` 라도 프로토콜 frontmatter 가 없으면
@@ -88,7 +88,7 @@ Cursor, Google Antigravity, Grok Build 가 같은 폴더를 같은 규칙으로 
   같은가. 6.4 가 고친 자리다
 - `_context-protocol/harnesses/` 에 `agent-harness.md` 와 프로파일 일곱 개가 있고, 가이드에
   §0-B 가, concept-scheme 에 `harness_id` 가 있는가. 8.0 이 더한 자리다
-- 가이드 스탬프가 8.6 인가
+- 가이드 스탬프가 8.7 인가
 - `CONTEXT.md` 2번에 비공개 폴더 항목("Private folders (8.4)" 또는 같은 뜻의 그 워크스페이스 말)이 있고
   가이드에 §3-B 가 있는가. 8.4 가 더한 자리다. 기존 `_` 폴더마다 비공개인지 사용자에게 물었는가
 - 설치기가 지침 블록을 출력하지 않았고, 워크스페이스 전용 규칙(승인 게이트 등)이 있다면 `CONTEXT.md`

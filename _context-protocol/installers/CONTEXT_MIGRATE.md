@@ -6,7 +6,8 @@ subject:
 
 # Context Workspace - Migrate / Update (existing folder)
 
-> Protocol version: 8.6 (deliverables are filed in the workspace; a chat
+> Protocol version: 8.7 (every answer that surfaced something durable ends
+> with a record line). 8.6 (deliverables are filed in the workspace; a chat
 > attachment is only a copy). 8.5 (no pasted project-instructions block: Claude Cowork reads
 > the CLAUDE.md portal, and workspace narrowing rules live in CONTEXT.md). 8.4
 > (every folder whose name starts with `_`, outside
@@ -69,7 +70,7 @@ This is the single source of truth for what "latest" means and what each version
 introduced. Step 1 reads it to compute the exact gap. Keep it in sync with the
 `Guide version:` stamp in the `<guide_content>` block below.
 
-- LATEST_VERSION: **8.6**
+- LATEST_VERSION: **8.7**
 - Format: MAJOR.MINOR. A bare integer stamp `N` means `N.0`.
   - MAJOR bump = a breaking change to the contract, not automatically a rebuild.
     Read that version's Reconcile cell before choosing a path. Only 3 -> 4 was a
@@ -122,6 +123,7 @@ moving TO that version from the one before it:
 | 8.4 | MINOR | Private folders. A user can keep material in the workspace and out of every agent's reach by naming its folder with a leading `_`. Any folder whose name starts with `_`, at any depth, is the user's private area, except the reserved protocol cluster `_context-protocol/` (with everything inside it, also in a nested workspace); `_project.md` is a file and unaffected. Agents never search, list, open, read, lint or write inside one, never move anything into one, never create one, and do not open one when a path into it is named, whoever names it; only the user renaming the folder without the `_` opens it, because a rename cannot be injected through a document or a chat line. A search that misses says it excluded private folders, by name only. Stated in the docs as a convention for protocol agents and not access control: secrets belong in a private workspace that is not connected (guide §2 L1b). The headless lint prunes them and lists their names. Adopted 2026-11-24 at the user's request (임한솔) | Insert the private-folders bullet into the entry canon's item 2 right after the "not found" bullet (template `<context_md>`), in the canon's own language when it is not English. Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp, §3-A last bullet, §3-B, §10, §12.2) and `_context-protocol/tools/integrity_lint.py` from the package when the workspace keeps it. Then list, by name only and without opening them, every folder outside the cluster whose name starts with `_` (skip `_deprecated_*` trees, already excluded). For each, ask the user once whether it is private (keep the name) or content that only happened to carry the prefix (the user renames it, or approves the agent renaming it; then fix links and log the move). Until answered, treat it as private. Never rebuild |
 | 8.5 | MINOR | No pasted instruction block. Claude Cowork injects the connected folder's CLAUDE.md portal as the project's instructions every session (measured 2026-10-25 and observed 2026-11-25 on cloud Cowork), so the block the installers printed for Cowork since 5.0 only repeated what the portal already says. `claude-cowork` gets `bootstrap_block: no`; `chat-upload` keeps `yes`, it has no file entry and cannot install. The two things only the block carried move into CONTEXT.md: workspace-specific narrowing rules (approval gates, role gates, tier-1 bans; the block's item 4) become its last item "Workspace rules", and in a public/private split each CONTEXT.md names its sibling and which side holds sensitive content. Adopted 2026-11-25 at the user's request (임한솔) | Replace the entry canon's preamble sentence about the pasted block with the `<context_md>` 8.5 wording, and extend item 8's narrowing-rule sentence the same way, in the canon's own language when it is not English. Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp, §8 step 3) and `_context-protocol/harnesses/` from `<harness_profiles>` (`agent-harness.md` contract row, `claude-cowork.md`). Then, on Claude Cowork, read the project instructions this session received: if they hold the context-protocol bootstrap block with rules beyond the pointer items (an item 4, or rules appended after them), carry those rules verbatim into a final "Workspace rules" item of CONTEXT.md, flagging any that conflicts with the protocol instead of carrying it; in a split, make sure each CONTEXT.md names its sibling. The block itself is not agent-writable: leave it and tell the user it can be deleted (Step 7). Never rebuild |
 | 8.6 | MINOR | Deliverables are filed. Every file the agent produces for the user (doc, deck, image, video, script, export) is content: it goes to the concept folder it belongs to, classified like any other content (item 5), and is written there directly with host-side tools. A chat attachment, a harness's own save or output folder (on Claude: `Claude outputs/` next to the connected folder's files, a project's `claude/` doc namespace) and a project doc saved by bare filename are copies, never the place. Observed 2026-11-25: on Claude Cowork files sent as chat attachments piled up in `Claude outputs/` at the connected folder's root, outside every concept folder. `claude-cowork` `deliver_file` changes from chat attachment to writing into the workspace and reporting the path. Adopted 2026-11-25 at the user's request (임한솔) | Insert the deliverables paragraph at the end of the entry canon's item 5 (template `<context_md>`), in the canon's own language when it is not English. Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp) and `_context-protocol/harnesses/` from `<harness_profiles>` (`agent-harness.md` `deliver_file` row, `claude-cowork.md`). Do not move files already in `Claude outputs/`: list them for the user, who decides which belong in a concept folder. Never rebuild |
+| 8.7 | MINOR | Record line. Active accumulation (item 4, guide §12) was written as "record it after answering", and an agent that ends its turn with the answer skips it with nothing to show. Reported 2026-11-25: concept management failed on Elice Helpy Code (an open-model coding agent, no harness profile). Adding more classification rules was rejected: items 4 and 5 and guide §12 already hold them, and a third wording conflicted with the existing timing ("after answering") and with §12.1 ("when unsure, record"). Instead: accumulation happens in the same turn as the answer, and every answer that surfaced a new name, a changed fact, a decision, or a dated event ends with one line `기록: <workspace paths>` (`Recorded:` in English), or `기록: 없음 (<reason>)`. A missing line is a visible failure. Adopted 2026-11-25 at the user's request (임한솔) | Insert the record-line paragraph at the end of the entry canon's item 4 (template `<context_md>`), in the canon's own language when it is not English. Refresh `_context-protocol/CONTEXT_GUIDE.md` from `<guide_content>` (stamp, §12 opening, §12.2 last paragraph). Never rebuild |
 
 Instruction-layer reality check (learned 2026-08-18, applies to every version
 whose delta touches `<project_instructions>`): the printed Cowork project
@@ -424,6 +426,9 @@ Likewise `_context-protocol/backends/` (7.0+) and root `backends/` (6.x).
      - 8.6: does the entry canon's item 5 end with the deliverables paragraph
        ("Deliverables (8.6)", or the same rule in the canon's own language)?
        Any miss = an 8.6 delta.
+     - 8.7: does the entry canon's item 4 end with the record-line paragraph
+       ("Record line (8.7)", or the same rule in the canon's own language)?
+       Any miss = an 8.7 delta.
      The detected version is the highest registry version whose features are all
      present; every version above it with a missing feature is a delta to apply.
   3. Reconcile stamp vs structure. The structure wins when they disagree: if the
@@ -1067,6 +1072,13 @@ there - so the portals do not change when the protocol version moves.
    (identity/preference/feedback/status) -> `memory/`; dated
    event/state change -> append to `action-log/<YYYY-MM-DD>.md` (and update the
    changed original too). Never cross the three. Full triggers/routing: guide §12.
+   Record line (8.7): accumulation happens in the same turn as the answer,
+   never deferred past it. Every answer that surfaced a new name, a changed
+   fact, a decision, or a dated event ends with one line naming what was
+   written: `기록: <workspace paths>` (`Recorded:` when the user writes in
+   English), or `기록: 없음 (<reason>)` when nothing was. A missing line is a
+   visible failure the user can point at. When unsure whether something is
+   durable, record a short note (guide §12.1).
 5. If a surfaced concept fits no existing folder, CREATE the structure - do not
    force it into the nearest folder. Misfiling is a silent loss (location is the
    claim); creating a folder is non-destructive. Same task: concept note
@@ -3345,7 +3357,10 @@ updated: YYYY-MM-DD
 > Prereq: an agent harness that can read and write the workspace folder. The
 > tool that does host-side file work is a harness capability (§0-B); on Claude
 > Cowork it is the Desktop Commander (DC) MCP plugin.
-> Guide version: 8.6 (8.6 files every deliverable the agent produces in the
+> Guide version: 8.7 (8.7 ends every answer that surfaced something durable
+> with a record line, `기록: <paths>` or `기록: 없음 (<reason>)`, and keeps
+> accumulation in the same turn as the answer, CONTEXT.md item 4, §12.2.
+> 8.6 files every deliverable the agent produces in the
 > concept folder it belongs to, written there directly; a chat attachment or a
 > harness's own save folder is only a copy, CONTEXT.md item 5. 8.5 drops the
 > pasted project-instructions block: Claude
@@ -4216,7 +4231,8 @@ the import skill spec, not this protocol.
 Lookup is SoT-first and stays that way (§3). This section changes only writing:
 from passive (waiting for an explicit "기억해줘") to active. When a conversation
 surfaces a durable fact, decision, or dated event, record it into the workspace
-right after answering, without asking the user first, then report where it went.
+in the same turn as the answer, never deferred past it, without asking the user
+first, then report where it went in the record line (§12.2).
 
 ### 12.1 Accumulation triggers
 
@@ -4273,7 +4289,12 @@ integrity-lint (broader x1, links resolve, DAG, no orphan md); if concept
 structure changed, update `_project.md` in the same task
 (§6 project-descriptor upkeep).
 
-At the end of the answer, report what was written and where, by path.
+End the answer with the record line (8.7): `기록: <workspace paths>` (`Recorded:`
+when the user writes in English), or `기록: 없음 (<reason>)` when nothing was
+written. A missing line is a visible failure the user can point at; it is how a
+skipped accumulation shows up instead of passing silently. Reported 2026-11-25:
+concept management failed on an unprofiled harness (Elice Helpy Code, an
+open-model coding agent) where nothing marked the skip.
 
 ### 12.3 action-log (time-axis stream)
 

@@ -11,7 +11,10 @@ subject:
 > Prereq: an agent harness that can read and write the workspace folder. The
 > tool that does host-side file work is a harness capability (§0-B); on Claude
 > Cowork it is the Desktop Commander (DC) MCP plugin.
-> Guide version: 8.6 (8.6 files every deliverable the agent produces in the
+> Guide version: 8.7 (8.7 ends every answer that surfaced something durable
+> with a record line, `기록: <paths>` or `기록: 없음 (<reason>)`, and keeps
+> accumulation in the same turn as the answer, CONTEXT.md item 4, §12.2.
+> 8.6 files every deliverable the agent produces in the
 > concept folder it belongs to, written there directly; a chat attachment or a
 > harness's own save folder is only a copy, CONTEXT.md item 5. 8.5 drops the
 > pasted project-instructions block: Claude
@@ -882,7 +885,8 @@ the import skill spec, not this protocol.
 Lookup is SoT-first and stays that way (§3). This section changes only writing:
 from passive (waiting for an explicit "기억해줘") to active. When a conversation
 surfaces a durable fact, decision, or dated event, record it into the workspace
-right after answering, without asking the user first, then report where it went.
+in the same turn as the answer, never deferred past it, without asking the user
+first, then report where it went in the record line (§12.2).
 
 ### 12.1 Accumulation triggers
 
@@ -939,7 +943,12 @@ integrity-lint (broader x1, links resolve, DAG, no orphan md); if concept
 structure changed, update `_project.md` in the same task
 (§6 project-descriptor upkeep).
 
-At the end of the answer, report what was written and where, by path.
+End the answer with the record line (8.7): `기록: <workspace paths>` (`Recorded:`
+when the user writes in English), or `기록: 없음 (<reason>)` when nothing was
+written. A missing line is a visible failure the user can point at; it is how a
+skipped accumulation shows up instead of passing silently. Reported 2026-11-25:
+concept management failed on an unprofiled harness (Elice Helpy Code, an
+open-model coding agent) where nothing marked the skip.
 
 ### 12.3 action-log (time-axis stream)
 
